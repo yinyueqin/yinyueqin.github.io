@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://yinyueqin.github.io.com/"/>
-  <updated>2019-01-23T03:48:30.547Z</updated>
+  <updated>2019-01-23T09:46:07.835Z</updated>
   <id>http://yinyueqin.github.io.com/</id>
   
   <author>
@@ -15,6 +15,30 @@
   </author>
   
   <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>matplotlib-1</title>
+    <link href="http://yinyueqin.github.io.com/2019/01/23/matplotlib-1/"/>
+    <id>http://yinyueqin.github.io.com/2019/01/23/matplotlib-1/</id>
+    <published>2019-01-23T09:07:51.000Z</published>
+    <updated>2019-01-23T09:46:07.835Z</updated>
+    
+    <content type="html"><![CDATA[<p><img src="/a.png" alt="d "></p>]]></content>
+    
+    <summary type="html">
+    
+      
+      
+        &lt;p&gt;&lt;img src=&quot;/a.png&quot; alt=&quot;d &quot;&gt;&lt;/p&gt;
+
+      
+    
+    </summary>
+    
+    
+      <category term="python" scheme="http://yinyueqin.github.io.com/tags/python/"/>
+    
+  </entry>
   
   <entry>
     <title>Hello World</title>
