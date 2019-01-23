@@ -2,6 +2,13 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
+    <loc>http://yinyueqin.github.io.com/2019/01/23/matplotlib-1/</loc>
+    
+    <lastmod>2019-01-23T10:10:06.347Z</lastmod>
+    
+  </url>
+  
+  <url>
     <loc>http://yinyueqin.github.io.com/categories/index.html</loc>
     
     <lastmod>2019-01-23T10:09:03.020Z</lastmod>
@@ -12,13 +19,6 @@
     <loc>http://yinyueqin.github.io.com/tags/index.html</loc>
     
     <lastmod>2019-01-23T10:08:22.354Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://yinyueqin.github.io.com/2019/01/23/matplotlib-1/</loc>
-    
-    <lastmod>2019-01-23T10:03:29.422Z</lastmod>
     
   </url>
   
