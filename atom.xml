@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://yinyueqin.github.io.com/"/>
-  <updated>2019-01-23T09:59:24.918Z</updated>
+  <updated>2019-01-23T10:03:29.422Z</updated>
   <id>http://yinyueqin.github.io.com/</id>
   
   <author>
@@ -17,24 +17,31 @@
   <generator uri="http://hexo.io/">Hexo</generator>
   
   <entry>
-    <title>matplotlib-1</title>
+    <title>用python matplotlib画图</title>
     <link href="http://yinyueqin.github.io.com/2019/01/23/matplotlib-1/"/>
     <id>http://yinyueqin.github.io.com/2019/01/23/matplotlib-1/</id>
     <published>2019-01-23T09:58:32.000Z</published>
-    <updated>2019-01-23T09:59:24.918Z</updated>
+    <updated>2019-01-23T10:03:29.422Z</updated>
     
-    <content type="html"><![CDATA[<p><img src="/2019/01/23/matplotlib-1/a.png" alt="a"></p>]]></content>
+    <content type="html"><![CDATA[<ul><li>欧舒丹你</li><li></li></ul>]]></content>
     
     <summary type="html">
     
       
       
-        &lt;p&gt;&lt;img src=&quot;/2019/01/23/matplotlib-1/a.png&quot; alt=&quot;a&quot;&gt;&lt;/p&gt;
+        &lt;ul&gt;
+&lt;li&gt;欧舒丹你&lt;/li&gt;
+&lt;li&gt;&lt;/li&gt;
+&lt;/ul&gt;
 
       
     
     </summary>
     
+      <category term="python" scheme="http://yinyueqin.github.io.com/categories/python/"/>
+    
+    
+      <category term="python" scheme="http://yinyueqin.github.io.com/tags/python/"/>
     
   </entry>
   
