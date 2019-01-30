@@ -73,6 +73,8 @@
 
 
 
+  
+
 
   <link rel="alternate" href="/atom.xml" title="Hexo" type="application/atom+xml">
 
@@ -81,17 +83,14 @@
 
 
 
-<meta name="description" content="无与伦比">
 <meta property="og:type" content="website">
 <meta property="og:title" content="tags">
 <meta property="og:url" content="http://yinyueqin.github.io.com/tags/index.html">
 <meta property="og:site_name" content="Hexo">
-<meta property="og:description" content="无与伦比">
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:updated_time" content="2019-01-23T10:08:22.354Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="tags">
-<meta name="twitter:description" content="无与伦比">
 
 
 
@@ -957,7 +956,24 @@
         }
       });
     </script>
-    <script type="text/javascript" src="//cdn.bootcss.com/mathjax/2.7.1/latest.js?config=TeX-AMS-MML_HTMLorMML"></script><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+    <script type="text/javascript" src="//cdn.bootcss.com/mathjax/2.7.1/latest.js?config=TeX-AMS-MML_HTMLorMML"></script><!-- hexo-inject:begin --><!-- Begin: Injected MathJax -->
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({"tex2jax":{"inlineMath":[["$","$"],["\\(","\\)"]],"skipTags":["script","noscript","style","textarea","pre","code"],"processEscapes":true},"TeX":{"equationNumbers":{"autoNumber":"AMS"}}});
+</script>
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i=0; i < all.length; i += 1) {
+      all[i].SourceElement().parentNode.className += ' has-jax';
+    }
+  });
+</script>
+
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js">
+</script>
+<!-- End: Injected MathJax -->
+<!-- hexo-inject:end -->
   
 
 
