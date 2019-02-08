@@ -3,7 +3,7 @@
   <entry>
     <title><![CDATA[poj_tips]]></title>
     <url>%2F2019%2F02%2F08%2Fpoj-tips%2F</url>
-    <content type="text"><![CDATA[1cout&lt;&lt;fixed&lt;&lt;setprecision(2)&lt;&lt;'$'&lt;&lt;sum/12.0&lt;&lt;endl; [ a^2 = 1 ]]]></content>
+    <content type="text"><![CDATA[1cout&lt;&lt;fixed&lt;&lt;setprecision(2)&lt;&lt;'$'&lt;&lt;sum/12.0&lt;&lt;endl; \[ a+b ^2 = 1\]]]></content>
       <categories>
         <category>poj</category>
       </categories>
