@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://yinyueqin.github.io.com/"/>
-  <updated>2019-02-08T04:30:25.993Z</updated>
+  <updated>2019-02-08T04:40:01.170Z</updated>
   <id>http://yinyueqin.github.io.com/</id>
   
   <author>
@@ -21,9 +21,9 @@
     <link href="http://yinyueqin.github.io.com/2019/02/08/poj-tips/"/>
     <id>http://yinyueqin.github.io.com/2019/02/08/poj-tips/</id>
     <published>2019-02-08T03:27:00.000Z</published>
-    <updated>2019-02-08T04:30:25.993Z</updated>
+    <updated>2019-02-08T04:40:01.170Z</updated>
     
-    <content type="html"><![CDATA[<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">cout</span>&lt;&lt;fixed&lt;&lt;setprecision(<span class="number">2</span>)&lt;&lt;<span class="string">'$'</span>&lt;&lt;sum/<span class="number">12.0</span>&lt;&lt;<span class="built_in">endl</span>;</span><br></pre></td></tr></table></figure><p><span class="math display">\[ a+b ^2 = 1\]</span></p>]]></content>
+    <content type="html"><![CDATA[<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">cout</span>&lt;&lt;fixed&lt;&lt;setprecision(<span class="number">2</span>)&lt;&lt;<span class="string">'$'</span>&lt;&lt;sum/<span class="number">12.0</span>&lt;&lt;<span class="built_in">endl</span>;</span><br></pre></td></tr></table></figure><p><span class="math display">\[ a+b ^2 = 1\]</span></p><p>是你的<span class="math inline">\(a+b^2=1\)</span>是你的</p><p>1 2 npm uninstall hexo-renderer-marked npm install hexo-renderer-kramed --save</p>]]></content>
     
     <summary type="html">
     
