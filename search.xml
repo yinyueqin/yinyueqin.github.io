@@ -1,9 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title><![CDATA[贪心]]></title>
+    <url>%2F2019%2F02%2F15%2F%E8%B4%AA%E5%BF%83%2F</url>
+    <content type="text"><![CDATA[硬币问题 12345678910111213141516171819#include&lt;iostream&gt;using namespace std;const int v[6] = &#123;1,5,10,50,100,500&#125;; //面值int main(int argc, char const *argv[]) &#123; int A; //支付A元 cin&gt;&gt;A; int C[6]; int ans = 0; for(int i=0;i&lt;6;i++)&#123; cin&gt;&gt;C[i]; &#125; for(int i=5;i&gt;=0;i--)&#123; int t = min(A/v[i],C[i]); A -= t*v[i]; ans += t; &#125; cout&lt;&lt;ans&lt;&lt;endl; return 0;&#125; 区间问题 区间调度]]></content>
+      <categories>
+        <category>poj</category>
+      </categories>
+      <tags>
+        <tag>poj</tag>
+      </tags>
+  </entry>
+  <entry>
     <title><![CDATA[情感分析]]></title>
     <url>%2F2019%2F02%2F13%2F%E6%83%85%E6%84%9F%E5%88%86%E6%9E%90%2F</url>
-    <content type="text"><![CDATA[情感分析 情感分析（SA）又称为倾向性分析和意见挖掘，它是对带有情感色彩的主观性文本进行分析、处理、归纳和推理的过程，其中情感分析还可以细分为情感极性（倾向）分析，情感程度分析，主客观分析等。]]></content>
+    <content type="text"><![CDATA[情感分析 情感分析（SA）又称为倾向性分析和意见挖掘，它是对带有情感色彩的主观性文本进行分析、处理、归纳和推理的过程，其中情感分析还可以细分为情感极性（倾向）分析，情感程度分析，主客观分析等。 情感分析的方法 基于情感词典的情感分析 以句子作为情感分析对象的粒度 基于机器学习的情感分析 基于朴素贝叶斯（Naïve Bayes, NB)的方法 基于最大熵(Maximumntropy, ME) 基于支持向量机(SVM)的方法 性能比较 情感词典 优点 能够体现文本的非结构化特征 更利于挖掘文本内在联系和所表达情感 缺点 依赖构建的情感词典 词语不规范 新词 变形词 机器学习 优点 将文本转化为结构化数据进行处理 语料库自动扩充 缺点 各特征都看做孤立元素 不能体现文本内在联系]]></content>
       <categories>
         <category>nlp</category>
       </categories>
