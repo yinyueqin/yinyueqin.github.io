@@ -60,6 +60,12 @@ function formatPublicationVenue(venueType, venue, isOral = false) {
   return badge;
 }
 
+function formatPublicationAwards(awards) {
+  if (!awards || awards.length === 0) return '';
+  const awardBadges = awards.map(a => `<span class="publication-award">${a}</span>`);
+  return awardBadges.join(' ');
+}
+
 function formatPublicationLinks(links) {
   if (!links || links.length === 0) return '';
   
@@ -215,7 +221,7 @@ function generateFooter(personal, templateInfo = null) {
                 </div>
             </div>
             ${templateCredit}
-            <p>&copy; ${currentYear} ${personal.name}. All rights reserved.</p>
+            
         </div>
     </footer>`;
 }
@@ -338,6 +344,7 @@ function generateIndexPage(config) {
   const targetName = personal.name.split(' ')[0]; // Use first name for highlighting
   const pubsHtml = selectedPubs.map(pub => {
     const venueBadge = formatPublicationVenue(pub.venue_type, pub.venue, pub.is_oral);
+    const awardsBadge = formatPublicationAwards(pub.awards);
     const authorsFormatted = highlightAuthorName(pub.authors, targetName);
     const linksFormatted = formatPublicationLinks(pub.links);
     
@@ -345,7 +352,7 @@ function generateIndexPage(config) {
             <div class="publication-item">
                 <img src="${pub.image}" alt="${pub.title}" class="publication-image teaser" onerror="this.src='images/default-paper.png'">
                 <div class="publication-content">
-                    <p class="publication-title">${venueBadge} ${pub.title}</p>
+                    <p class="publication-title">${venueBadge} ${awardsBadge} ${pub.title}</p>
                     <p class="publication-authors">${authorsFormatted}</p>
                     <p class="publication-links">${linksFormatted}</p>
                 </div>
@@ -412,11 +419,10 @@ function generateIndexPage(config) {
     <!-- JSON-LD Structured Data -->
     ${generateJsonLd(config)}
     
-    <!-- Favicon -->
-    <link rel="icon" type="image/png" sizes="32x32" href="favicon-32x32.png">
-    <link rel="icon" type="image/png" sizes="16x16" href="favicon-16x16.png">
-    <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
-    <link rel="shortcut icon" href="favicon.ico">
+    <!-- Disable favicon explicitly -->
+    <link rel="icon" href="data:,">
+    <link rel="apple-touch-icon" href="data:,">
+    <link rel="shortcut icon" href="data:,">
     
     <link rel="stylesheet" href="styles.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -624,6 +630,7 @@ function generatePublicationsPage(config) {
     const yearPubs = manualPubs[year];
     const pubItems = yearPubs.map(pub => {
       const venueBadge = formatPublicationVenue(pub.venue_type, pub.venue, pub.is_oral);
+      const awardsBadge = formatPublicationAwards(pub.awards);
       const authorsFormatted = highlightAuthorName(pub.authors, targetName);
       const linksFormatted = formatPublicationLinks(pub.links);
       
@@ -631,7 +638,7 @@ function generatePublicationsPage(config) {
                 <div class="publication-item">
                     <img src="${pub.image}" alt="${pub.title}" class="publication-image teaser" onerror="this.src='images/default-paper.png'">
                     <div class="publication-content">
-                        <p class="publication-title">${venueBadge} ${pub.title}</p>
+                        <p class="publication-title">${venueBadge} ${awardsBadge} ${pub.title}</p>
                         <p class="publication-authors">${authorsFormatted}</p>
                         <p class="publication-links">${linksFormatted}</p>
                     </div>
@@ -651,6 +658,7 @@ function generatePublicationsPage(config) {
   if (publications.survey) {
     const surveyItems = publications.survey.map(pub => {
       const venueBadge = formatPublicationVenue(pub.venue_type, pub.venue);
+      const awardsBadge = formatPublicationAwards(pub.awards);
       const authorsFormatted = highlightAuthorName(pub.authors, targetName);
       const linksFormatted = formatPublicationLinks(pub.links);
       
@@ -658,7 +666,7 @@ function generatePublicationsPage(config) {
                 <div class="publication-item">
                     <img src="${pub.image}" alt="${pub.title}" class="publication-image teaser" onerror="this.src='images/default-paper.png'">
                     <div class="publication-content">
-                        <p class="publication-title">${venueBadge} ${pub.title}</p>
+                        <p class="publication-title">${venueBadge} ${awardsBadge} ${pub.title}</p>
                         <p class="publication-authors">${authorsFormatted}</p>
                         <p class="publication-links">${linksFormatted}</p>
                     </div>
@@ -678,6 +686,7 @@ function generatePublicationsPage(config) {
   if (autoSyncedPubs.length > 0) {
     const autoSyncItems = autoSyncedPubs.map(pub => {
       const venueBadge = formatPublicationVenue(pub.venue_type, pub.venue, pub.is_oral);
+      const awardsBadge = formatPublicationAwards(pub.awards);
       const authorsFormatted = highlightAuthorName(pub.authors, targetName);
       const linksFormatted = formatPublicationLinks(pub.links);
       
@@ -685,7 +694,7 @@ function generatePublicationsPage(config) {
                 <div class="publication-item">
                     <img src="${pub.image}" alt="${pub.title}" class="publication-image teaser" onerror="this.src='images/default-paper.png'">
                     <div class="publication-content">
-                        <p class="publication-title">${venueBadge} ${pub.title}</p>
+                        <p class="publication-title">${venueBadge} ${awardsBadge} ${pub.title}</p>
                         <p class="publication-authors">${authorsFormatted}</p>
                         <p class="publication-links">${linksFormatted}</p>
                     </div>
@@ -750,11 +759,10 @@ function generatePublicationsPage(config) {
     <!-- JSON-LD Structured Data -->
     ${generateJsonLd(config)}
     
-    <!-- Favicon -->
-    <link rel="icon" type="image/png" sizes="32x32" href="favicon-32x32.png">
-    <link rel="icon" type="image/png" sizes="16x16" href="favicon-16x16.png">
-    <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
-    <link rel="shortcut icon" href="favicon.ico">
+    <!-- Disable favicon explicitly -->
+    <link rel="icon" href="data:,">
+    <link rel="apple-touch-icon" href="data:,">
+    <link rel="shortcut icon" href="data:,">
     
     <link rel="stylesheet" href="styles.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">

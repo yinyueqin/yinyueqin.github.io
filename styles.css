@@ -862,6 +862,19 @@ body {
     text-align: center;
 }
 
+/* Publication award badge (e.g., 🏆 Best Paper) */
+.publication-award {
+    display: inline-block;
+    padding: 4px 10px;
+    background: #fff7ed; /* light amber */
+    color: #b45309;      /* amber-700 */
+    font-weight: 700;
+    font-size: 13px;
+    border: 1px solid #fed7aa; /* amber-200 */
+    border-radius: 4px;
+    margin-right: 8px;
+}
+
 .publication-venue::after {
     content: "";
 }

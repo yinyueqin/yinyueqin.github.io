@@ -280,6 +280,16 @@ def format_publication_venue(venue_type, venue, is_oral=False):
     return badge
 
 
+def format_publication_awards(awards):
+    """Format publication awards as inline badges"""
+    if not awards:
+        return ""
+    badges = []
+    for award in awards:
+        badges.append(f'<span class="publication-award">{award}</span>')
+    return ' '.join(badges)
+
+
 def format_publication_links(links):
     """Format publication links"""
     if not links:
@@ -343,16 +353,12 @@ def generate_footer(personal, template_info=None):
 
             <div class="footer-stats">
                 <div class="stats-item">
-                    <i class="fas fa-map-marker-alt"></i>
-                    Last updated from: <span id="owner-location">Loading...</span>
-                </div>
-                <div class="stats-item">
                     <i class="fas fa-clock"></i>
                     Content last updated: <span id="last-updated"></span>
                 </div>
             </div>
             {template_credit}
-            <p>&copy; {current_year} {personal['name']}. All rights reserved.</p>
+            
         </div>
     </footer>'''
 
@@ -364,45 +370,6 @@ def generate_common_scripts():
     
     return f'''
     <script>
-        // Get website owner's location during build (not visitor's location)
-        async function getOwnerLocation() {{
-            try {{
-                // Try primary API first
-                let response = await fetch('https://ipapi.co/json/');
-                let data = await response.json();
-                
-                if (data.city && data.country_name) {{
-                    const location = `${{data.city}}, ${{data.country_name}}`;
-                    document.getElementById('owner-location').textContent = location;
-                    return;
-                }}
-                
-                // If primary API fails, try backup API
-                response = await fetch('https://api.ipify.org?format=json');
-                const ipData = await response.json();
-                
-                if (ipData.ip) {{
-                    // Use a different geolocation service
-                    response = await fetch(`https://ip-api.com/json/${{ipData.ip}}`);
-                    data = await response.json();
-                    
-                    if (data.city && data.country) {{
-                        const location = `${{data.city}}, ${{data.country}}`;
-                        document.getElementById('owner-location').textContent = location;
-                        return;
-                    }}
-                }}
-                
-                // If all APIs fail, show a default message
-                document.getElementById('owner-location').textContent = 'Local Build';
-                
-            }} catch (error) {{
-                console.log('Location detection failed:', error);
-                // For local builds, show a more appropriate message
-                document.getElementById('owner-location').textContent = 'Local Build';
-            }}
-        }}
-        
         // Set last updated time (when site was built)
         function setLastUpdated() {{
             const buildDate = '{build_time}';
@@ -417,7 +384,6 @@ def generate_common_scripts():
         
         // Initialize on page load
         document.addEventListener('DOMContentLoaded', function() {{
-            getOwnerLocation();
             setLastUpdated();
         }});
     </script>'''
@@ -481,6 +447,7 @@ def generate_index_page(config):
     pubs_html = []
     for pub in selected_pubs:
         venue_badge = format_publication_venue(pub['venue_type'], pub['venue'], pub.get('is_oral', False))
+        awards_badge = format_publication_awards(pub.get('awards'))
         authors_formatted = highlight_author_name(pub['authors'], target_name)
         links_formatted = format_publication_links(pub['links'])
         
@@ -488,7 +455,7 @@ def generate_index_page(config):
             <div class="publication-item">
                 <img src="{pub['image']}" alt="{pub['title']}" class="publication-image teaser" onerror="this.src='images/default-paper.png'">
                 <div class="publication-content">
-                    <p class="publication-title">{venue_badge} {pub['title']}</p>
+                    <p class="publication-title">{venue_badge} {awards_badge} {pub['title']}</p>
                     <p class="publication-authors">{authors_formatted}</p>
                     <p class="publication-links">{links_formatted}</p>
                 </div>
@@ -511,7 +478,8 @@ def generate_index_page(config):
     # Generate education items
     edu_html = []
     for edu in education:
-        details = f'<p class="education-details">{edu["details"]}</p>' if edu['details'] else ''
+        details_text = edu.get('details') or ''
+        details = f'<p class="education-details">{details_text}</p>' if details_text else ''
         edu_html.append(f'''
             <div class="education-item">
                 <span class="education-period">{edu['period']}</span>
@@ -523,6 +491,14 @@ def generate_index_page(config):
             </div>''')
     
     # Create complete HTML page
+    reviewer = service.get('reviewer', {})
+    conferences_text = reviewer.get('conferences', '')
+    journals_text = reviewer.get('journals', '')
+    journals_html = f'''
+                        <p class="service-description">
+                            <strong>Journals:</strong> {journals_text}
+                        </p>''' if journals_text else ''
+
     return f'''<!DOCTYPE html>
 <!-- 
   Generated by Config-Driven Academic Website Template
@@ -541,6 +517,10 @@ def generate_index_page(config):
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/jpswalsh/academicons@1/css/academicons.min.css">
+    <!-- Disable favicon explicitly -->
+    <link rel="icon" href="data:,">
+    <link rel="apple-touch-icon" href="data:,">
+    <link rel="shortcut icon" href="data:,">
     <script src="script.js" defer></script>
 </head>
 <body>
@@ -634,11 +614,9 @@ def generate_index_page(config):
                     <div class="service-summary">
                         <h3 class="service-title">Reviewer</h3>
                         <p class="service-description">
-                            <strong>Conferences:</strong> {service['reviewer']['conferences']}
+                            <strong>Conferences:</strong> {conferences_text}
                         </p>
-                        <p class="service-description">
-                            <strong>Journals:</strong> {service['reviewer']['journals']}
-                        </p>
+                        {journals_html}
                     </div>
                 </div>
             </div>
@@ -742,6 +720,7 @@ def generate_publications_page(config):
         
         for pub in year_pubs:
             venue_badge = format_publication_venue(pub['venue_type'], pub['venue'], pub.get('is_oral', False))
+            awards_badge = format_publication_awards(pub.get('awards'))
             authors_formatted = highlight_author_name(pub['authors'], target_name)
             links_formatted = format_publication_links(pub['links'])
             
@@ -749,7 +728,7 @@ def generate_publications_page(config):
                 <div class="publication-item">
                     <img src="{pub['image']}" alt="{pub['title']}" class="publication-image teaser" onerror="this.src='images/default-paper.png'">
                     <div class="publication-content">
-                        <p class="publication-title">{venue_badge} {pub['title']}</p>
+                        <p class="publication-title">{venue_badge} {awards_badge} {pub['title']}</p>
                         <p class="publication-authors">{authors_formatted}</p>
                         <p class="publication-links">{links_formatted}</p>
                     </div>
@@ -763,11 +742,12 @@ def generate_publications_page(config):
                 </div>
             </div>''')
     
-    # Generate survey papers section
-    if 'survey' in publications:
+    # Generate survey papers section (only if exists and non-empty)
+    if 'survey' in publications and publications['survey']:
         survey_items = []
         for pub in publications['survey']:
             venue_badge = format_publication_venue(pub['venue_type'], pub['venue'])
+            awards_badge = format_publication_awards(pub.get('awards'))
             authors_formatted = highlight_author_name(pub['authors'], target_name)
             links_formatted = format_publication_links(pub['links'])
             
@@ -775,7 +755,7 @@ def generate_publications_page(config):
                 <div class="publication-item">
                     <img src="{pub['image']}" alt="{pub['title']}" class="publication-image teaser" onerror="this.src='images/default-paper.png'">
                     <div class="publication-content">
-                        <p class="publication-title">{venue_badge} {pub['title']}</p>
+                        <p class="publication-title">{venue_badge} {awards_badge} {pub['title']}</p>
                         <p class="publication-authors">{authors_formatted}</p>
                         <p class="publication-links">{links_formatted}</p>
                     </div>
@@ -794,6 +774,7 @@ def generate_publications_page(config):
         auto_sync_items = []
         for pub in auto_synced_pubs:
             venue_badge = format_publication_venue(pub['venue_type'], pub['venue'], pub.get('is_oral', False))
+            awards_badge = format_publication_awards(pub.get('awards'))
             authors_formatted = highlight_author_name(pub['authors'], target_name)
             links_formatted = format_publication_links(pub['links'])
             
@@ -801,7 +782,7 @@ def generate_publications_page(config):
                 <div class="publication-item">
                     <img src="{pub['image']}" alt="{pub['title']}" class="publication-image teaser" onerror="this.src='images/default-paper.png'">
                     <div class="publication-content">
-                        <p class="publication-title">{venue_badge} {pub['title']}</p>
+                        <p class="publication-title">{venue_badge} {awards_badge} {pub['title']}</p>
                         <p class="publication-authors">{authors_formatted}</p>
                         <p class="publication-links">{links_formatted}</p>
                     </div>
@@ -844,6 +825,10 @@ def generate_publications_page(config):
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/jpswalsh/academicons@1/css/academicons.min.css">
+    <!-- Disable favicon explicitly -->
+    <link rel="icon" href="data:,">
+    <link rel="apple-touch-icon" href="data:,">
+    <link rel="shortcut icon" href="data:,">
 </head>
 <body>
     <!-- Navigation -->
@@ -915,6 +900,10 @@ def generate_blog_page(config):
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/jpswalsh/academicons@1/css/academicons.min.css">
     <link rel="stylesheet" href="https://unpkg.com/@waline/client@v3/dist/waline.css">
+    <!-- Disable favicon explicitly -->
+    <link rel="icon" href="data:,">
+    <link rel="apple-touch-icon" href="data:,">
+    <link rel="shortcut icon" href="data:,">
     <script src="blog-data.js"></script>
 </head>
 <body>
@@ -937,7 +926,7 @@ def generate_blog_page(config):
                     <div class="page-header-content">
                         <h1 class="page-title-left">Blog</h1>
                         <div class="blog-intro">
-                            <p>Welcome to my blog! Here I share insights about my research, thoughts on the latest developments in computer vision and AI, tutorials, and reflections on my academic journey.</p>
+                            <p>Welcome to my blog!</p>
                         </div>
                     </div>
                 </div>

@@ -1,857 +1,426 @@
 {
-  "_template_info": {
-    "name": "Config-Driven Academic Website Template",
-    "version": "1.0.1",
-    "author": "Sixun Dong (ironieser)",
-    "repository": "https://github.com/Ironieser/ironieser.github.io",
-    "license": "MIT",
-    "description": "A GitHub Actions-powered template for easy academic website management",
-    "show_template_credit": true,
-    "acknowledgments": "Built with the help of Cursor IDE, Claude AI, and GPT - enabling non-experts to create personalized academic websites through modern AI tools"
-  },
   "_scholar_sync": {
     "last_sync_date": "2025-10-06",
     "last_sync_status": "No new publications found (0 existing checked)"
   },
   "personal": {
-    "name": "Sixun Dong",
-    "aka": "Ironieser",
-    "title": "Multimodal Learning, VLM, LLM Agent",
-    "affiliation": "Arizona State University",
-    "email": "sixundong.ai@gmail.com",
-    "profile_image": "images/logo.jpg",
-    "cv_link": "#",
+    "name": "Yueqin Yin (殷月琴)",
+    "aka": "殷月琴",
+    "title": "Third-year Ph.D. student",
+    "affiliation": "McCombs School of Business, The University of Texas at Austin",
+    "email": "yinyueqin0314@gmail.com",
+    "profile_image": "images/profile.jpg",
+    "cv_link": "files/cv_yueqin.pdf",
     "bio": [
-      "I am studying at Arizona State University. I completed my Master's at ShanghaiTech University under Professor <a href=\"https://scholar.google.com/citations?hl=zh-CN&user=fe-1v0MAAAAJ\" class=\"link\">Shenghua Gao</a>.",
-      "My research focuses on <em class=\"research-keywords\">multimodal AI systems</em> that bridge computer vision, natural language processing, and machine learning, with different applications."
+      "I am a third-year Ph.D. student at the McCombs School of Business, The University of Texas at Austin, advised by <a href=\"https://scholar.google.com/citations?user=LXwCIisAAAAJ&hl=en\" class=\"link\">Prof. Mingyuan Zhou</a>.",
+      "Previously, I received my M.S. from the Institute of Automation, Chinese Academy of Sciences (CASIA) in 2023, and my B.S. in Software Engineering from Dalian University of Technology in 2020.",
+      "My research interests include <em class=\"research-keywords\">large language model alignment, reasoning, and post-training optimization</em>.",
+      "If you are interested in my work and would like to collaborate, please feel free to reach out!"
     ],
     "links": [
       {
         "name": "Email",
-        "url": "mailto:sixundong.ai@gmail.com",
+        "url": "mailto:yinyueqin0314@gmail.com",
         "icon": "fas fa-envelope",
         "color": "#dc3545"
       },
       {
         "name": "Scholar",
-        "url": "https://scholar.google.com/citations?user=j71Y2-4AAAAJ",
+        "url": "https://scholar.google.com/citations?hl=zh-CN&user=HhEo-1cAAAAJ",
         "icon": "fas fa-graduation-cap",
         "color": "#4285f4"
       },
       {
         "name": "GitHub",
-        "url": "https://github.com/Ironieser",
+        "url": "https://github.com/yinyueqin",
         "icon": "fab fa-github",
         "color": "#333"
       },
       {
-        "name": "Twitter",
-        "url": "https://twitter.com/ironieser",
-        "icon": "fab fa-twitter",
-        "color": "#1da1f2"
-      },
-      {
         "name": "LinkedIn",
-        "url": "https://www.linkedin.com/in/sixun-dong-789069330/",
+        "url": "https://www.linkedin.com/in/yueqin-yin-64813234b/",
         "icon": "fab fa-linkedin",
         "color": "#1666C5"
-      },
-      {
-        "name": "知乎",
-        "url": "https://zhuanlan.zhihu.com/p/1952615273212384694",
-        "icon": "fas fa-book",
-        "color": "#0084ff"
       }
     ]
   },
   "research": {
-    "description": "Currently, my research focuses on <strong>multimodal AI systems</strong> that bridge computer vision, natural language processing, and machine learning. I work on developing intelligent agents that can understand and generate content across multiple modalities, with applications in video analysis, time series forecasting, and feature transformation.",
+    "description": "My research focuses on LLM alignment, reasoning, and post-training optimization. On the algorithmic side, I work on DPO-based optimization (RPO, SAPO, Diffusion-RPO) and PPO-based optimization (Segment-Level PPO) to improve model alignment and reasoning reliability. On the data side, I develop ContextCheck, a sentence-level faithfulness verifier designed for context-dependent hallucination detection, and also contribute to KODCODE, a large-scale and verifiable dataset for code generation model training.",
     "stats": [
-      "10+ publications",
-      "4 top-tier venues (CVPR, WACV, IJCAI)",
-      "1 oral presentation"
+      "6+ first/co-first author works",
+      "CVPR, ICCV, TMLR, ACL Findings",
+      "🏆 Best Paper Award at DataWorld @ ICML 2025"
     ],
     "max_featured_publications": 8
   },
   "news": [
     {
       "date": "Sep 2025",
-      "content": "Paper on <strong>Feature Transformation</strong> by Semi-AR and reward-guided diffusion, accepted to NeurIPS 2025, congratulations to Nanxu Gong and Zijun Li!",
-      "category": "papers"
-    },
-    {
-      "date": "Aug 2025",
-      "content": "Completed GenAI Research Internship at <strong>Zoom Inc.</strong>, focusing on efficient vision–language modeling. Grateful to my mentor <strong>Qi Qian</strong> and the Zoom team for their invaluable support and collaboration.",
-      "category": "career"
-    },
-    {
-      "date": "Aug 2025",
-      "content": "Paper on <strong>MMTok</strong> - Multimodal Coverage Maximization for Efficient VLM Inference, project homepage launched",
-      "category": "papers"
-    },
-    {
-      "date": "Aug 2025",
-      "content": "Paper on <strong>LiveMCP-101</strong> - a new benchmark testing AI agents’ real-world tool-use, released on arXiv",
-      "category": "papers"
-    },
-    {
-      "date": "Aug 2025",
-      "content": "Paper on <strong>LogicIF</strong> - Complex Logical Instruction Generation released on arXiv",
-      "category": "papers"
-    },
-    {
-      "date": "Aug 2025",
-      "content": "Published comprehensive blog post about <strong>TimesCLIP</strong> - our multimodal approach to time series forecasting with CLIP",
+      "content": "Segment-PPO was accepted to <strong>TMLR 2025</strong>. <a href=\"https://arxiv.org/abs/2501.02790\" target=\"_blank\">Paper</a>.",
       "category": "papers"
     },
     {
       "date": "May 2025",
-      "content": "Started GenAI Research Internship at <strong>Zoom Inc.</strong> focusing on efficient vision-language modeling",
+      "content": "KODCODE was accepted to <strong>ACL 2025 Findings</strong>. <a href=\"https://arxiv.org/abs/2503.02951\" target=\"_blank\">Paper</a>.",
+      "category": "papers"
+    },
+    {
+      "date": "May 2025",
+      "content": "Started summer research internship at <strong>Zoom GenAI</strong> (hallucination detection and verification).",
       "category": "career"
     },
     {
-      "date": "Aug 2024",
-      "content": "Started PhD program at Arizona State University",
+      "date": "May 2024",
+      "content": "Started summer research internship at <strong>Microsoft GenAI</strong> (LLM alignment and reasoning).",
       "category": "career"
     },
     {
-      "date": "Feb 2024",
-      "content": "Paper on <strong>MLLM-Tool</strong> accepted to WACV 2024",
-      "category": "papers"
-    },
-    {
-      "date": "Mar 2023",
-      "content": "Paper on <strong>WeakSVR</strong> accepted to CVPR 2023",
-      "category": "papers"
-    },
-    {
-      "date": "Mar 2022",
-      "content": "Paper on <strong>TransRAC</strong> accepted as <strong>🏆 oral presentation</strong> to CVPR 2022",
-      "category": "papers"
+      "date": "Aug 2023",
+      "content": "Started Ph.D. program at <strong>The University of Texas at Austin</strong>.",
+      "category": "career"
     }
   ],
   "publications": {
     "2022": [
       {
-        "title": "TransRAC: Encoding Multi-scale Temporal Correlation with Transformers for Repetitive Action Counting",
+        "title": "TransEditor: Transformer-Based Dual-Space GAN for Highly Controllable Facial Editing",
         "authors": [
-          "Huazhang Hu*",
-          "Sixun Dong*",
-          "Yiqun Zhao",
-          "Dongze Lian",
-          "Zhengxin Li",
-          "Shenghua Gao"
+          "Yanbo Xu*",
+          "Yueqin Yin*",
+          "Liming Jiang",
+          "Qianyi Wu",
+          "Chengyao Zheng",
+          "Chen Change Loy",
+          "Bo Dai",
+          "Wayne Wu"
         ],
-        "venue": "CVPR'22",
+        "venue": "CVPR22",
         "venue_type": "conference",
-        "image": "teaser/transrac.jpg",
-        "is_oral": true,
-        "featured": true,
+        "image": "teaser/transeditor.jpg",
         "links": [
           {
             "name": "Paper",
-            "url": "https://arxiv.org/abs/2204.01018",
+            "url": "https://arxiv.org/abs/2203.17266",
             "icon": "ai ai-arxiv"
           },
           {
             "name": "Code",
-            "url": "https://github.com/SvipRepetitionCounting/TransRAC",
+            "url": "https://github.com/BillyXYB/TransEditor",
             "icon": "fab fa-github"
           },
           {
-            "name": "Dataset",
-            "url": "https://svip-lab.github.io/dataset/RepCount_dataset.html",
-            "icon": "fas fa-database"
-          },
-          {
-            "name": "YouTube",
-            "url": "https://youtu.be/SFpUS9mHHpk",
-            "icon": "fab fa-youtube"
-          },
-          {
-            "name": "Bilibili",
-            "url": "https://www.bilibili.com/video/BV1B94y1S7oP",
-            "icon": "fas fa-tv"
-          },
-          {
-            "name": "知乎",
-            "url": "https://zhuanlan.zhihu.com/p/543376943",
-            "icon": "fas fa-book-open"
+            "name": "Website",
+            "url": "https://billyxyb.github.io/TransEditor/",
+            "icon": "fas fa-home"
           }
+        ]
+      },
+      {
+        "title": "DiffGAR: Model-Agnostic Restoration from Generative Artifacts Using Image-to-Image Diffusion Models",
+        "authors": [
+          "Yueqin Yin",
+          "Lianghua Huang",
+          "Yu Liu",
+          "Kaiqi Huang"
         ],
-        "_scholar_citations": 84,
-        "_scholar_last_updated": "2025-10-06"
+        "venue": "CSAI22",
+        "venue_type": "conference",
+        "image": "teaser/diffgar.jpg",
+        "links": [
+          {
+            "name": "Paper",
+            "url": "https://arxiv.org/abs/2210.08573",
+            "icon": "ai ai-arxiv"
+          }
+        ]
       }
     ],
     "2023": [
       {
-        "title": "Weakly Supervised Video Representation Learning with Unaligned Text for Sequential Videos",
+        "title": "Efficient-VQGAN: Towards High-Resolution Image Generation with Efficient Vision Transformers",
         "authors": [
-          "Sixun Dong*",
-          "Huazhang Hu*",
-          "Dongze Lian",
-          "Weixin Luo",
-          "Yicheng Qian",
-          "Shenghua Gao"
+          "Shiyue Cao",
+          "Yueqin Yin",
+          "Lianghu Huang",
+          "Yu Liu",
+          "Xin Zhao",
+          "Deli Zhao",
+          "Kaiqi Huang"
         ],
-        "venue": "CVPR'23",
+        "venue": "ICCV23",
         "venue_type": "conference",
-        "image": "teaser/weaksvr.jpg",
-        "featured": true,
+        "image": "teaser/efficient-vqgan.jpg",
         "links": [
           {
             "name": "Paper",
-            "url": "https://arxiv.org/abs/2303.12370",
+            "url": "https://openaccess.thecvf.com/content/ICCV2023/papers/Cao_Efficient-VQGAN_Towards_High-Resolution_Image_Generation_with_Efficient_Vision_Transformers_ICCV_2023_paper.pdf",
             "icon": "ai ai-arxiv"
-          },
-          {
-            "name": "Code",
-            "url": "https://github.com/svip-lab/WeakSVR",
-            "icon": "fab fa-github"
-          },
-          {
-            "name": "YouTube",
-            "url": "https://www.youtube.com/watch?v=AqozSRYP7Pc",
-            "icon": "fab fa-youtube"
-          },
-          {
-            "name": "Bilibili",
-            "url": "https://www.bilibili.com/video/BV1AW4y1R7um",
-            "icon": "fas fa-tv"
-          },
-          {
-            "name": "知乎",
-            "url": "https://zhuanlan.zhihu.com/p/617926257",
-            "icon": "fas fa-book-open"
           }
-        ],
-        "_scholar_citations": 21,
-        "_scholar_last_updated": "2025-10-06"
+        ]
       }
     ],
     "2024": [
       {
-        "title": "MLLM-Tool: A Multimodal Large Language Model For Tool Agent Learning",
+        "title": "Relative Preference Optimization: Enhancing LLM Alignment through Contrasting Responses across Identical and Diverse Prompts",
         "authors": [
-          "Chenyu Wang",
-          "Weixin Luo",
-          "Sixun Dong",
-          "Xiaohua Xuan",
-          "Zhengxin Li",
-          "Lin Ma",
-          "Shenghua Gao"
+          "Yueqin Yin*",
+          "Zhendong Wang*",
+          "Yi Gu",
+          "Hai Huang",
+          "Weizhu Chen",
+          "Mingyuan Zhou"
         ],
-        "venue": "WACV",
-        "venue_type": "conference",
-        "image": "teaser/mmtool.jpg",
-        "featured": true,
+        "venue": "arXiv'2402",
+        "venue_type": "preprint",
+        "image": "teaser/rpo.jpg",
         "links": [
           {
             "name": "Paper",
-            "url": "https://arxiv.org/abs/2401.10727",
+            "url": "https://arxiv.org/abs/2402.10958",
             "icon": "ai ai-arxiv"
           },
           {
             "name": "Code",
-            "url": "https://github.com/MLLM-Tool/MLLM-Tool",
+            "url": "https://github.com/yinyueqin/relative-preference-optimization",
             "icon": "fab fa-github"
           }
-        ],
-        "_scholar_citations": 39,
-        "_scholar_last_updated": "2025-10-06"
+        ]
       },
       {
-        "title": "RoomDesigner: Encoding Anchor-latents for Style-consistent and Shape-compatible Indoor Scene Generation",
+        "title": "Self-Augmented Preference Optimization: Off-Policy Paradigms for Language Model Alignment",
         "authors": [
-          "Yiqun Zhao",
-          "Zibo Zhao",
-          "Jing Li",
-          "Sixun Dong",
-          "Shenghua Gao"
+          "Yueqin Yin*",
+          "Zhendong Wang*",
+          "Yujia Xie",
+          "Weizhu Chen",
+          "Mingyuan Zhou"
         ],
-        "venue": "3DV 2024, 2024",
-        "venue_type": "conference",
-        "image": "teaser/room.jpg",
-        "featured": true,
+        "venue": "arXiv'2405",
+        "venue_type": "preprint",
+        "image": "teaser/sapo.jpg",
         "links": [
           {
             "name": "Paper",
-            "url": "https://arxiv.org/abs/2310.10027",
+            "url": "https://arxiv.org/pdf/2405.20830",
             "icon": "ai ai-arxiv"
           },
           {
             "name": "Code",
-            "url": "https://github.com/zhao-yiqun/RoomDesigner",
+            "url": "https://github.com/yinyueqin/SAPO",
             "icon": "fab fa-github"
           }
+        ]
+      },
+      {
+        "title": "Diffusion-RPO: Aligning Diffusion Models through Relative Preference Optimization",
+        "authors": [
+          "Yi Gu",
+          "Zhendong Wang",
+          "Yueqin Yin",
+          "Yujia Xie",
+          "Mingyuan Zhou"
         ],
-        "_scholar_citations": 16,
-        "_scholar_last_updated": "2025-10-06"
+        "venue": "arXiv'2406",
+        "venue_type": "preprint",
+        "image": "teaser/diffusionr-rpo.jpg",
+        "links": [
+          {
+            "name": "Paper",
+            "url": "https://arxiv.org/pdf/2406.06382",
+            "icon": "ai ai-arxiv"
+          }
+        ]
       }
     ],
     "2025": [
       {
-        "title": "MMTok: Multimodal Coverage Maximization for Efficient Inference of VLMs",
+        "title": "Segmenting Text and Learning Their Rewards for Improved RLHF in Language Model",
         "authors": [
-          "Sixun Dong",
-          "Juhua Hu",
-          "Mian Zhang",
-          "Ming Yin",
-          "Yanjie Fu",
-          "Qi Qian"
+          "Yueqin Yin*",
+          "Shentao Yang*",
+          "Yujia Xie",
+          "Ziyi Yang",
+          "Yuting Sun",
+          "Hany Awadalla",
+          "Weizhu Chen",
+          "Mingyuan Zhou"
         ],
-        "venue": "arXiv'2508",
-        "venue_type": "preprint",
-        "image": "images/blog/mmtok/combined_plots.png",
-        "featured": true,
+        "venue": "TMLR25",
+        "venue_type": "journal",
+        "image": "teaser/segment-ppo.jpg",
         "links": [
           {
             "name": "Paper",
-            "url": "https://arxiv.org/abs/2508.18264",
+            "url": "https://arxiv.org/abs/2501.02790",
             "icon": "ai ai-arxiv"
           },
           {
             "name": "Code",
-            "url": "https://github.com/Ironieser/MMTok",
+            "url": "https://github.com/yinyueqin/DenseRewardRLHF-PPO",
             "icon": "fab fa-github"
-          },
-          {
-            "name": "Homepage",
-            "url": "https://project.ironieser.cc/mmtok",
-            "icon": "fas fa-home"
-          },
-          {
-            "name": "知乎",
-            "url": "https://zhuanlan.zhihu.com/p/1944299907109348831",
-            "icon": "fas fa-book-open"
           }
         ]
       },
       {
-        "title": "LiveMCP-101: Stress Testing and Diagnosing MCP-enabled Agents on Challenging Queries",
+        "title": "KODCODE: A Diverse, Challenging, and Verifiable Synthetic Dataset for Coding",
         "authors": [
-          "Ming Yin",
-          "Dinghan Shen",
-          "Silei Xu",
-          "Jianbing Han",
-          "Sixun Dong",
-          "Mian Zhang",
-          "Yebowen Hu",
-          "Shujian Liu",
-          "Simin Ma",
-          "Song Wang",
-          "Sathish Reddy Indurthi",
-          "Xun Wang",
-          "Yiran Chen",
-          "Kaiqiang Song"
+          "Zhangchen Xu",
+          "Yang Liu",
+          "Yueqin Yin",
+          "Mingyuan Zhou",
+          "Radha Poovendran"
         ],
-        "venue": "arXiv'2508",
-        "venue_type": "preprint",
-        "image": "teaser/MCP101.jpg",
-        "featured": true,
+        "venue": "ACL Findings25",
+        "venue_type": "conference",
+        "image": "teaser/kodcode.jpg",
+        "awards": [
+          "🏆 Best Paper Award at DataWorld @ ICML 2025"
+        ],
         "links": [
           {
             "name": "Paper",
-            "url": "https://arxiv.org/abs/2508.15760",
+            "url": "https://arxiv.org/abs/2503.02951",
             "icon": "ai ai-arxiv"
           },
           {
             "name": "Code",
+            "url": "https://github.com/KodCode-AI/kodcode",
+            "icon": "fab fa-github"
+          },
+          {
+            "name": "Website",
+            "url": "https://kodcode-ai.github.io/",
+            "icon": "fas fa-home"
+          }
+        ]
+      },
+      {
+        "title": "ContextCheck: Sentence-Level Faithfulness Verification with Context-Aware Disambiguation",
+        "authors": [
+          "Yueqin Yin",
+          "Yaxi Li",
+          "Xin Liu",
+          "Xun Wang",
+          "Kaiqiang Song",
+          "Simin Ma",
+          "Shujian Liu",
+          "Sathish Reddy Indurthi",
+          "Haoyun Deng",
+          "Pengcheng He",
+          "Mingyuan Zhou",
+          "Song Wang"
+        ],
+        "venue": "Under Review",
+        "venue_type": "under-review",
+        "image": "teaser/underreview.jpg",
+        "links": [
+          {
+            "name": "Paper (Coming Soon)",
+            "url": null,
+            "icon": "ai ai-arxiv",
+            "coming_soon": true
+          },
+          {
+            "name": "Code (Coming Soon)",
             "url": null,
             "icon": "fab fa-github",
             "coming_soon": true
-          },
-          {
-            "name": "Benchmark",
-            "url": null,
-            "icon": "fas fa-database",
-            "coming_soon": true
-          },
-          {
-            "name": "知乎",
-            "url": "https://zhuanlan.zhihu.com/p/1949009535743264421",
-            "icon": "fas fa-book-open"
-          }
-        ],
-        "_scholar_citations": 1,
-        "_scholar_last_updated": "2025-10-06"
-      },
-      {
-        "title": "Complex Logical Instruction Generation",
-        "authors": [
-          "Mian Zhang",
-          "Shujian Liu",
-          "Sixun Dong",
-          "Ming Yin",
-          "Yebowen Hu",
-          "Xun Wang",
-          "Steven Ma",
-          "Song Wang",
-          "Sathish Reddy Indurthi",
-          "Haoyun Deng",
-          "Zhiyu Zoey Chen",
-          "Kaiqiang Song"
-        ],
-        "venue": "arXiv'2508",
-        "venue_type": "preprint",
-        "image": "teaser/logitif.jpg",
-        "featured": true,
-        "links": [
-          {
-            "name": "Paper",
-            "url": "https://arxiv.org/abs/2508.09125",
-            "icon": "ai ai-arxiv"
-          },
-          {
-            "name": "Code",
-            "url": "https://github.com/mianzhang/LogicIF",
-            "icon": "fab fa-github"
-          },
-          {
-            "name": "Benchmark",
-            "url": "https://github.com/mianzhang/LogicIF",
-            "icon": "fas fa-database"
-          },
-          {
-            "name": "知乎",
-            "url": "https://zhuanlan.zhihu.com/p/1941376510113059206",
-            "icon": "fas fa-book-open"
-          }
-        ],
-        "_scholar_citations": 1,
-        "_scholar_last_updated": "2025-10-06"
-      },
-      {
-        "title": "Teaching Time Series to See and Speak: Forecasting with Aligned Visual and Textual Perspectives",
-        "authors": [
-          "Sixun Dong",
-          "Wei Fan",
-          "Teresa Wu",
-          "Yanjie Fu"
-        ],
-        "venue": "arXiv'2506",
-        "venue_type": "under-review",
-        "image": "images/blog/timesclip/fig3.png",
-        "featured": true,
-        "links": [
-          {
-            "name": "Paper",
-            "url": "https://arxiv.org/abs/2506.24124",
-            "icon": "ai ai-arxiv"
-          },
-          {
-            "name": "Code",
-            "url": "https://github.com/Ironieser/TimesCLIP",
-            "icon": "fab fa-github"
-          },
-          {
-            "name": "Homepage",
-            "url": "https://cv.ironieser.cc/projects/timesclip.html",
-            "icon": "fas fa-home"
-          },
-          {
-            "name": "Blog",
-            "url": "https://cv.ironieser.cc/blog.html#timesclip-time-series-forecasting",
-            "icon": "fas fa-blog"
-          },
-          {
-            "name": "知乎",
-            "url": "https://zhuanlan.zhihu.com/p/1936813469446940130",
-            "icon": "fas fa-book-open"
           }
         ]
-      },
-      {
-        "title": "TimesFrame: Multi-Variable Time Series is a Video of Numerical Data",
-        "authors": [
-          "Sixun Dong",
-          "Nanxu Gong",
-          "Haoyue Bai",
-          "Xinyuan Wang",
-          "Wangyang Ying",
-          "Wei Fan",
-          "Yanjie Fu"
-        ],
-        "venue": "Under Review",
-        "venue_type": "under-review",
-        "image": "teaser/underreview.jpg",
-        "featured": false,
-        "links": [
-          {
-            "name": "Paper (Coming Soon)",
-            "url": null,
-            "icon": "ai ai-arxiv",
-            "coming_soon": true
-          }
-        ]
-      },
-      {
-        "title": "Agentic Feature Augmentation: Unifying Selection and Generation with Teaming, Planning, and Memories",
-        "authors": [
-          "Nanxu Gong*",
-          "Sixun Dong*",
-          "Haoyue Bai",
-          "Xinyuan Wang",
-          "Wangyang Ying",
-          "Yanjie Fu"
-        ],
-        "venue": "arXiv'2505",
-        "venue_type": "under-review",
-        "image": "teaser/agentic.jpg",
-        "links": [
-          {
-            "name": "Paper",
-            "url": "https://arxiv.org/abs/2505.15076",
-            "icon": "ai ai-arxiv"
-          }
-        ],
-        "_scholar_citations": 6,
-        "_scholar_last_updated": "2025-10-06"
-      },
-      {
-        "title": "Sculpting Features from Noise: Reward-Guided Hierarchical Diffusion for Task-Optimal Feature Transformation",
-        "authors": [
-          "Nanxu Gong*",
-          "Zijun Li*",
-          "Sixun Dong",
-          "Haoyue Bai",
-          "Wangyang Ying",
-          "Xinyuan Wang",
-          "Yanjie Fu"
-        ],
-        "venue": "NeurIPS",
-        "venue_type": "conference",
-        "image": "teaser/sculp.jpg",
-        "featured": true,
-        "links": [
-          {
-            "name": "Paper",
-            "url": "https://arxiv.org/abs/2505.15152",
-            "icon": "ai ai-arxiv"
-          },
-          {
-            "name": "Code",
-            "url": "https://github.com/NanxuGong/DIFFT",
-            "icon": "fab fa-github"
-          },
-          {
-            "name": "知乎",
-            "url": "https://zhuanlan.zhihu.com/p/1933301751826429982",
-            "icon": "fas fa-book-open"
-          }
-        ],
-        "_scholar_citations": 4,
-        "_scholar_last_updated": "2025-10-06"
-      },
-      {
-        "title": "MECT: From Multimodal Knowledge Acquisition To Contrastive Embedding Construction For Generative Feature Transformation",
-        "authors": [
-          "Nanxu Gong",
-          "Sixun Dong",
-          "Haoyue Bai",
-          "Wangyang Ying",
-          "Yanjie Fu"
-        ],
-        "venue": "Under Review",
-        "venue_type": "under-review",
-        "image": "teaser/underreview.jpg",
-        "links": [
-          {
-            "name": "Paper (Coming Soon)",
-            "url": null,
-            "icon": "ai ai-arxiv",
-            "coming_soon": true
-          }
-        ]
-      },
-      {
-        "title": "Unsupervised feature transformation via in-context generation, generator-critic llm agents, and duet-play teaming",
-        "authors": [
-          "Nanxu Gong",
-          "Xinyuan Wang",
-          "Wangyang Ying",
-          "Haoyue Bai",
-          "Sixun Dong",
-          "Haifeng Chen",
-          "Yanjie Fu"
-        ],
-        "venue": "IJCAI",
-        "venue_type": "conference",
-        "image": "teaser/agentFt.jpg",
-        "links": [
-          {
-            "name": "Paper",
-            "url": "https://arxiv.org/abs/2504.21304",
-            "icon": "ai ai-arxiv"
-          },
-          {
-            "name": "Code",
-            "url": "https://github.com/NanxuGong/LPFG",
-            "icon": "fab fa-github"
-          }
-        ],
-        "_scholar_citations": 6,
-        "_scholar_last_updated": "2025-10-06"
-      },
-      {
-        "title": "LLM-ML Teaming: Integrated Symbolic Decoding and Gradient Search for Valid and Stable Generative Feature Transformation",
-        "authors": [
-          "Xinyuan Wang",
-          "Haoyue Bai",
-          "Nanxu Gong",
-          "Wangyang Ying",
-          "Sixun Dong",
-          "X Cui",
-          "Yanjie Fu"
-        ],
-        "venue": "arXiv'2506",
-        "venue_type": "preprint",
-        "image": "teaser/preprint.jpg",
-        "auto_sync": true,
-        "links": [
-          {
-            "name": "Paper",
-            "url": "https://scholar.google.com/citations?view_op=view_citation&hl=en&user=j71Y2-4AAAAJ&sortby=pubdate&citation_for_view=j71Y2-4AAAAJ:_FxGoFyzp5QC",
-            "icon": "ai ai-arxiv"
-          }
-        ],
-        "_scholar_citations": 1,
-        "_scholar_last_updated": "2025-09-15"
-      },
-      {
-        "title": "Efficient Post-Training Refinement of Latent Reasoning in Large Language Models",
-        "authors": [
-          "Xinyuan Wang",
-          "Dongjie Wang",
-          "Wangyang Ying",
-          "Haoyue Bai",
-          "Nanxu Gong",
-          "Sixun Dong",
-          "Kunpeng Liu",
-          "Yanjie Fu"
-        ],
-        "venue": "arXiv'2506",
-        "venue_type": "preprint",
-        "image": "teaser/preprint.jpg",
-        "auto_sync": true,
-        "links": [
-          {
-            "name": "Paper",
-            "url": "https://scholar.google.com/citations?view_op=view_citation&hl=en&user=j71Y2-4AAAAJ&sortby=pubdate&citation_for_view=j71Y2-4AAAAJ:ufrVoPGSRksC",
-            "icon": "ai ai-arxiv"
-          }
-        ],
-        "_scholar_citations": 1,
-        "_scholar_last_updated": "2025-09-15"
-      },
-      {
-        "title": "Brownian Bridge Augmented Surrogate Simulation and Injection Planning for Geological CO Storage",
-        "authors": [
-          "Haoyue Bai",
-          "G Chen",
-          "Wangyang Ying",
-          "Xinyuan Wang",
-          "Nanxu Gong",
-          "Sixun Dong",
-          "G Pedrielli",
-          "H Wang",
-          "..."
-        ],
-        "venue": "arXiv'2505",
-        "venue_type": "preprint",
-        "image": "teaser/preprint.jpg",
-        "auto_sync": true,
-        "links": [
-          {
-            "name": "Paper",
-            "url": "https://scholar.google.com/citations?view_op=view_citation&hl=en&user=j71Y2-4AAAAJ&sortby=pubdate&citation_for_view=j71Y2-4AAAAJ:WF5omc3nYNoC",
-            "icon": "ai ai-arxiv"
-          }
-        ],
-        "_scholar_citations": 5,
-        "_scholar_last_updated": "2025-09-15"
-      },
-      {
-        "title": "Bridging the domain gap in equation distillation with reinforcement feedback",
-        "authors": [
-          "Wangyang Ying",
-          "Haoyue Bai",
-          "Nanxu Gong",
-          "Xinyuan Wang",
-          "Sixun Dong",
-          "H Chen",
-          "Yanjie Fu"
-        ],
-        "venue": "arXiv'2505",
-        "venue_type": "preprint",
-        "image": "teaser/preprint.jpg",
-        "auto_sync": true,
-        "links": [
-          {
-            "name": "Paper",
-            "url": "https://scholar.google.com/citations?view_op=view_citation&hl=en&user=j71Y2-4AAAAJ&sortby=pubdate&citation_for_view=j71Y2-4AAAAJ:eQOLeE2rZwMC",
-            "icon": "ai ai-arxiv"
-          }
-        ],
-        "_scholar_citations": 4,
-        "_scholar_last_updated": "2025-09-15"
       }
     ],
-    "survey": [
-      {
-        "title": "Towards Data-Centric AI: A Comprehensive Survey of Traditional, Reinforcement, and Generative Approaches for Tabular Data Transformation",
-        "authors": [
-          "Dongjie Wang",
-          "Yanyong Huang",
-          "Wangyang Ying",
-          "Haoyue Bai",
-          "Nanxu Gong",
-          "Xinyuan Wang",
-          "Sixun Dong",
-          "Tao Zhe",
-          "Kunpeng Liu",
-          "Meng Xiao",
-          "et al."
-        ],
-        "venue": "arXiv'2501",
-        "venue_type": "under-review",
-        "image": "teaser/underreview.jpg",
-        "links": [
-          {
-            "name": "Paper",
-            "url": "https://arxiv.org/abs/2501.10555",
-            "icon": "ai ai-arxiv"
-          }
-        ],
-        "_scholar_citations": 9,
-        "_scholar_last_updated": "2025-10-06"
-      },
-      {
-        "title": "A Survey on Data-Centric AI: Tabular Learning from Reinforcement Learning and Generative AI Perspective",
-        "authors": [
-          "Wangyang Ying",
-          "Cong Wei",
-          "Nanxu Gong",
-          "Xinyuan Wang",
-          "Haoyue Bai",
-          "Arun Vignesh Malarkkan",
-          "Sixun Dong",
-          "Dongjie Wang",
-          "Denghui Zhang",
-          "Yanjie Fu"
-        ],
-        "venue": "arXiv'2502",
-        "venue_type": "under-review",
-        "image": "teaser/underreview.jpg",
-        "links": [
-          {
-            "name": "Paper",
-            "url": "https://arxiv.org/abs/2502.08828",
-            "icon": "ai ai-arxiv"
-          }
-        ],
-        "_scholar_citations": 10,
-        "_scholar_last_updated": "2025-10-06"
-      }
-    ]
+    "survey": []
   },
   "experience": [
     {
-      "position": "GenAI Research Intern",
-      "company": "Zoom Inc., GenAI Research Group",
-      "period": "May 2025 - Aug 2025",
-      "description": "Working on VLM and LLM Agent.",
+      "position": "Summer Research Intern — Hallucination Detection and Verification",
+      "company": "Zoom Video Communications, GenAI Research Group",
+      "period": "Jun 2025 - Aug 2025",
+      "description": "ContextCheck: sentence-level faithfulness verification with context-aware disambiguation.",
       "logo": "images/zoom.jpg"
     },
     {
-      "position": "Research Intern (Team Leader)",
-      "company": "DGene, Digital Human Algorithm Department",
-      "period": "Aug 2023 - Jan 2024",
-      "description": "Led digital human projects: co-speech gesture generation and 3D human body reconstruction with <7% measurement error.",
-      "logo": "images/dgene.jpeg"
+      "position": "Summer Research Intern — LLM Alignment and Reasoning",
+      "company": "Microsoft Research, GenAI",
+      "period": "Jun 2024 - Aug 2024",
+      "description": "Segment-PPO for RLHF; KODCODE dataset for coding.",
+      "logo": "images/micorsoft.png"
     },
     {
-      "position": "Research Intern (Team Leader)",
-      "company": "Transsion Holdings, Audio-Video Generation Department",
-      "period": "Apr 2023 - Aug 2023",
-      "description": "Led audio-driven talking head video generation research, achieving SoTA performance in commercial and academic benchmarks.",
-      "logo": "images/transsion.jpeg"
+      "position": "Research Intern — Diffusion Models",
+      "company": "Alibaba DAMO Academy",
+      "period": "Mar 2022 - Mar 2023",
+      "description": "DiffGAR; Efficient-VQGAN.",
+      "logo": "images/alibaba.png"
+    },
+    {
+      "position": "Research Intern — GANs",
+      "company": "Shanghai AI Laboratory",
+      "period": "Mar 2021 - Dec 2021",
+      "description": "TransEditor: controllable facial editing via dual-space GAN and Transformer.",
+      "logo": "images/shanghailab.jpg"
     }
   ],
   "education": [
     {
-      "degree": "Computer Science",
-      "institution": "Arizona State University, USA",
-      "period": "2024 - Present",
-      "details": "Focus: Multimodal Learning, Computer Vision, LLM Agent"
+      "degree": "Ph.D. in LLM",
+      "institution": "The University of Texas at Austin",
+      "period": "Sept. 2023 - June. 2028 (expected)"
     },
     {
-      "degree": "M.S. in Computer Science",
-      "institution": "ShanghaiTech University, China",
-      "period": "2021 - 2024",
-      "details": "SVIP-Lab, Advisor: Prof. Shenghua Gao"
+      "degree": "M.S. in Computer Vision and Deep Learning",
+      "institution": "Institute of Automation, Chinese Academy of Sciences (CASIA)",
+      "period": "Sept. 2020 - June. 2023"
     },
     {
-      "degree": "B.E. in Computer Science (Dual Degree)",
-      "institution": "Dalian University of Technology, China",
-      "period": "2016 - 2020",
-      "details": ""
-    },
-    {
-      "degree": "B.E. in Process Equipment and Control Engineering",
-      "institution": "Dalian University of Technology, China",
-      "period": "2016 - 2020",
-      "details": ""
+      "degree": "B.S. in Software Engineering",
+      "institution": "Dalian University of Technology",
+      "period": "Sept. 2016 - June. 2020"
     }
   ],
   "service": {
     "reviewer": {
-      "conferences": "CVPR 2023-2025, ICCV 2023-2025, NeurIPS 2025, ECCV 2024, ACCV 2024, ACM MM 2023-2025, KDD 2024",
-      "journals": "TMM, Neural Networks, TKDD"
+      "conferences": "CVPR 2024, ICCV 2025, ICLR 2025, ICLR 2026"
     }
   },
   "seo": {
     "enable_json_ld": true,
-    "website_url": "https://cv.ironieser.cc",
-    "github_pages_url": "https://ironieser.github.io",
-    "website_name": "Sixun Dong (Ironieser) - Academic Homepage",
-    "website_description": "PhD Student in Computer Science at Arizona State University, focusing on multimodal AI systems, computer vision, and machine learning",
+    "website_url": "https://yinyueqin.github.io",
+    "github_pages_url": "https://yinyueqin.github.io",
+    "website_name": "Yueqin Yin - Academic Homepage",
+    "website_description": "Ph.D. student in AI at UT Austin focusing on LLM alignment, reasoning, and post-training optimization.",
     "keywords": [
-      "computer vision",
-      "multimodal AI",
-      "machine learning",
-      "deep learning",
+      "LLM alignment",
+      "LLM reasoning",
+      "LLM post-training",
       "artificial intelligence",
-      "academic research",
-      "Sixun Dong",
-      "Ironieser"
+      "Yueqin Yin"
     ],
     "author": {
-      "name": "Sixun Dong",
-      "alternate_name": "Ironieser",
-      "email": "ironieser@gmail.com",
-      "academic_email": "sixundong.ai@gmail.com",
-      "affiliation": "Arizona State University",
-      "job_title": "PhD Student in Computer Science",
+      "name": "Yueqin Yin",
+      "alternate_name": "殷月琴",
+      "email": "yinyueqin0314@gmail.com",
+      "academic_email": "yueqin.yin@utexas.edu",
+      "affiliation": "The University of Texas at Austin",
+      "job_title": "Ph.D. Student in Artificial Intelligence",
       "research_areas": [
-        "multimodal AI systems",
-        "computer vision",
-        "natural language processing",
-        "machine learning"
+        "LLM alignment",
+        "LLM reasoning",
+        "LLM post-training"
       ],
-      "google_scholar_id": "j71Y2-4AAAAJ",
+      "google_scholar_id": "HhEo-1cAAAAJ",
       "orcid": null,
-      "github": "Ironieser",
-      "twitter": "ironieser"
+      "github": "yinyueqin",
+      "twitter": null
     },
     "organization": {
-      "name": "Arizona State University",
+      "name": "The University of Texas at Austin",
       "type": "University",
-      "url": "https://www.asu.edu",
+      "url": "https://www.utexas.edu",
       "address": {
         "addressCountry": "USA",
-        "addressLocality": "Tempe",
-        "addressRegion": "AZ"
+        "addressLocality": "Austin",
+        "addressRegion": "TX"
       }
     }
   }
