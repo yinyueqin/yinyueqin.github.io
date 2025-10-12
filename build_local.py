@@ -346,7 +346,7 @@ def generate_footer(personal, template_info=None):
                     <!-- Visitor Map Widget -->
                     <div class="visitor-map">
                         <!-- ClustrMaps Widget -->
-                        <script type="text/javascript" id="clustrmaps" src="//clustrmaps.com/map_v2.js?d=r_cMMykDPAdqK2GTahWbR__mtnzcj9svUgejZ86OXnU&cl=ffffff&w=a"></script>
+                        <script type="text/javascript" id="clustrmaps" src="//clustrmaps.com/map_v2.js?d=35UW7SywHhkqmrgaDf2xJwc08dXPf8JoiGRcY4ooOho&cl=ffffff&w=a"></script>
                     </div>
                 </div>
             </div>
