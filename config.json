@@ -55,6 +55,16 @@
   },
   "news": [
     {
+      "date": "Jun 2026",
+      "content": "Started summer research internship at <strong>Snowflake AI Research</strong> in Bellevue, WA.",
+      "category": "career"
+    },
+    {
+      "date": "Apr 2026",
+      "content": "ContextCheck was accepted to <strong>ACL 2026 Findings</strong>. <a href=\"https://aclanthology.org/2026.findings-acl.658.pdf\" target=\"_blank\">Paper</a>.",
+      "category": "papers"
+    },
+    {
       "date": "Sep 2025",
       "content": "Segment-PPO was accepted to <strong>TMLR 2025</strong>. <a href=\"https://arxiv.org/abs/2501.02790\" target=\"_blank\">Paper</a>.",
       "category": "papers"
@@ -293,7 +303,9 @@
             "icon": "fas fa-home"
           }
         ]
-      },
+      }
+    ],
+    "2026": [
       {
         "title": "ContextCheck: Sentence-Level Faithfulness Verification with Context-Aware Disambiguation",
         "authors": [
@@ -310,19 +322,18 @@
           "Mingyuan Zhou",
           "Song Wang"
         ],
-        "venue": "Under Review",
-        "venue_type": "under-review",
-        "image": "teaser/underreview.jpg",
+        "venue": "ACL Findings26",
+        "venue_type": "conference",
+        "image": "teaser/contextcheck.png",
         "links": [
           {
-            "name": "Paper (Coming Soon)",
-            "url": null,
-            "icon": "ai ai-arxiv",
-            "coming_soon": true
+            "name": "Paper",
+            "url": "https://aclanthology.org/2026.findings-acl.658.pdf",
+            "icon": "ai ai-arxiv"
           },
           {
             "name": "Code (Coming Soon)",
-            "url": null,
+            "url": "https://github.com/yinyueqin/ContextCheck-Verifier",
             "icon": "fab fa-github",
             "coming_soon": true
           }
@@ -332,6 +343,13 @@
     "survey": []
   },
   "experience": [
+    {
+      "position": "Summer Research Intern — SQL Autocomplete",
+      "company": "Snowflake AI Research",
+      "period": "Jun 2026 - Present",
+      "description": "SQL Fill-in-the-Middle autocomplete model through SFT and GRPO.",
+      "logo": "images/snowflake.png"
+    },
     {
       "position": "Summer Research Intern — Hallucination Detection and Verification",
       "company": "Zoom Video Communications, GenAI Research Group",
