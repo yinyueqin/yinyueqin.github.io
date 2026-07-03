@@ -16,7 +16,7 @@ from urllib.parse import urljoin, urlparse
 import argparse
 
 # 配置
-SCHOLAR_USER_ID = "j71Y2-4AAAAJ"  # 您的Scholar ID
+SCHOLAR_USER_ID = "HhEo-1cAAAAJ"  # 您的Scholar ID
 REQUEST_DELAY = 2  # 请求间隔（秒）
 MAX_RETRIES = 3
 

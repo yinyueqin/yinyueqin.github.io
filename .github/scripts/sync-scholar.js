@@ -2,7 +2,7 @@ const fs = require('fs');
 const puppeteer = require('puppeteer');
 
 // Google Scholar用户ID，从环境变量获取
-const SCHOLAR_USER_ID = process.env.SCHOLAR_USER_ID || 'j71Y2-4AAAAJ'; // 默认使用你的ID
+const SCHOLAR_USER_ID = process.env.SCHOLAR_USER_ID || 'HhEo-1cAAAAJ'; // 默认使用你的ID
 
 if (!SCHOLAR_USER_ID) {
   console.error('❌ SCHOLAR_USER_ID environment variable is required');

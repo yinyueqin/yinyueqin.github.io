@@ -26,7 +26,7 @@
       },
       {
         "name": "Scholar",
-        "url": "https://scholar.google.com/citations?user=jPrhqN0AAAAJ&hl=en",
+        "url": "https://scholar.google.com/citations?user=HhEo-1cAAAAJ&hl=en",
         "icon": "fas fa-graduation-cap",
         "color": "#4285f4"
       },
@@ -426,7 +426,7 @@
         "LLM reasoning",
         "LLM post-training"
       ],
-      "google_scholar_id": "jPrhqN0AAAAJ",
+      "google_scholar_id": "HhEo-1cAAAAJ",
       "orcid": null,
       "github": "yinyueqin",
       "twitter": null
