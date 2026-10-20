@@ -1,0 +1,22 @@
+{
+  "name": "yinyueqin.github.io",
+  "version": "2.1.0",
+  "description": "A simple, config-driven academic website template that generates HTML from JSON configuration.",
+  "main": "index.js",
+  "directories": {
+    "doc": "docs"
+  },
+  "scripts": {
+    "validate": "node scripts/validate-config.js",
+    "build": "npm run validate && node .github/scripts/build-website.js && node .github/scripts/build-blog.js && node .github/scripts/build-blog-page.js",
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "serve": "python3 scripts/local_server.py"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "js-yaml": "^4.1.1",
+    "marked": "^17.0.3"
+  }
+}

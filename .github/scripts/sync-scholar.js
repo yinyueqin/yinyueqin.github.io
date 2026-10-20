@@ -1,4 +1,5 @@
 const fs = require('fs');
+const yaml = require('js-yaml');
 const puppeteer = require('puppeteer');
 
 // Google Scholar用户ID，从环境变量获取
@@ -216,8 +217,8 @@ function isVenueUserCustomized(venue) {
     return true;
   }
   
-  // 2. 包含完整年份的格式（如 CVPR 2022, WACV 2025）
-  if (venue.match(/^[A-Za-z]+\s+20[0-9]{2}$/)) {
+  // 2. 包含完整年份的格式（如 CVPR 2022, WACV 2025, 3DV 2024）
+  if (venue.match(/^[A-Za-z0-9]+\s+20[0-9]{2}$/)) {
     return true;
   }
   
@@ -244,13 +245,9 @@ function updateExistingPublication(existing, scholarData) {
   // 只更新非手动编辑的基础信息，保护用户的手动修改
   let updated = false;
   
-  // 1. 更新引用数相关的featured状态（如果用户没有手动设置）
-  const shouldBeFeatured = scholarData.citations > 10;
-  if (shouldBeFeatured && !existing.featured) {
-    existing.featured = true;
-    updated = true;
-  }
-  
+  // 1. featured 状态完全由用户手动维护，自动同步不再根据引用数修改它
+  //    （历史问题：>10 引用会被自动加成 featured，覆盖用户的精选列表）
+
   // 2. 保护用户手动设置的venue信息
   const isUserCustomizedVenue = isVenueUserCustomized(existing.venue);
   if (!isUserCustomizedVenue) {
@@ -493,11 +490,9 @@ function convertToConfigFormat(scholarPubs, existingConfig) {
         ]
       };
       
-      // 如果引用数较高，标记为featured
-      if (pub.citations > 10) {
-        configPub.featured = true;
-      }
-      
+      // 新论文默认不进精选；featured 由用户手动维护，自动同步不再设置
+      configPub.featured = false;
+
       publicationsByYear[year].push(configPub);
       console.log(`✅ Added new: ${pub.title} (${year})`);
     } else {
@@ -527,11 +522,66 @@ function convertToConfigFormat(scholarPubs, existingConfig) {
   return publicationsByYear;
 }
 
+const CONFIG_DIR = 'config';
+const CONTENT_CONFIG_PATH = `${CONFIG_DIR}/content.json`;
+const META_CONFIG_PATH = `${CONFIG_DIR}/meta.json`;
+const SITE_CONFIG_PATH = `${CONFIG_DIR}/site.yaml`;
+
+const META_KEYS = ['_template_info', '_scholar_sync'];
+const SITE_KEYS = ['seo', 'visitor_map', 'redirects'];
+
+function loadCombinedConfig() {
+  const hasContent = fs.existsSync(CONTENT_CONFIG_PATH);
+  const hasMeta = fs.existsSync(META_CONFIG_PATH);
+  const hasSite = fs.existsSync(SITE_CONFIG_PATH);
+
+  if (hasContent) {
+    const contentRaw = fs.readFileSync(CONTENT_CONFIG_PATH, 'utf8');
+    const contentConfig = JSON.parse(contentRaw);
+
+    let metaConfig = {};
+    if (hasMeta) {
+      const metaRaw = fs.readFileSync(META_CONFIG_PATH, 'utf8');
+      metaConfig = JSON.parse(metaRaw);
+    }
+
+    let siteConfig = {};
+    if (hasSite) {
+      const siteRaw = fs.readFileSync(SITE_CONFIG_PATH, 'utf8');
+      siteConfig = yaml.load(siteRaw) || {};
+    }
+
+    const parts = ['config/content.json'];
+    if (hasMeta) parts.push('config/meta.json');
+    if (hasSite) parts.push('config/site.yaml');
+    console.log('✓ Loaded config from ' + parts.join(' + '));
+    return { ...metaConfig, ...contentConfig, ...siteConfig };
+  }
+
+  throw new Error('Missing config/content.json. Run: npm run migrate-config');
+}
+
+function saveCombinedConfig(configData) {
+  const meta = {};
+  const content = {};
+  META_KEYS.forEach(k => { if (configData[k] !== undefined) meta[k] = configData[k]; });
+  const nonContentKeys = new Set([...META_KEYS, ...SITE_KEYS]);
+  Object.keys(configData).forEach(k => {
+    if (!nonContentKeys.has(k) && configData[k] !== undefined) {
+      content[k] = configData[k];
+    }
+  });
+
+  fs.writeFileSync(META_CONFIG_PATH, JSON.stringify(meta, null, 2), 'utf8');
+  fs.writeFileSync(CONTENT_CONFIG_PATH, JSON.stringify(content, null, 2), 'utf8');
+
+  console.log('💾 Saved updated config/content.json and config/meta.json');
+}
+
 async function updateConfig() {
   try {
-    console.log('📖 Reading current config.json...');
-    const configPath = 'config.json';
-    const configData = JSON.parse(fs.readFileSync(configPath, 'utf8'));
+    console.log('📖 Reading current configuration...');
+    const configData = loadCombinedConfig();
     
     console.log('🔍 Fetching publications from Google Scholar...');
     const scholarPubs = await fetchScholarPublications();
@@ -578,8 +628,7 @@ async function updateConfig() {
       `Added ${addedCount} new publications` : 
       `No new publications found (${updatedCount} existing checked)`;
     
-    console.log('💾 Saving updated config.json...');
-    fs.writeFileSync(configPath, JSON.stringify(configData, null, 2), 'utf8');
+    saveCombinedConfig(configData);
     
     console.log('🎉 Google Scholar sync completed successfully!');
     console.log(`📊 Summary: ${addedCount} added, ${updatedCount} checked`);
@@ -591,4 +640,4 @@ async function updateConfig() {
 }
 
 // 运行同步
-updateConfig(); 
+updateConfig();

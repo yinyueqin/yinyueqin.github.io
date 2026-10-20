@@ -6,24 +6,29 @@
   License: MIT
 -->
 <html lang="en">
+<script>/* Inline theme init — prevent flash of wrong theme */
+(function(){var m=localStorage.getItem('theme-mode')||'auto';var d=m==='night'||(m==='auto'&&window.matchMedia('(prefers-color-scheme:dark)').matches);document.documentElement.setAttribute('data-theme',d?'dark':'light');})();</script>
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Blog - Yueqin Yin (殷月琴)</title>
-    <link rel="stylesheet" href="styles.css">
-    <link rel="stylesheet" href="blog.css">
-    <link rel="stylesheet" href="blog-comments.css">
+    <title>Blog - Yueqin Yin</title>
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" sizes="32x32" href="favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="favicon-16x16.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
+    <link rel="shortcut icon" href="favicon.ico">
+    
+    <link rel="stylesheet" href="assets/css/styles.css">
+    <link rel="stylesheet" href="assets/css/blog.css">
+    <link rel="stylesheet" href="assets/css/blog-comments.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/jpswalsh/academicons@1/css/academicons.min.css">
     <link rel="stylesheet" href="https://unpkg.com/@waline/client@v3/dist/waline.css">
-    <!-- Disable favicon explicitly -->
-    <link rel="icon" href="data:,">
-    <link rel="apple-touch-icon" href="data:,">
-    <link rel="shortcut icon" href="data:,">
-    <script src="blog-data.js"></script>
+    <script src="assets/js/blog-data.js"></script>
 </head>
 <body>
     <!-- Navigation -->
@@ -33,7 +38,6 @@
                 <a href="index.html" class="nav-link " >Bio</a>
                 <a href="publications.html" class="nav-link " >Publications</a>
                 <a href="blog.html" class="nav-link active" >Blog</a>
-                <a href="files/cv_yueqin.pdf" class="nav-link " target="_blank">CV(PDF)</a>
             </div>
         </nav>
     </header>
@@ -48,7 +52,7 @@
                     <div class="page-header-content">
                         <h1 class="page-title-left">Blog</h1>
                         <div class="blog-intro">
-                            <p>Welcome to my blog!</p>
+                            <p>Welcome to my blog! Here I share insights about my research, thoughts on the latest developments in computer vision and AI, tutorials, and reflections on my academic journey.</p>
                         </div>
                     </div>
                 </div>
@@ -100,19 +104,13 @@
     </main>
 
     
+    <button id="back-to-top" class="back-to-top" type="button" aria-label="Back to top">
+        <i class="fas fa-chevron-up"></i>
+    </button>
+    
     <footer class="footer">
         <div class="container">
-            <!-- Visitor Map Section -->
-            <div class="visitor-map-section">
-                <div class="visitor-map-container">
-                    <!-- Visitor Map Widget -->
-                    <div class="visitor-map">
-                        <!-- ClustrMaps Widget -->
-                        <script type="text/javascript" id="clustrmaps" src="//clustrmaps.com/map_v2.js?d=35UW7SywHhkqmrgaDf2xJwc08dXPf8JoiGRcY4ooOho&cl=ffffff&w=a"></script>
-                    </div>
-                </div>
-            </div>
-
+            
             <div class="footer-stats">
                 <div class="stats-item">
                     <i class="fas fa-clock"></i>
@@ -120,7 +118,11 @@
                 </div>
             </div>
             
+            <div class="template-credit">
+                <p>Built with <a href="https://github.com/Ironieser/ironieser.github.io" target="_blank" rel="noopener">Config-Driven Academic Website Template</a> by <a href="https://github.com/Ironieser/ironieser.github.io" target="_blank" rel="noopener">Sixun Dong (ironieser)</a></p>
+            </div>
             
+            <p>&copy; 2025 - 2026 Yueqin Yin. All rights reserved.</p>
         </div>
     </footer>
     
@@ -324,7 +326,7 @@
                         showBlogPost(postId);
                     });
                 });
-                
+
                 document.querySelectorAll('.blog-item.internal-post').forEach(item => {
                     item.addEventListener('click', function() {
                         const postId = this.getAttribute('data-post-id');
@@ -393,13 +395,15 @@
             if (walineContainer) {
                 walineContainer.innerHTML = '';
             }
+            const commentsServer = "";
+            if (!commentsServer) return;
             
             // Import and initialize Waline
             import('https://unpkg.com/@waline/client@v3/dist/waline.js')
                 .then(({ init }) => {
                     init({
                         el: '#waline',
-                        serverURL: 'https://comments.ironieser.cc',
+                        serverURL: commentsServer,
                         path: window.location.pathname + window.location.search,
                         lang: 'en-US',
                         locale: {
@@ -475,25 +479,48 @@
         
         // Initialize when page loads
         document.addEventListener('DOMContentLoaded', function() {
-            // Wait a bit for blog-data.js to load
-            setTimeout(function() {
+            // Check if blog data is already loaded
+            if (typeof window.BLOG_DATA !== 'undefined') {
+                console.log('Blog data already loaded, initializing...');
+                initializeBlog();
+                return;
+            }
+            
+            // Wait for assets/js/blog-data.js to load with progressive timeout
+            let attempts = 0;
+            const maxAttempts = 50; // 5 seconds total
+            
+            function checkBlogData() {
+                attempts++;
+                
                 if (typeof window.BLOG_DATA !== 'undefined') {
+                    console.log('Blog data loaded after', attempts * 100, 'ms');
                     initializeBlog();
+                } else if (attempts < maxAttempts) {
+                    setTimeout(checkBlogData, 100);
                 } else {
-                    console.error('Blog data not loaded');
+                    console.error('Blog data failed to load after 5 seconds');
                     document.getElementById('blog-loading').style.display = 'none';
+                    document.getElementById('no-posts-message').innerHTML = `
+                        <i class="fas fa-exclamation-triangle"></i>
+                        <h3>Failed to Load Blog Data</h3>
+                        <p>The blog data could not be loaded. Please try refreshing the page.</p>
+                        <button onclick="location.reload()" class="btn btn-primary">Refresh Page</button>
+                    `;
                     document.getElementById('no-posts-message').style.display = 'block';
                 }
-            }, 100);
+            }
+            
+            checkBlogData();
         });
     </script>
     
     
     <script>
-        // Set last updated time (when site was built)
+        // Set last updated time (when GitHub Actions built the site)
         function setLastUpdated() {
-            const buildDate = '2026-07-01';
-            const date = new Date(buildDate);
+            const buildDate = '2026-10-20';
+            const date = new Date(buildDate + 'T12:00:00'); // Add noon time to avoid timezone issues
             const formatted = date.toLocaleDateString('en-US', { 
                 year: 'numeric', 
                 month: 'short', 

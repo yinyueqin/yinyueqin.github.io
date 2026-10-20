@@ -1,0 +1,93 @@
+enabled: true
+title: Research Roadmap
+subtitle: Designing Feedback for LLM Post-Training
+description: Informative, well-targeted, and trustworthy learning signals.
+
+phases:
+  - id: preference_optimization
+    title: Preference Optimization
+    icon: ⚖️
+    summary: Getting more learning signal out of preference data by contrasting related prompts and generating fresh negatives during training.
+    stageIds: [preference_optimization]
+    maxItems: 3
+  - id: reward_allocation
+    title: Reward & Exploration Allocation
+    icon: 🎯
+    summary: Sending reward to the parts of a response or task that still need work, from semantic segments in RLHF to hard instructions in multi-constraint RL.
+    stageIds: [reward_allocation]
+    maxItems: 3
+  - id: grounded_feedback
+    title: Verifiable & Grounded Feedback
+    icon: 🔍
+    summary: Grounding feedback in execution and evidence, and putting it to work in a deployed product.
+    stageIds: [verification, deployment]
+    maxItems: 6
+    columns: 2
+    groups:
+      - id: verification
+        label: Verifiable Data & Verifiers
+        icon: 🧪
+        row: top
+      - id: deployment
+        label: "Deployed: SQL Autocomplete"
+        icon: 🚀
+        row: top
+
+filters:
+  - id: alignment
+    name: Alignment
+  - id: reward
+    name: Reward Design
+  - id: verification
+    name: Verification & Grounding
+
+nodes:
+  - id: rpo
+    paper_url: https://arxiv.org/abs/2402.10958
+    short_label: RPO
+    tags: [alignment]
+    stages: [preference_optimization]
+    importance: 2
+  - id: sapo
+    paper_url: https://arxiv.org/pdf/2405.20830
+    short_label: SAPO
+    tags: [alignment]
+    stages: [preference_optimization]
+    importance: 2
+  - id: diffusion_rpo
+    paper_url: https://arxiv.org/pdf/2406.06382
+    short_label: Diffusion-RPO
+    tags: [alignment]
+    stages: [preference_optimization]
+  - id: segment_ppo
+    paper_url: https://arxiv.org/abs/2501.02790
+    short_label: Segment-PPO
+    tags: [alignment, reward]
+    stages: [reward_allocation]
+    importance: 2
+  - id: mulif
+    paper_url: https://arxiv.org/abs/2608.23830
+    short_label: MulIF
+    tags: [reward]
+    stages: [reward_allocation]
+    importance: 2
+  - id: kodcode
+    paper_url: https://arxiv.org/abs/2503.02951
+    short_label: KodCode
+    tags: [verification]
+    group: verification
+    stages: [verification]
+  - id: contextcheck
+    paper_url: https://aclanthology.org/2026.findings-acl.658.pdf
+    short_label: ContextCheck
+    tags: [verification]
+    group: verification
+    stages: [verification]
+    importance: 2
+  - id: sql_autocomplete
+    paper_url: https://openreview.net/forum?id=xSBiWehn2W
+    short_label: SQL Autocomplete
+    tags: [reward, verification]
+    group: deployment
+    stages: [deployment]
+    importance: 2

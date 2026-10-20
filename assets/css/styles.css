@@ -1,0 +1,3563 @@
+/* Reset and Base */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html {
+    overflow-x: hidden;
+}
+
+:root {
+    /* Colors - Light Theme (Premium) */
+    --color-primary: #111827; /* Darker gray for higher contrast */
+    --color-secondary: #4b5563;
+    --color-accent: #4f46e5; /* Sophisticated Indigo */
+    --color-accent-hover: #4338ca;
+    --color-background: #ffffff;
+    --color-surface: #f9fafb; /* Slightly softer than f8fafc */
+    --color-border: #e5e7eb;
+    --color-success: #10b981;
+    --color-warning: #f59e0b;
+    
+    /* Typography */
+    --font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    --font-heading: 'Georgia', 'Times New Roman', serif; /* Added for premium headings */
+    --font-size-xl: 2.25rem;
+    --font-size-lg: 1.875rem;
+    --font-size-md: 1.25rem;
+    --font-size-base: 1rem;
+    --font-size-sm: 0.875rem;
+    --font-size-xs: 0.75rem;
+    
+    /* Spacing */
+    --spacing-xs: 0.5rem;
+    --spacing-sm: 0.75rem;
+    --spacing-md: 1rem;
+    --spacing-lg: 1.5rem;
+    --spacing-xl: 2rem;
+    --spacing-2xl: 3rem;
+    --spacing-3xl: 4rem;
+    
+    /* Layout */
+    --container-width: 1200px;
+    --content-width: 1000px; /* narrowed slightly for better readability */
+    --border-radius: 12px; /* Smoother corners */
+    --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+    --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+    --shadow-md: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+    --shadow-lg: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+    --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); /* smoother easing */
+}
+
+/* Dark Mode Variables */
+[data-theme="dark"] {
+    --color-primary: #ffffff; /* pure white for titles */
+    --color-secondary: #cbd5e1; /* brighter gray (slate-300) */
+    --color-accent: #a5b4fc; /* brighter indigo (indigo-300) */
+    --color-accent-hover: #c7d2fe;
+    /* Use a deep slate blue-black instead of pure black */
+    --color-background: #020617; /* slate-950 style background */
+    --color-surface: #0f172a; /* slightly lighter slate surface for depth */
+    --color-border: #1e293b; /* softer slate border */
+    
+    --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.5);
+    --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.5), 0 2px 4px -1px rgba(0, 0, 0, 0.5);
+    --shadow-md: 0 10px 15px -3px rgba(0, 0, 0, 0.5), 0 4px 6px -2px rgba(0, 0, 0, 0.5);
+    --shadow-lg: 0 20px 25px -5px rgba(0, 0, 0, 0.5), 0 10px 10px -5px rgba(0, 0, 0, 0.5);
+}
+
+body {
+    font-family: var(--font-family);
+    font-size: var(--font-size-base);
+    line-height: 1.6;
+    color: var(--color-primary);
+    background-color: var(--color-background);
+    overflow-x: hidden;
+}
+
+/* Container */
+.container {
+    max-width: var(--container-width);
+    margin: 0 auto;
+    padding: 0 var(--spacing-lg);
+    width: 100%;
+}
+
+/* Header & Navigation */
+.header {
+    background: var(--color-background);
+    border-bottom: 1px solid var(--color-border);
+    position: sticky;
+    top: 0;
+    z-index: 100;
+}
+
+.nav {
+    padding: var(--spacing-md) 0;
+}
+
+.nav-container {
+    max-width: var(--container-width);
+    margin: 0 auto;
+    padding: 0 var(--spacing-lg);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: var(--spacing-2xl);
+    position: relative;
+}
+
+/* Theme Toggle Button */
+.theme-toggle {
+    position: absolute;
+    right: var(--spacing-lg);
+    background: none;
+    border: 1px solid var(--color-border);
+    border-radius: 8px;
+    padding: 6px 10px;
+    cursor: pointer;
+    font-size: 16px;
+    line-height: 1;
+    color: var(--color-secondary);
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    transition: var(--transition);
+    user-select: none;
+}
+
+.theme-toggle:hover {
+    background: var(--color-surface);
+    border-color: var(--color-accent);
+    transform: scale(1.08);
+}
+
+.theme-toggle:active {
+    transform: scale(0.95);
+}
+
+/* Theme toggle: focus / selected visual frame */
+.theme-toggle:focus-visible {
+    outline: 2px solid var(--color-accent);
+    outline-offset: 3px;
+}
+
+/* Show a subtle frame depending on current color mode */
+[data-theme="light"] #theme-toggle,
+[data-theme="dark"] #theme-toggle {
+    border-color: var(--color-accent);
+    box-shadow: 0 0 0 1px rgba(129, 140, 248, 0.5);
+}
+
+[data-theme="light"] #theme-toggle {
+    background: #eef2ff;
+}
+
+[data-theme="dark"] #theme-toggle {
+    background: #020617;
+}
+
+.theme-icon {
+    font-size: 15px;
+    transition: transform 0.3s ease;
+    display: inline-block;
+}
+
+.theme-toggle:hover .theme-icon {
+    transform: rotate(15deg);
+}
+
+.nav-link {
+    color: var(--color-secondary);
+    text-decoration: none;
+    font-weight: 500;
+    font-size: var(--font-size-md);
+    padding: var(--spacing-sm) var(--spacing-md);
+    border-radius: var(--border-radius);
+    transition: var(--transition);
+}
+
+.nav-link:hover {
+    color: var(--color-accent);
+    background-color: var(--color-surface);
+}
+
+.nav-link.active {
+    color: var(--color-accent);
+    font-weight: 600;
+}
+
+/* Main Content */
+.main {
+    padding-top: var(--spacing-xl);
+}
+
+/* Hero Section */
+.hero {
+    padding: var(--spacing-2xl) 0 0 0;
+}
+
+.hero-content {
+    display: grid;
+    grid-template-columns: 280px 1fr;
+    gap: 40px;
+    align-items: center;
+    max-width: 1000px;
+    margin: 0 auto;
+}
+
+.hero-photo {
+    text-align: center;
+}
+
+.profile-image {
+    width: 260px;
+    height: 260px;
+    border-radius: 16px;
+    object-fit: cover;
+    border: 4px solid var(--color-border);
+    box-shadow: var(--shadow-lg);
+    transition: var(--transition);
+}
+
+.profile-image:hover {
+    transform: scale(1.02);
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+}
+
+.hero-info {
+    padding-top: 0;
+}
+
+.hero-title {
+    font-family: var(--font-heading);
+    font-size: 2.75rem;
+    font-weight: 700;
+    margin-bottom: 8px;
+    color: var(--color-primary);
+    line-height: 1.2;
+    letter-spacing: -0.02em;
+}
+
+.hero-title .aka {
+    font-family: var(--font-family);
+    font-size: 1.5rem;
+    font-weight: 400;
+    color: var(--color-secondary);
+    margin-left: 8px;
+}
+
+.hero-subtitle {
+    font-size: var(--font-size-md);
+    color: var(--color-secondary);
+    margin-bottom: 4px;
+    font-weight: 500;
+}
+
+.hero-affiliation {
+    font-size: var(--font-size-base);
+    color: var(--color-secondary);
+    font-weight: 600;
+    margin-bottom: 20px;
+}
+
+.hero-description {
+    font-size: var(--font-size-base);
+    line-height: 1.6;
+    margin-bottom: 24px;
+}
+
+.hero-description p {
+    margin-bottom: 8px;
+}
+
+.hero-description p:last-child {
+    margin-bottom: 0;
+}
+
+.research-keywords {
+    color: var(--color-success);
+    font-style: italic;
+    font-weight: 600;
+}
+
+.job-market-note {
+    display: block;
+    margin-top: 8px;
+    padding: 12px 16px;
+    background: #fff7ed;
+    border: 1px solid #fed7aa;
+    border-left: 5px solid #f97316;
+    border-radius: var(--border-radius);
+    font-weight: 500;
+}
+
+.job-market-note .job-market-highlight {
+    color: #c2410c;
+    font-weight: 700;
+}
+
+[data-theme="dark"] .job-market-note {
+    background: rgba(249, 115, 22, 0.12);
+    border-color: rgba(249, 115, 22, 0.4);
+    border-left-color: #fb923c;
+}
+
+[data-theme="dark"] .job-market-note .job-market-highlight {
+    color: #fdba74;
+}
+
+.username-definition {
+    margin-top: var(--spacing-lg);
+    padding: var(--spacing-md);
+    background: var(--color-surface);
+    border-left: 4px solid var(--color-accent);
+    border-radius: var(--border-radius);
+    font-style: italic;
+}
+
+.username-definition p {
+    margin-bottom: 0;
+    color: var(--color-secondary);
+    font-size: var(--font-size-sm);
+    line-height: 1.5;
+}
+
+.username-definition em {
+    color: var(--color-primary);
+    font-weight: 600;
+    font-style: normal;
+}
+
+.hero-links {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-top: 20px;
+}
+
+.hero-link {
+    display: inline-flex;
+    align-items: center;
+    padding: 10px 16px;
+    background: var(--color-background);
+    border: 1px solid var(--color-border);
+    border-radius: var(--border-radius);
+    text-decoration: none;
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--color-primary);
+    transition: var(--transition);
+    min-width: 80px;
+    justify-content: center;
+    box-shadow: var(--shadow-sm);
+}
+
+.hero-link:hover {
+    border-color: var(--color-accent);
+    color: var(--color-accent);
+    transform: translateY(-2px);
+    box-shadow: var(--shadow);
+    background: var(--color-surface);
+}
+
+.hero-link i {
+    margin-right: 6px;
+    width: 16px;
+    text-align: center;
+}
+
+.hero-link .fa-envelope {
+    color: #dc3545;
+}
+
+.hero-link .fa-graduation-cap {
+    color: #4285f4;
+}
+
+.hero-link .fa-github {
+    color: #333;
+}
+
+.hero-link .fa-twitter {
+    color: #1da1f2;
+}
+
+.hero-link .fa-user-circle {
+    color: #0084ff;
+}
+
+.hero-link .fa-book {
+    color: #0084ff;
+}
+
+.hero-link .fa-google {
+    color: #ea4335;
+}
+
+/* Sections */
+.section {
+    padding: 48px 0;
+}
+
+.section-alt {
+    margin-top: 12px;
+    padding-top: 8px;
+}
+
+.section-title {
+    font-family: var(--font-heading);
+    font-size: 2rem;
+    font-weight: 700;
+    margin-bottom: var(--spacing-2xl);
+    padding-bottom: var(--spacing-sm);
+    color: var(--color-primary);
+    margin-left: 20px;
+    position: relative;
+    letter-spacing: -0.01em;
+}
+
+.section-title::after {
+    content: '';
+    position: absolute;
+    bottom: -2px;
+    left: -30px;
+    right: -30px;
+    height: 2px;
+    background: rgba(55, 65, 81, 0.3);
+}
+
+/* Page Header Styles for Publications */
+.page-header {
+    padding: 40px 0 32px 0;
+}
+
+.page-header-content {
+    max-width: var(--container-width);
+    margin: 0 auto;
+    padding: 0 var(--spacing-lg);
+    text-align: left;
+}
+
+.page-title-left {
+    font-size: var(--font-size-lg);
+    font-weight: 600;
+    color: var(--color-primary);
+    margin-bottom: var(--spacing-xl);
+    padding-bottom: var(--spacing-sm);
+    text-align: left;
+    margin-left: 20px;
+    position: relative;
+    display: none;
+}
+
+.page-title-left::after {
+    content: '';
+    position: absolute;
+    bottom: -2px;
+    left: -30px;
+    right: -30px;
+    height: 2px;
+    background: var(--color-accent);
+}
+
+.research-intro {
+    max-width: 1000px;
+    margin: 0 0 20px 20px; /* 上方介绍与下方统计条之间更紧凑一点 */
+    font-size: 17px;
+    line-height: 1.7;
+    color: var(--color-secondary);
+    text-align: left;
+}
+
+.research-intro p {
+    margin-bottom: 0;
+}
+
+.research-intro strong {
+    color: var(--color-primary);
+    font-weight: 600;
+}
+
+[data-theme="dark"] .research-intro {
+    color: var(--color-secondary) !important;
+}
+
+[data-theme="dark"] .research-intro strong {
+    color: var(--color-primary) !important;
+}
+
+.publication-stats-bar {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 13px;
+    color: #6b7280;
+    /* 居中放在介绍文字下方 */
+    margin: 10px auto 10px auto;
+    padding: 6px 16px;
+    background: rgba(59, 130, 246, 0.08);
+    border-radius: 20px;
+    border: 1px solid rgba(59, 130, 246, 0.15);
+}
+
+.publication-stats-bar .stat-item {
+    font-weight: 600;
+    color: #4f46e5;
+}
+
+.publication-stats-bar .stat-divider {
+    color: #9ca3af;
+    font-weight: 300;
+    margin: 0 4px;
+}
+
+[data-theme="dark"] .publication-stats-bar {
+    background: rgba(129, 140, 248, 0.15);
+    border-color: rgba(129, 140, 248, 0.3);
+    color: var(--color-secondary);
+}
+
+[data-theme="dark"] .publication-stats-bar .stat-item {
+    color: var(--color-accent);
+}
+
+[data-theme="dark"] .publication-stats-bar .stat-divider {
+    color: var(--color-border);
+}
+
+.section-footer {
+    text-align: center;
+    margin-top: var(--spacing-2xl);
+}
+
+/* News */
+.news-filter {
+    display: flex;
+    justify-content: flex-start;
+    gap: 12px;
+    margin-bottom: 32px;
+    flex-wrap: wrap;
+}
+
+.filter-btn {
+    padding: 8px 16px;
+    border: 1px solid var(--color-border);
+    background: var(--color-background);
+    color: var(--color-secondary);
+    border-radius: 20px;
+    font-size: var(--font-size-sm);
+    font-weight: 500;
+    cursor: pointer;
+    transition: var(--transition);
+}
+
+.filter-btn:hover {
+    border-color: var(--color-accent);
+    color: var(--color-accent);
+}
+
+.filter-btn.active {
+    background: var(--color-accent);
+    color: white;
+    border-color: var(--color-accent);
+}
+
+/* Dark mode: Recent News tags active state 更亮、更柔和的靛紫 */
+[data-theme="dark"] .filter-btn.active {
+    background: rgba(129, 140, 248, 0.22); /* 浅一点的靛紫底色 */
+    color: #c7d2fe;                        /* 亮一些的文字颜色 */
+    border-color: #a5b4fc;                 /* 柔和边框 */
+    box-shadow: 0 0 0 1px rgba(165, 180, 252, 0.65);
+}
+
+[data-theme="dark"] .filter-btn.active:hover {
+    background: rgba(129, 140, 248, 0.32);
+}
+
+.news-container {
+    display: flex;
+    gap: 24px;
+    max-width: var(--content-width);
+    margin: 0 auto;
+}
+
+.news-sidebar {
+    width: 120px;
+    flex-shrink: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.news-list {
+    flex: 1;
+    border-left: 2px solid rgba(55, 65, 81, 0.2);
+    padding-left: 24px;
+    max-height: 240px;
+    overflow-y: auto;
+    padding-right: 8px;
+}
+
+.news-list::-webkit-scrollbar {
+    width: 6px;
+}
+
+.news-list::-webkit-scrollbar-track {
+    background: rgba(243, 244, 246, 0.3);
+    border-radius: 3px;
+}
+
+.news-list::-webkit-scrollbar-thumb {
+    background: rgba(55, 65, 81, 0.3);
+    border-radius: 3px;
+}
+
+.news-list::-webkit-scrollbar-thumb:hover {
+    background: rgba(55, 65, 81, 0.5);
+}
+
+.news-item {
+    margin-bottom: 12px;
+    line-height: 1.6;
+}
+
+.news-item:last-child {
+    margin-bottom: 0;
+}
+
+.news-icon {
+    display: inline;
+    margin-right: 4px;
+    font-size: 1em;
+}
+
+.news-date {
+    display: inline-block;
+    min-width: 72px;
+    text-align: left;
+    font-weight: 600;
+    color: var(--color-accent);
+    font-size: var(--font-size-sm);
+    margin-right: 6px;
+}
+
+.news-content {
+    display: inline;
+}
+
+/* 论文名、人名等加粗用黑色 */
+.news-content strong {
+    color: var(--color-primary);
+    font-weight: 700;
+}
+
+.news-content a strong {
+    color: var(--color-primary);
+}
+
+.news-content a {
+    color: var(--color-accent);
+    text-decoration: none;
+    font-weight: 500;
+}
+
+[data-theme="dark"] .news-content strong,
+[data-theme="dark"] .news-content a strong {
+    color: var(--color-primary);
+    text-shadow: 0 0 1px rgba(255, 255, 255, 0.2);
+}
+
+[data-theme="dark"] .research-intro {
+    color: var(--color-secondary);
+}
+
+[data-theme="dark"] .research-intro strong {
+    color: var(--color-primary);
+}
+
+.news-content a:hover {
+    text-decoration: underline;
+}
+
+.news-paper-link {
+    display: inline;
+    margin-left: 4px;
+    color: #b91c1c;
+    text-decoration: none;
+}
+
+.news-paper-link i {
+    color: #b91c1c;
+}
+
+.news-paper-link .ai-arxiv {
+    font-family: 'Academicons';
+    color: #b91c1c;
+}
+
+.news-paper-link:hover {
+    opacity: 0.85;
+}
+
+.news-paper-link:hover i {
+    color: #dc2626;
+}
+
+/* 会议名用颜色高亮（与日期紫色区分） */
+.venue-highlight {
+    font-weight: 700;
+    color: var(--color-warning);
+}
+
+/* Removed Featured Section - keeping basic structure for future use */
+
+.scroll-container {
+    display: flex;
+    overflow-x: auto;
+    gap: 20px;
+    padding: 8px 0 16px 0;
+    scroll-snap-type: x mandatory;
+    scrollbar-width: thin;
+    scrollbar-color: var(--color-border) transparent;
+    -webkit-overflow-scrolling: touch;
+}
+
+.compact-scroll-container {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    max-height: 400px;
+    overflow-y: auto;
+    padding-right: 8px;
+    scrollbar-width: thin;
+    scrollbar-color: var(--color-border) transparent;
+}
+
+.compact-scroll-container::-webkit-scrollbar {
+    width: 6px;
+}
+
+.compact-scroll-container::-webkit-scrollbar-track {
+    background: var(--color-surface);
+    border-radius: 3px;
+}
+
+.compact-scroll-container::-webkit-scrollbar-thumb {
+    background: var(--color-border);
+    border-radius: 3px;
+}
+
+.compact-scroll-container::-webkit-scrollbar-thumb:hover {
+    background: var(--color-secondary);
+}
+
+.scroll-container::-webkit-scrollbar {
+    height: 6px;
+}
+
+.scroll-container::-webkit-scrollbar-track {
+    background: var(--color-surface);
+    border-radius: 3px;
+}
+
+.scroll-container::-webkit-scrollbar-thumb {
+    background: var(--color-border);
+    border-radius: 3px;
+}
+
+.scroll-container::-webkit-scrollbar-thumb:hover {
+    background: var(--color-secondary);
+}
+
+.featured-card {
+    flex: 0 0 auto;
+    width: 280px;
+    background: var(--color-surface);
+    border-radius: 12px;
+    padding: 16px;
+    border: 1px solid var(--color-border);
+    scroll-snap-align: start;
+    transition: var(--transition);
+}
+
+.featured-card.compact {
+    width: 100%;
+    display: flex;
+    gap: 16px;
+    padding: 12px;
+    background: var(--color-background);
+    border: 1px solid var(--color-border);
+}
+
+.featured-card:hover {
+    transform: translateY(-4px);
+    box-shadow: var(--shadow-lg);
+}
+
+.card-image {
+    width: 100%;
+    height: 160px;
+    border-radius: 8px;
+    overflow: hidden;
+    margin-bottom: 12px;
+}
+
+.card-image.compact {
+    width: 80px;
+    height: 60px;
+    margin-bottom: 0;
+    flex-shrink: 0;
+}
+
+.card-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.card-icon-placeholder {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+    border: 2px dashed var(--color-border);
+}
+
+.card-icon-placeholder i {
+    font-size: 48px;
+    color: var(--color-secondary);
+    opacity: 0.6;
+}
+
+.card-image.compact.card-icon-placeholder i {
+    font-size: 24px;
+}
+
+.card-content {
+    flex: 1;
+}
+
+.card-title {
+    font-size: var(--font-size-sm);
+    font-weight: 600;
+    color: var(--color-primary);
+    margin: 0 0 8px 0;
+    line-height: 1.3;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+
+.card-tag {
+    margin-bottom: 12px;
+    font-size: 12px;
+    font-weight: 500;
+}
+
+.project-tag {
+    background: #e0f2fe;
+    color: #0277bd;
+    padding: 4px 8px;
+    border-radius: 12px;
+    display: inline-block;
+}
+
+.blog-tag {
+    background: #f3e5f5;
+    color: #7b1fa2;
+    padding: 4px 8px;
+    border-radius: 12px;
+    display: inline-block;
+}
+
+[data-theme="dark"] .blog-tag {
+    background: rgba(167, 139, 250, 0.15);
+    color: #a5b4fc;
+    border: 1px solid rgba(167, 139, 250, 0.3);
+}
+
+[data-theme="dark"] .blog-link {
+    color: var(--color-primary);
+}
+
+[data-theme="dark"] .blog-item p {
+    color: var(--color-secondary);
+}
+
+.card-links {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+}
+
+.btn-small {
+    display: inline-flex;
+    align-items: center;
+    padding: 4px 8px;
+    border-radius: 6px;
+    text-decoration: none;
+    font-size: 11px;
+    font-weight: 500;
+    transition: var(--transition);
+    border: 1px solid transparent;
+}
+
+.btn-small i {
+    margin-right: 4px;
+    font-size: 10px;
+}
+
+.btn-small.btn-paper {
+    background: var(--color-accent);
+    color: white;
+}
+
+.btn-small.btn-paper:hover {
+    background: #1e40af;
+    transform: translateY(-1px);
+}
+
+.btn-small.btn-code {
+    background: var(--color-background);
+    color: var(--color-primary);
+    border-color: var(--color-border);
+}
+
+.btn-small.btn-code:hover {
+    border-color: var(--color-accent);
+    color: var(--color-accent);
+}
+
+.btn-small.btn-demo {
+    background: #059669;
+    color: white;
+}
+
+.btn-small.btn-demo:hover {
+    background: #047857;
+    transform: translateY(-1px);
+}
+
+/* Publications */
+.publications-list {
+    max-width: var(--content-width);
+    margin: 0 auto;
+    list-style: none;
+    padding: 0;
+}
+
+.publication-item {
+    display: flex;
+    flex-wrap: wrap; /* allow TL;DR to wrap below */
+    gap: 24px;
+    margin-bottom: 24px; /* 稍微缩小论文卡片之间的垂直间距 */
+    padding: 24px;
+    background: var(--color-background);
+    /* 默认状态下用更“细”的浅灰描边，看起来更轻一点 */
+    border: 1px solid rgba(148, 163, 184, 0.45);  
+    border-radius: var(--border-radius);
+    align-items: flex-start;
+    box-shadow: var(--shadow-sm);
+    transition: var(--transition), z-index 0s 0.5s; /* delay z-index revert so outgoing popover finishes fading first */
+    position: relative;
+    z-index: 1;
+}
+
+.publication-item:hover,
+.publication-item:focus-within {
+    /* 用边框颜色 + 轻微阴影表示选中 */
+    box-shadow: var(--shadow-md);
+    border-color: var(--color-accent);
+    transform: translateY(-4px);
+    z-index: 10;
+    transition: var(--transition), z-index 0s 0s; /* on hover, elevate z-index immediately */
+}
+
+/* Day mode: pub 高亮边框用深灰色 1px（不抢 TL;DR 的 2px 紫色框） */
+[data-theme="light"] .publication-item:hover,
+[data-theme="light"] .publication-item:focus-within {
+    border-color: var(--color-primary); /* 深灰文字色，整体更克制 */
+}
+
+/* TL;DR functionality - independent floating tooltip */
+.tldr-wrapper {
+    position: absolute;
+    bottom: calc(100% + 8px);
+    left: 0;
+    width: 100%;
+    /* Soft violet tint with glassmorphism */
+    background: rgba(247, 245, 255, 0.95); 
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border-radius: var(--border-radius);
+    border: 1px solid #8b5cf6; /* 稍微加粗一点边框，突出 TL;DR */
+    box-shadow: 0 10px 30px -10px rgba(139, 92, 246, 0.15), 0 4px 6px -2px rgba(139, 92, 246, 0.05);
+    padding: 16px 24px;
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(10px);
+    /* Disappear fast (no delay) so the outgoing one clears immediately */
+    transition: opacity 0.25s ease-out 0s,
+                transform 0.25s ease-out 0s,
+                visibility 0s 0.25s;
+    z-index: 20;
+    pointer-events: none;
+}
+
+:root[data-theme="dark"] .tldr-wrapper {
+    /* Soft violet tint for dark mode */
+    background: rgba(38, 35, 56, 0.95);
+    border: 1px solid #a78bfa; /* Lighter violet for dark mode */
+    box-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.5), 0 4px 6px -2px rgba(0, 0, 0, 0.3);
+}
+
+/* Appear: wait a bit longer (0.2s) so outgoing popover fades before incoming shows */
+
+/* TL;DR glassmorphism fine-tuning: 更高透明度 + 更柔和的高斯模糊 */
+.tldr-wrapper {
+    background: rgba(247, 245, 255, 0.16);  /* 更透明一些 */
+    backdrop-filter: blur(18px);
+    -webkit-backdrop-filter: blur(18px);
+}
+
+[data-theme="dark"] .tldr-wrapper {
+    background: rgba(15, 23, 42, 0.5);      /* 夜间模式也再透一点 */
+    border: 2px solid #a78bfa;              /* 与浅色模式一致稍微加粗边框 */
+}
+
+.publication-item.has-tldr:hover .tldr-wrapper {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0);
+    /* 再稍微晚一点出现（0.3s 延迟），看起来更从容 */
+    transition: opacity 0.35s cubic-bezier(0.16, 1, 0.3, 1) 0.3s,
+                transform 0.45s cubic-bezier(0.16, 1, 0.3, 1) 0.3s,
+                visibility 0s 0.3s;
+}
+
+.tldr-badge {
+    display: inline;
+    color: #8b5cf6; /* Matches border color perfectly */
+    font-size: 13px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-right: 6px;
+}
+
+:root[data-theme="dark"] .tldr-badge {
+    color: #a78bfa; /* Match dark mode border */
+}
+
+.tldr-badge::after {
+    content: ":";
+}
+
+.tldr-text {
+    display: inline;
+    font-size: 14px;
+    line-height: 1.5;
+    color: var(--color-text-light);
+    margin: 0;
+}
+
+.publication-item:last-child {
+    margin-bottom: 0;
+}
+
+.year-group {
+    margin-bottom: var(--spacing-3xl);
+}
+
+.year-title {
+    font-size: var(--font-size-lg);
+    font-weight: 600;
+    color: var(--color-primary);
+    margin-bottom: var(--spacing-xl);
+    padding-bottom: var(--spacing-sm);
+    margin-left: 20px;
+    position: relative;
+}
+
+.year-title::after {
+    content: '';
+    position: absolute;
+    bottom: -2px;
+    left: -30px;
+    right: -30px;
+    height: 2px;
+    background: rgba(55, 65, 81, 0.3);
+}
+
+.auto-sync-note {
+    font-size: var(--font-size-sm);
+    font-weight: 400;
+    color: var(--color-secondary);
+    font-style: italic;
+    margin-left: var(--spacing-sm);
+}
+
+        .publication-image {
+            flex-shrink: 0;
+            width: 160px;
+            height: 90px; /* 16:9 aspect ratio - unified wide format */
+            border-radius: var(--border-radius);
+            object-fit: contain;
+            border: 1px solid var(--color-border);
+            background: var(--color-surface);
+        }
+
+        /* All images now use the same wide format */
+        .publication-image.teaser {
+            width: 160px;
+            height: 90px;
+        }
+
+        .publication-image.square {
+            width: 160px;
+            height: 90px; /* Changed from square to wide format */
+        }
+
+.publication-content {
+    flex: 1;
+}
+
+.publication-content h3 {
+    margin: 0 0 15px 0;
+    font-size: 28px;
+    font-weight: 600;
+    color: #333;
+}
+
+.publication-entry {
+    margin-bottom: 25px;
+}
+
+.publication-venue {
+    display: inline-block;
+    padding: 4px 12px;
+    background: #3b82f6;
+    color: #ffffff;
+    font-weight: 600;
+    font-size: 13px;
+    border-radius: 4px;
+    margin-right: 8px;
+    min-width: 100px;
+    text-align: center;
+}
+
+.publication-venue-under-review {
+    display: inline-block;
+    padding: 4px 12px;
+    background: #f3f4f6;
+    color: #6b7280;
+    font-weight: 500;
+    font-size: 13px;
+    border-radius: 4px;
+    margin-right: 8px;
+    min-width: 100px;
+    text-align: center;
+}
+
+.publication-venue-preprint {
+    display: inline-block;
+    padding: 4px 12px;
+    background: #f3f4f6;
+    color: #6b7280;
+    font-weight: 500;
+    font-size: 13px;
+    border-radius: 4px;
+    margin-right: 8px;
+    min-width: 100px;
+    text-align: center;
+}
+
+.publication-venue-working {
+    display: inline-block;
+    padding: 4px 12px;
+    background: #e0f2fe;
+    color: #0277bd;
+    font-weight: 600;
+    font-size: 13px;
+    border-radius: 4px;
+    margin-right: 8px;
+    min-width: 100px;
+    text-align: center;
+}
+
+.publication-venue-oral {
+    display: inline-block;
+    padding: 4px 12px;
+    color: #ffffff;
+    font-weight: 700;
+    background: #f59e0b;
+    border-radius: 4px;
+    margin-left: 4px;
+    margin-right: 8px;
+    font-size: 13px;
+    min-width: 60px;
+    text-align: center;
+}
+
+.publication-award {
+    display: inline-block;
+    padding: 3px 10px;
+    color: #b45309;
+    font-weight: 700;
+    background: #fff7ed;
+    border: 1px solid #fed7aa;
+    border-radius: 4px;
+    margin-right: 8px;
+    font-size: 13px;
+}
+
+.publication-venue::after {
+    content: "";
+}
+
+.publication-title {
+    margin: 0 0 6px 0;
+    font-size: 16px;
+    line-height: 1.4;
+    font-weight: 500;
+
+}
+
+.publication-authors {
+    margin: 0 0 8px 0;
+    font-size: 14px;
+    color: var(--color-secondary);
+    line-height: 1.4;
+    font-weight: 400;
+}
+
+.publication-authors strong {
+    color: var(--color-primary);
+    font-weight: 700;
+    font-size: 15px;
+}
+
+.publication-authors .author-highlight {
+    color: var(--color-primary);
+    font-weight: 600;
+    font-size: 14.5px;
+    position: relative;
+}
+
+.publication-description {
+    margin: 8px 0 10px 0;
+    font-size: 0.95em;
+    color: var(--color-secondary, #6b7280);
+    line-height: 1.5;
+}
+
+.publication-authors .author-highlight::after {
+    content: '';
+    position: absolute;
+    bottom: 1px;
+    left: 0;
+    right: 0;
+    height: 1px;
+    background: #3b82f6;
+    opacity: 0.4;
+    border-radius: 0.5px;
+}
+
+.publication-links {
+    margin: 0;
+    font-size: 14px;
+}
+
+.publication-links a {
+    color: var(--color-accent);
+    text-decoration: none;
+}
+
+.publication-links a:hover {
+    text-decoration: underline;
+}
+
+.publication-links a[href="#"] {
+    color: #9ca3af;
+    cursor: default;
+    font-style: italic;
+}
+
+.publication-links a[href="#"]:hover {
+    text-decoration: none;
+}
+
+.publication-links .coming-soon {
+    color: #9ca3af;
+    font-style: italic;
+    cursor: default;
+}
+
+.publication-links .ai-arxiv {
+    color: #b91c1c;
+    font-family: 'Academicons';
+}
+
+.publication-links .ai {
+    font-family: 'Academicons';
+}
+
+.publication-links .fa-github {
+    color: var(--color-primary);
+}
+
+.publication-links .fa-youtube {
+    color: #ff0000;
+}
+
+.publication-links .fa-tv {
+    color: #fb7299;
+}
+
+.publication-links .fa-database {
+    color: #28a745;
+}
+
+.publication-links .fa-book-open {
+    color: #007bff;
+}
+
+/* Experience */
+.experience-list {
+    max-width: var(--content-width);
+    margin: 0 auto;
+    list-style: none;
+    padding: 0;
+}
+
+.experience-item {
+    display: flex;
+    margin-bottom: 24px;
+    padding: 24px;
+    background: var(--color-background);
+    border-radius: var(--border-radius);
+    align-items: flex-start;
+    gap: var(--spacing-lg);
+}
+
+.experience-item:hover {
+    /* 无边框、无高亮效果，保持原样 */
+}
+
+.experience-item:last-child {
+    margin-bottom: 0;
+}
+
+.experience-logo {
+    flex-shrink: 0;
+    width: 160px;
+    height: 90px;
+    border-radius: var(--border-radius);
+    object-fit: cover;
+    border: 1px solid var(--color-border);
+    background: var(--color-surface);
+}
+
+.experience-content {
+    flex: 1;
+}
+
+.experience-position {
+    font-weight: 600;
+    color: var(--color-primary);
+    margin: 0 0 var(--spacing-xs) 0;
+    font-size: var(--font-size-base);
+    line-height: 1.4;
+}
+
+.experience-company {
+    margin: 0 0 var(--spacing-xs) 0;
+    color: var(--color-secondary);
+    font-size: var(--font-size-sm);
+    line-height: 1.4;
+    font-weight: 500;
+}
+
+.experience-period {
+    margin: 0 0 var(--spacing-xs) 0;
+    color: var(--color-secondary);
+    font-size: var(--font-size-sm);
+    line-height: 1.4;
+    font-style: italic;
+}
+
+.experience-description {
+    margin: 0;
+    color: var(--color-secondary);
+    font-size: var(--font-size-sm);
+    line-height: 1.4;
+}
+
+/* Academic Service */
+.service-content {
+    max-width: var(--content-width);
+    margin: 0 auto;
+}
+
+.service-summary {
+    text-align: left;
+}
+
+.service-title {
+    font-size: var(--font-size-lg);
+    font-weight: 600;
+    color: var(--color-primary);
+    margin-bottom: var(--spacing-lg);
+}
+
+.service-description {
+    margin-bottom: var(--spacing-md);
+    line-height: 1.6;
+    color: var(--color-secondary);
+    font-size: var(--font-size-base);
+}
+
+.service-description:last-child {
+    margin-bottom: 0;
+}
+
+.service-description strong {
+    /* 用强调色高亮 “Conference / Journal” 等关键词，兼容深浅主题 */
+    color: var(--color-accent);
+    font-weight: 600;
+}
+
+/* Education */
+.education-list {
+    max-width: var(--content-width);
+    margin: 0 auto;
+    list-style: none;
+    padding: 0;
+}
+
+.education-item {
+    display: flex;
+    margin-bottom: var(--spacing-xl);
+    align-items: flex-start;
+    gap: var(--spacing-lg);
+}
+
+.education-item:last-child {
+    margin-bottom: 0;
+}
+
+.education-period {
+    flex-shrink: 0;
+    width: 160px; /* Match publication image width for consistency */
+    font-weight: 500;
+    color: var(--color-secondary);
+    font-size: var(--font-size-sm);
+}
+
+.education-content {
+    flex: 1;
+}
+
+.education-degree {
+    font-weight: 600;
+    color: var(--color-primary);
+    margin: 0 0 var(--spacing-xs) 0;
+    font-size: var(--font-size-base);
+    line-height: 1.4;
+}
+
+.education-institution {
+    margin: 0 0 var(--spacing-xs) 0;
+    color: var(--color-secondary);
+    font-size: var(--font-size-sm);
+    line-height: 1.4;
+    font-weight: 500;
+}
+
+.education-details {
+    margin: 0;
+    color: var(--color-secondary);
+    font-size: var(--font-size-sm);
+    line-height: 1.4;
+}
+
+/* Buttons */
+.btn {
+    display: inline-block;
+    padding: var(--spacing-sm) var(--spacing-md);
+    border-radius: var(--border-radius);
+    text-decoration: none;
+    font-weight: 500;
+    font-size: var(--font-size-sm);
+    transition: var(--transition);
+    border: 1px solid transparent;
+}
+
+.btn-paper {
+    background: var(--color-accent);
+    color: white;
+}
+
+.btn-paper:hover {
+    background: #1e40af;
+    transform: translateY(-1px);
+}
+
+.btn-code {
+    background: var(--color-background);
+    color: var(--color-primary);
+    border-color: var(--color-border);
+}
+
+.btn-code:hover {
+    border-color: var(--color-accent);
+    color: var(--color-accent);
+}
+
+.btn-more {
+    background: var(--color-surface);
+    color: var(--color-primary);
+    border-color: var(--color-border);
+    padding: var(--spacing-md) var(--spacing-xl);
+    font-size: var(--font-size-base);
+}
+
+.btn-more:hover {
+    border-color: var(--color-accent);
+    color: var(--color-accent);
+    transform: translateY(-1px);
+}
+
+/* Links */
+.link {
+    color: var(--color-accent);
+    text-decoration: none;
+    transition: var(--transition);
+}
+
+.link:hover {
+    color: #1e40af;
+}
+
+/* Footer */
+.footer {
+    background: var(--color-surface);
+    border-top: 1px solid var(--color-border);
+    padding: var(--spacing-lg) 0;
+    margin-top: var(--spacing-3xl);
+    text-align: center;
+    color: var(--color-secondary);
+    font-size: var(--font-size-sm);
+}
+
+/* Visitor Map Styles */
+.visitor-map-section {
+    margin-bottom: var(--spacing-md);
+}
+
+.visitor-map-container {
+    display: flex;
+    justify-content: center;
+}
+
+.visitor-map {
+    width: 100%;
+    max-width: 380px;
+    border-radius: 6px;
+    overflow: hidden;
+    background: var(--color-background);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.visitor-map a {
+    display: block;
+    text-decoration: none;
+}
+
+.visitor-map img {
+    display: block;
+    width: 100%;
+    height: auto;
+}
+
+/* Control ClustrMaps widget size */
+.visitor-map #clustrmaps {
+    max-width: 380px !important;
+    width: 100% !important;
+}
+
+.visitor-map iframe {
+    max-width: 380px !important;
+    width: 100% !important;
+    height: 220px !important;
+    border: none !important;
+}
+
+.footer-stats {
+    display: flex;
+    justify-content: center;
+    gap: var(--spacing-xl);
+    margin-bottom: var(--spacing-md);
+    flex-wrap: wrap;
+}
+
+.stats-item {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-xs);
+    color: var(--color-secondary);
+    font-size: var(--font-size-sm);
+}
+
+.stats-item i {
+    color: var(--color-accent);
+    width: 16px;
+    text-align: center;
+}
+
+/* Template Credit */
+.template-credit {
+    margin-bottom: var(--spacing-md);
+    padding-top: var(--spacing-md);
+    border-top: 1px solid var(--color-border);
+}
+
+.template-credit p {
+    margin: 0;
+    font-size: var(--font-size-xs);
+    color: var(--color-secondary);
+    opacity: 0.8;
+}
+
+.template-acknowledgments {
+    margin-top: var(--spacing-xs) !important;
+    font-style: italic;
+    opacity: 0.7 !important;
+}
+
+.template-credit a {
+    color: var(--color-accent);
+    text-decoration: none;
+    transition: var(--transition);
+}
+
+.template-credit a:hover {
+    color: #1e40af;
+    text-decoration: underline;
+}
+
+/* Template attribution (always shown when using this template; not controlled by config) */
+.template-attribution {
+    margin: 0 0 var(--spacing-sm);
+    font-size: var(--font-size-xs);
+    color: var(--color-secondary);
+    opacity: 0.75;
+}
+
+.template-attribution a {
+    color: var(--color-accent);
+    text-decoration: none;
+}
+
+.template-attribution a:hover {
+    text-decoration: underline;
+}
+
+/* Back to Top button */
+.back-to-top {
+    position: fixed;
+    right: 32px;
+    bottom: 180px;
+    width: 46px;           /* 按钮稍微放大 */
+    height: 46px;
+    border-radius: 10px;   /* 改为圆角方块，不再是完全圆形 */
+    border: 1px solid var(--color-border);
+    background: var(--color-surface);
+    color: var(--color-secondary);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 16px;       /* 图标大小 */
+    font-weight: 600;
+    letter-spacing: 0.04em;
+    cursor: pointer;
+    box-shadow: var(--shadow-sm);
+    opacity: 0;
+    pointer-events: none;
+    transform: translateY(10px);
+    transition: opacity 0.25s ease, transform 0.25s ease, background 0.2s ease, border-color 0.2s ease, color 0.2s ease;
+    z-index: 60;
+}
+
+/* Desktop: 将 Top 按钮对齐到中间内容栏的右侧 */
+@media (min-width: 1200px) {
+    .back-to-top {
+        right: calc((100vw - 1200px) / 2 - 4px); /* 内容栏右侧，紧贴边缘 */
+    }
+}
+
+.back-to-top.visible {
+    opacity: 1;
+    pointer-events: auto;
+    transform: translateY(0);
+}
+
+.back-to-top:hover {
+    background: var(--color-accent);
+    border-color: var(--color-accent);
+    color: #ffffff;
+    box-shadow: var(--shadow);
+}
+
+/* 点击后失去 focus 样式，不保留高亮颜色 */
+.back-to-top:focus {
+    outline: none;
+}
+
+.back-to-top:focus:not(:focus-visible) {
+    background: var(--color-surface);
+    border-color: var(--color-border);
+    color: var(--color-secondary);
+    box-shadow: var(--shadow-sm);
+}
+
+@media (max-width: 768px) {
+    .back-to-top {
+        right: 8px;
+        bottom: 56px;
+        width: 40px;
+        height: 40px;
+        font-size: 11px;
+    }
+}
+
+/* Responsive Design */
+@media (max-width: 1024px) {
+    .hero-content {
+        grid-template-columns: 260px 1fr;
+        gap: 32px;
+    }
+    
+    .profile-image {
+        width: 240px;
+        height: 240px;
+    }
+
+    .hero-links {
+        gap: 10px;
+    }
+
+    .hero-link {
+        min-width: 70px;
+        padding: 6px 10px;
+        font-size: 12px;
+    }
+}
+
+@media (max-width: 768px) {
+    .container {
+        padding: 0 var(--spacing-md);
+    }
+    
+    .nav-container {
+        padding: 0 var(--spacing-md);
+        gap: var(--spacing-lg);
+    }
+    
+    .nav-link {
+        font-size: var(--font-size-base);
+        padding: var(--spacing-xs) var(--spacing-sm);
+    }
+    
+    .hero-content {
+        grid-template-columns: 1fr;
+        gap: var(--spacing-xl);
+        text-align: center;
+    }
+    
+    .hero-info {
+        padding-top: 0;
+        text-align: left;
+    }
+    
+    .hero-links {
+        justify-content: center;
+    }
+    
+    .profile-image {
+        width: 200px;
+        height: 200px;
+    }
+
+    .news-filter {
+        gap: 8px;
+    }
+
+    .filter-btn {
+        padding: 6px 12px;
+        font-size: 12px;
+    }
+    
+    .news-container {
+        flex-direction: column;
+        gap: 16px;
+    }
+    
+    .news-sidebar {
+        width: auto;
+        flex-direction: row;
+        gap: 8px;
+        overflow-x: auto;
+    }
+    
+    .news-list {
+        border-left: none;
+        padding-left: 0;
+        padding-top: 16px;
+        max-height: 320px; /* Increased from 120px at user request */
+        overflow-y: auto;
+        padding-right: 8px;
+    }
+    
+    .news-item,
+    .education-item {
+        flex-direction: column;
+        gap: var(--spacing-sm);
+    }
+    
+    .experience-item {
+        flex-direction: row;
+        gap: var(--spacing-md);
+    }
+    
+    .experience-logo {
+        width: 80px;
+        height: 60px;
+        flex-shrink: 0;
+    }
+    
+    .publication-item {
+        flex-direction: column;          /* 手机端改为上下排版：图片在上，文字在下 */
+        align-items: flex-start;
+        gap: 15px;
+        padding: 12px 10px 20px 10px;    /* 左右仅留一点边，图片接近卡片等宽 */
+        margin-bottom: 24px;
+    }
+    
+    .tldr-wrapper,
+    .publication-item.has-tldr:hover .tldr-wrapper {
+        position: relative;
+        top: auto;
+        bottom: auto;
+        opacity: 0;
+        visibility: hidden;
+        max-height: 0;
+        overflow: hidden;
+        padding: 0 12px;
+        margin-top: 0;
+        width: 100%;
+        box-shadow: none !important;
+        background: rgba(139, 92, 246, 0.05); /* Soft violet tint */
+        border: 1px solid transparent;
+        border-top: none;
+        border-bottom: none;
+        /* Snappier close animation */
+        transition: max-height 0.3s cubic-bezier(0, 1, 0, 1), opacity 0.2s ease-out, margin 0.3s ease-out, padding 0.3s ease-out, border 0.3s ease-out;
+        transform: none !important;
+    }
+    
+    .publication-item.has-tldr.mobile-active .tldr-wrapper,
+    .publication-item.has-tldr.mobile-active:hover .tldr-wrapper {
+        opacity: 1;
+        visibility: visible;
+        /* Using a smaller max-height so it doesn't take forever to close */
+        max-height: 250px; 
+        padding: 12px;
+        margin-top: 8px;
+        border: 1px solid rgba(139, 92, 246, 0.2);
+        /* Smoother open animation */
+        transition: max-height 0.4s ease-in-out, opacity 0.3s ease-in 0.1s, margin 0.4s ease-in-out, padding 0.4s ease-in-out, border 0.4s ease-in-out;
+    }
+    
+    :root[data-theme="dark"] .publication-item.has-tldr.mobile-active .tldr-wrapper {
+        background: rgba(167, 139, 250, 0.05);
+        border: 1px solid rgba(167, 139, 250, 0.2);
+    }
+    
+    /* 手机端 pub 图片包裹容器：统一尺寸，承载模糊背景效果 */
+    .pub-img-wrapper {
+        position: relative;
+        display: block;
+        width: 90%;
+        height: 150px;
+        margin: 0 auto 12px auto;
+        border-radius: var(--border-radius);
+        overflow: hidden;
+        flex-shrink: 0;
+    }
+
+    /* 模糊背景层：同一张图模糊后填满留白区域 */
+    .pub-img-wrapper::before {
+        content: '';
+        position: absolute;
+        inset: -10px;
+        background-image: var(--pub-img-src);
+        background-size: cover;
+        background-position: center;
+        filter: blur(14px);
+        opacity: 0.5;
+    }
+
+    /* 主图层：等比缩放居中，叠在模糊层上方 */
+    .pub-img-wrapper .publication-image {
+        position: relative !important;
+        z-index: 1 !important;
+        display: block !important;
+        width: 100% !important;
+        max-width: 100% !important;
+        height: 100% !important;
+        object-fit: contain !important;
+        padding: 0 !important;
+        margin: 0 !important;
+        flex-shrink: unset !important;
+        background: transparent !important;
+        border: none !important;
+    }
+    
+    /* 手机端：只隐藏用了默认占位图（underreview.jpg）的 paper 图片及其 wrapper */
+    .publication-image[src*="underreview"],
+    .pub-img-wrapper:has(.publication-image[src*="underreview"]) {
+        display: none !important;
+    }
+
+    .news-date,
+    .education-period,
+    .experience-period,
+    .publication-year {
+        min-width: auto;
+        font-weight: 600;
+    }
+    
+    .section {
+        padding: var(--spacing-2xl) 0;
+    }
+    
+    .section-alt {
+        margin-top: 24px;
+        padding-top: 16px;
+    }
+    
+    .section-title {
+        font-size: var(--font-size-md);
+        margin-bottom: var(--spacing-xl);
+        margin-left: 0;
+    }
+    
+    .section-title::after {
+        left: -10px;
+        right: -10px;
+    }
+}
+
+@media (max-width: 480px) {
+    .nav-container {
+        gap: var(--spacing-md);
+        flex-wrap: wrap;
+        justify-content: center;
+    }
+    
+    .hero-title {
+        font-size: 1.875rem;
+    }
+    
+    .profile-image {
+        width: 180px;
+        height: 180px;
+    }
+
+    .featured-card {
+        width: 240px;
+    }
+
+    .featured-tabs {
+        gap: 4px;
+    }
+
+    .featured-tab {
+        padding: 6px 12px;
+        font-size: 12px;
+    }
+    
+    .publication-title {
+        font-size: var(--font-size-base);
+    }
+    
+    .publication-item {
+        gap: 12px;
+    }
+    
+    .publication-image {
+        width: 100px;
+        height: 56px;
+    }
+    
+    .publication-venue {
+        width: 75px;
+        font-size: 12px;
+        padding: 2px 6px;
+    }
+    
+    .publication-venue-oral {
+        font-size: 12px;
+        padding: 2px 6px;
+    }
+    
+    .visitor-map {
+        max-width: 320px;
+    }
+    
+    .visitor-map iframe {
+        height: 180px !important;
+    }
+    
+    .footer-stats {
+        flex-direction: column;
+        gap: var(--spacing-sm);
+        align-items: center;
+    }
+    
+    .section-alt {
+        margin-top: 20px;
+        padding-top: 12px;
+    }
+    
+    /* Publications page responsive */
+    .page-title-left, 
+    .year-title {
+        margin-left: 0;
+        font-size: 24px;
+    }
+    
+    .page-title-left::after,
+    .year-title::after {
+        left: -10px;
+        right: -10px;
+    }
+    
+    .research-intro, 
+    .publication-stats-bar {
+        margin-left: 0;
+    }
+    
+    .publication-stats-bar {
+        flex-wrap: wrap;
+        justify-content: flex-start;
+        gap: 4px;
+        font-size: 12px;
+        padding: 5px 12px;
+    }
+    
+    .mobile-menu-toggle {
+        display: block;
+    }
+    
+    .publication-stats-bar .stat-item {
+        background: rgba(59, 130, 246, 0.1);
+        padding: 2px 8px;
+        border-radius: 12px;
+        font-size: 11px;
+    }
+}
+
+/* Scroll Reveal Animations */
+.reveal {
+    opacity: 0;
+    transform: translateY(30px);
+    transition: all 0.8s cubic-bezier(0.5, 0, 0, 1);
+}
+
+.reveal.active {
+    opacity: 1;
+    transform: translateY(0);
+}
+/* Final Dark Mode Overrides */
+[data-theme="dark"] .publication-award {
+    background: rgba(245, 158, 11, 0.12);
+    color: #fbbf24;
+    border-color: rgba(245, 158, 11, 0.35);
+}
+
+[data-theme="dark"] .publication-venue-under-review,
+[data-theme="dark"] .publication-venue-preprint,
+[data-theme="dark"] .publication-venue-working {
+    background: var(--color-surface) !important;
+    color: var(--color-secondary) !important;
+    border: 1px solid var(--color-border) !important;
+}
+
+[data-theme="dark"] .publication-content h3 {
+    color: var(--color-primary) !important;
+}
+
+[data-theme="dark"] .research-intro {
+    color: var(--color-primary) !important;
+}
+
+[data-theme="dark"] .publication-item {
+    background: var(--color-surface) !important;
+    border-color: var(--color-border) !important;
+}
+
+/* 夜间模式下：pub 默认是较深灰底 + 灰色细边框（未选中状态） */
+[data-theme="dark"] .publication-item {
+    background: #020617 !important;   /* 深一点的底色 */
+    border-color: #111827 !important; /* 更深的灰色描边，未选中时更低调 */
+    border-width: 1px;
+}
+
+[data-theme="dark"] .news-item {
+    /* 夜间模式下与日间保持同样的布局，不再单独加卡片式边框，以便展示更多内容 */
+    background: transparent;
+    padding: 0;
+    border-radius: 0;
+    border: none;
+    margin-bottom: 12px;
+}
+
+[data-theme="dark"] .news-item:hover {
+    /* 保留轻微的交互反馈（可以按需再增强），不做位移和阴影 */
+    border: none;
+    transform: none;
+    box-shadow: none;
+}
+
+/* Dark mode: hover elevation / highlight
+ * - pub: 灰框变亮一点
+ * - experience / featured: 仍使用强调色高亮
+ */
+[data-theme="dark"] .publication-item:hover,
+[data-theme="dark"] .publication-item:focus-within {
+    background: #020617; /* 保持与默认一致的深底色 */
+    box-shadow: 0 18px 45px rgba(15, 23, 42, 0.85);
+    border-color: #e5e7eb !important; /* 更亮的灰色边框（高亮状态） */
+}
+
+[data-theme="dark"] .featured-card:hover {
+    background: #020617; /* slightly darker than surface,形成对比 */
+    box-shadow: 0 18px 45px rgba(15, 23, 42, 0.85);
+    border-color: var(--color-accent);
+}
+
+[data-theme="dark"] .hero-link:hover,
+[data-theme="dark"] .btn-code:hover,
+[data-theme="dark"] .filter-btn:hover {
+    background-color: #0b1220;
+    border-color: var(--color-accent);
+    color: var(--color-accent);
+}
+
+/* Research Roadmap */
+.roadmap-section {
+    position: relative;
+}
+
+.roadmap-points {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 0.75rem;
+    margin-bottom: 1rem;
+}
+
+.roadmap-point-item {
+    border: 1px solid color-mix(in srgb, var(--track-color) 35%, var(--color-border));
+    background: color-mix(in srgb, var(--track-color) 8%, var(--color-surface));
+    border-radius: 12px;
+    padding: 0.7rem 0.85rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.35rem;
+}
+
+.roadmap-point-tag {
+    font-weight: 700;
+    font-size: 0.88rem;
+    color: var(--color-primary);
+}
+
+.roadmap-point-text {
+    color: var(--color-secondary);
+    font-size: 0.82rem;
+}
+
+.roadmap-toolbar {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.55rem;
+    margin-bottom: 0.75rem;
+}
+
+.roadmap-toolbar-inline {
+    margin-bottom: 0;
+    justify-content: flex-end;
+    align-items: center;
+}
+
+.roadmap-mode-group {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.55rem;
+    margin-right: 0.25rem;
+}
+
+.roadmap-mode-btn {
+    border: 1px solid var(--color-border);
+    background: var(--color-background);
+    color: var(--color-secondary);
+    border-radius: 999px;
+    padding: 0.45rem 0.85rem;
+    font-size: 0.86rem;
+    cursor: pointer;
+    transition: var(--transition);
+    font-weight: 600;
+}
+
+.roadmap-mode-btn.active {
+    color: var(--color-primary);
+    border-color: var(--color-accent);
+    background: color-mix(in srgb, var(--color-accent) 10%, var(--color-surface));
+}
+
+.roadmap-filter-btn {
+    border: 1px solid var(--color-border);
+    background: var(--color-surface);
+    color: var(--color-secondary);
+    border-radius: 999px;
+    padding: 0.35rem 0.72rem;
+    font-size: 0.8rem;
+    cursor: pointer;
+    transition: var(--transition);
+}
+
+.roadmap-filter-btn:hover {
+    border-color: color-mix(in srgb, var(--color-accent) 45%, var(--color-border));
+    color: var(--color-primary);
+}
+
+.roadmap-filter-btn.active {
+    border-color: color-mix(in srgb, var(--track-color, var(--color-accent)) 65%, var(--color-border));
+    color: var(--color-primary);
+    font-weight: 700;
+    background: color-mix(in srgb, var(--track-color, var(--color-accent)) 15%, var(--color-surface));
+    box-shadow: 0 1px 7px color-mix(in srgb, var(--color-accent) 18%, transparent);
+}
+
+.roadmap-shell {
+    display: block;
+}
+
+.roadmap-canvas-wrap {
+    overflow: visible;
+    padding: 0;
+}
+
+.research-roadmap-graph {
+    width: 100%;
+    min-width: 0;
+    min-height: 0;
+    height: auto;
+    display: block;
+    position: relative;
+}
+
+.roadmap-flow {
+    position: relative;
+    background: linear-gradient(135deg, rgba(124, 58, 237, 0.06), rgba(14, 165, 233, 0.05));
+    border: 1px solid var(--color-border);
+    border-radius: 18px;
+    padding: 0.95rem 1.05rem 1rem;
+    box-shadow: var(--shadow-md);
+}
+
+/* Faint paper grain for an atlas/field-guide texture */
+.roadmap-flow::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    pointer-events: none;
+    opacity: 0.5;
+    mix-blend-mode: multiply;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.32'/%3E%3C/svg%3E");
+    z-index: 0;
+}
+
+.roadmap-flow > * {
+    position: relative;
+    z-index: 1;
+}
+
+.roadmap-flow-header {
+    position: relative;
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 0.9rem;
+    margin-bottom: 0.9rem;
+    padding: 0.05rem 0 0.1rem 0.8rem;
+}
+
+.roadmap-flow-header::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 0.18rem;
+    bottom: 0.12rem;
+    width: 3px;
+    border-radius: 999px;
+    background: linear-gradient(180deg, #7c3aed, #0ea5e9);
+}
+
+.roadmap-flow-heading {
+    display: flex;
+    flex-direction: column;
+    gap: 0.2rem;
+    min-width: 0;
+}
+
+.roadmap-flow-title {
+    color: var(--color-primary);
+    font-size: 1.04rem;
+    font-weight: 800;
+    line-height: 1.18;
+}
+
+.roadmap-flow-description {
+    color: var(--color-secondary);
+    font-size: 0.74rem;
+    line-height: 1.35;
+    letter-spacing: 0.02em;
+    text-transform: uppercase;
+}
+
+.roadmap-spine {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr) auto minmax(0, 1fr);
+    align-items: center;
+    gap: 0.55rem;
+    margin-bottom: 0.9rem;
+}
+
+.roadmap-spine-step {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    min-width: 0;
+    padding: 0.6rem 0.7rem;
+    border-radius: 16px;
+    border: 1px solid color-mix(in srgb, var(--phase-color) 38%, var(--color-border));
+    background: color-mix(in srgb, var(--phase-color) 10%, var(--color-background));
+}
+
+.roadmap-spine-index {
+    width: 30px;
+    height: 30px;
+    border-radius: 999px;
+    border: 1.8px solid var(--phase-color);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--color-primary);
+    font-size: 0.76rem;
+    font-weight: 800;
+    flex: 0 0 auto;
+}
+
+.roadmap-spine-copy {
+    min-width: 0;
+}
+
+.roadmap-spine-title {
+    color: var(--color-primary);
+    font-size: 0.9rem;
+    font-weight: 800;
+    line-height: 1.2;
+    margin-bottom: 0.12rem;
+}
+
+.roadmap-spine-meta {
+    color: var(--color-secondary);
+    font-size: 0.72rem;
+    line-height: 1.35;
+}
+
+.roadmap-spine-arrow {
+    color: var(--color-secondary);
+    font-size: 1rem;
+    font-weight: 700;
+}
+
+.roadmap-phase-grid {
+    display: grid;
+    grid-template-columns: minmax(0, 0.72fr) minmax(0, 0.82fr) minmax(0, 1.68fr);
+    gap: 0.7rem;
+    align-items: start;
+}
+
+.roadmap-phase-card {
+    position: relative;
+    border-radius: 18px;
+    border: 1px solid color-mix(in srgb, var(--phase-color) 36%, var(--color-border));
+    background: color-mix(in srgb, var(--phase-color) 7%, var(--color-background));
+    padding: 0.85rem 0.75rem 0.75rem;
+    min-width: 0;
+}
+
+/* Colored accent strip across the top of each stage card */
+.roadmap-phase-card::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 0;
+    height: 3px;
+    border-radius: 18px 18px 0 0;
+    background: linear-gradient(90deg, var(--phase-color), color-mix(in srgb, var(--phase-color) 25%, transparent));
+}
+
+.roadmap-phase-kicker {
+    color: var(--phase-color);
+    font-size: 0.56rem;
+    font-weight: 700;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    margin-bottom: 0.28rem;
+}
+
+.roadmap-phase-title {
+    display: flex;
+    align-items: baseline;
+    gap: 0.4rem;
+    color: var(--color-primary);
+    font-family: var(--font-heading);
+    font-weight: 600;
+    font-size: 1.18rem;
+    line-height: 1.18;
+    margin-bottom: 0.5rem;
+    padding-bottom: 0.42rem;
+    border-bottom: 1px solid color-mix(in srgb, var(--phase-color) 26%, var(--color-border));
+}
+
+.roadmap-phase-icon,
+.roadmap-group-icon {
+    flex: 0 0 auto;
+    line-height: 1;
+}
+
+.roadmap-phase-icon {
+    font-size: 0.98rem;
+}
+
+.roadmap-phase-summary {
+    color: var(--color-secondary);
+    font-size: 0.76rem;
+    line-height: 1.45;
+    margin-bottom: 0.65rem;
+}
+
+/* Auto-wrap by min width; Stage 02 can prefer 2 equal columns on wide desktop (see media query). */
+.roadmap-phase-papers {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(10rem, 1fr));
+    gap: 0.4rem;
+}
+
+.roadmap-agentic-top-row {
+    grid-column: 1 / -1;
+    display: grid;
+    grid-template-columns: minmax(0, 1.5fr) minmax(0, 1.2fr);
+    gap: 0.4rem;
+}
+
+.roadmap-paper-group {
+    grid-column: 1 / -1;
+    border: 1px solid color-mix(in srgb, var(--paper-color) 24%, var(--color-border));
+    border-radius: 14px;
+    padding: 0.35rem;
+    background: color-mix(in srgb, var(--paper-color) 4%, transparent);
+}
+
+.roadmap-paper-group + .roadmap-paper-group {
+    margin-top: 0.05rem;
+}
+
+.roadmap-agentic-top-row > .roadmap-paper-group {
+    grid-column: auto;
+}
+
+.roadmap-paper-group-label {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.24rem;
+    margin-bottom: 0.28rem;
+    padding: 0.06rem 0.28rem;
+    border-radius: 999px;
+    background: color-mix(in srgb, var(--paper-color) 12%, var(--color-background));
+    color: var(--color-secondary);
+    font-size: 0.56rem;
+    font-weight: 800;
+    letter-spacing: 0.03em;
+    text-transform: uppercase;
+}
+
+.roadmap-group-icon {
+    font-size: 0.72rem;
+}
+
+/* Flex wrap: no flex-grow on default cards — otherwise each row stretches to full width (looks like a single column). */
+.roadmap-paper-group-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(6.6rem, 1fr));
+    gap: 0.35rem;
+    align-items: stretch;
+}
+
+/* Uniform tiles: every card takes exactly one grid cell; titles may wrap to two lines. */
+.roadmap-paper-group-grid > .roadmap-paper-card {
+    width: 100%;
+    min-width: 0;
+    box-sizing: border-box;
+}
+
+.roadmap-paper-group-grid .roadmap-paper-card-title {
+    white-space: normal;
+    overflow: hidden;
+    text-overflow: unset;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+}
+
+.roadmap-paper-group-grid > .roadmap-paper-card.is-span-2 { grid-column: span 2; }
+.roadmap-paper-group-grid > .roadmap-paper-card.is-span-3,
+.roadmap-paper-group-grid > .roadmap-paper-card.is-span-4 { grid-column: 1 / -1; }
+
+.roadmap-paper-card {
+    width: 100%;
+    border: 1px solid color-mix(in srgb, var(--paper-color) 36%, var(--color-border));
+    border-radius: 14px;
+    background: color-mix(in srgb, var(--paper-color) 10%, var(--color-background));
+    padding: 0.38rem 0.42rem;
+    text-align: left;
+    cursor: pointer;
+    transition: var(--transition);
+}
+
+.roadmap-paper-card.is-spotlight {
+    opacity: 1;
+}
+
+.roadmap-paper-card.is-dimmed {
+    opacity: 0.3;
+    filter: grayscale(0.9);
+}
+
+/* Flagship papers (oral or importance>=2) get a soft colored ring */
+.roadmap-paper-card.is-featured {
+    border-color: color-mix(in srgb, var(--paper-color) 55%, var(--color-border));
+    box-shadow: 0 0 0 1px color-mix(in srgb, var(--paper-color) 38%, transparent),
+                0 2px 12px color-mix(in srgb, var(--paper-color) 20%, transparent);
+}
+
+.roadmap-paper-card:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 14px color-mix(in srgb, var(--paper-color) 26%, transparent);
+}
+
+.roadmap-paper-card-static {
+    cursor: default;
+    box-sizing: border-box;
+}
+
+.roadmap-paper-card-static:hover {
+    transform: none;
+}
+
+.roadmap-paper-card-static[data-context-tip] {
+    cursor: pointer;
+}
+
+.roadmap-paper-card-static .roadmap-paper-card-title {
+    white-space: normal;
+    overflow: visible;
+    text-overflow: unset;
+    word-break: break-word;
+    hyphens: auto;
+}
+
+.roadmap-context-subline {
+    font-size: 0.6rem;
+    font-weight: 700;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    color: var(--color-secondary);
+    opacity: 0.92;
+}
+
+.roadmap-paper-card.is-preprint {
+    border-style: solid;
+}
+
+.roadmap-paper-card.is-span-2 { grid-column: span 2; }
+.roadmap-paper-card.is-span-3 { grid-column: span 3; }
+.roadmap-paper-card.is-span-4 { grid-column: span 4; }
+
+
+.roadmap-paper-card-main {
+    display: flex;
+    align-items: center;
+    gap: 0.34rem;
+    min-width: 0;
+}
+
+.roadmap-paper-card-num {
+    width: 18px;
+    height: 18px;
+    border-radius: 999px;
+    border: 1.8px solid var(--paper-color);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--color-primary);
+    font-size: 0.58rem;
+    font-weight: 800;
+    flex: 0 0 auto;
+}
+
+.roadmap-paper-card-copy {
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+    flex: 1 1 auto;
+}
+
+.roadmap-paper-card-title {
+    color: var(--color-primary);
+    font-size: 0.72rem;
+    font-weight: 800;
+    line-height: 1.25;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.roadmap-paper-card-meta {
+    color: var(--color-secondary);
+    font-size: 0.6rem;
+    line-height: 1.3;
+    display: flex;
+    align-items: center;
+    gap: 0.28rem;
+    flex-wrap: wrap;
+}
+
+.roadmap-paper-venue {
+    color: var(--color-secondary);
+}
+
+.roadmap-paper-venue.is-accepted {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0.04rem 0.24rem;
+    border-radius: 999px;
+    background: color-mix(in srgb, var(--paper-color) 14%, var(--color-background));
+    color: color-mix(in srgb, var(--paper-color) 78%, var(--color-primary));
+    font-weight: 800;
+}
+
+.roadmap-paper-venue.is-preprint {
+    color: var(--color-secondary);
+    opacity: 0.88;
+}
+
+.roadmap-paper-oral {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0.04rem 0.26rem;
+    border-radius: 999px;
+    background: color-mix(in srgb, #f59e0b 18%, var(--color-background));
+    color: #92400e;
+    font-size: 0.52rem;
+    font-weight: 800;
+    line-height: 1;
+}
+
+.roadmap-paper-role {
+    color: var(--paper-color);
+    font-size: 0.68rem;
+    line-height: 1;
+    flex: 0 0 auto;
+    opacity: 0.88;
+    cursor: default;
+    align-self: center;
+}
+
+.roadmap-phase-more,
+.roadmap-phase-empty {
+    color: var(--color-secondary);
+    font-size: 0.7rem;
+    margin-top: 0.55rem;
+}
+
+.roadmap-phase-ongoing {
+    margin-top: 0.55rem;
+}
+
+.roadmap-context-cards {
+    margin-top: 0.45rem;
+    padding-top: 0.38rem;
+    border-top: 1px solid color-mix(in srgb, var(--phase-color) 22%, var(--color-border));
+}
+
+.roadmap-context-cards-head {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.32rem;
+    margin-bottom: 0.32rem;
+}
+
+.roadmap-context-cards-head.is-minimal {
+    margin-bottom: 0.28rem;
+}
+
+.roadmap-context-cards-icon {
+    font-size: 0.78rem;
+    line-height: 1.2;
+    flex-shrink: 0;
+}
+
+.roadmap-context-cards-head-text {
+    display: flex;
+    flex-direction: column;
+    gap: 0.12rem;
+    min-width: 0;
+}
+
+.roadmap-context-cards-label {
+    font-size: 0.64rem;
+    font-weight: 800;
+    letter-spacing: 0.03em;
+    text-transform: uppercase;
+    color: var(--color-primary);
+}
+
+.roadmap-context-cards-grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 0.35rem;
+}
+
+.roadmap-context-cards-grid.is-full-width {
+    grid-template-columns: 1fr;
+}
+
+.roadmap-ongoing-card {
+    border-style: dashed;
+    opacity: 0.82;
+}
+
+.roadmap-ongoing-status {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0.04rem 0.24rem;
+    border-radius: 999px;
+    background: color-mix(in srgb, var(--paper-color) 10%, var(--color-background));
+    color: var(--color-secondary);
+    font-size: 0.52rem;
+    font-weight: 800;
+    letter-spacing: 0.03em;
+    text-transform: uppercase;
+}
+
+.roadmap-flow-footer {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 0.55rem 1.1rem;
+    margin-top: 0.45rem;
+    padding-top: 0.45rem;
+    border-top: 1px dashed color-mix(in srgb, var(--color-border) 72%, transparent);
+}
+
+.roadmap-lead-legend {
+    margin: 0;
+    display: flex;
+    align-items: center;
+    gap: 0.32rem;
+    font-size: 0.62rem;
+    line-height: 1.35;
+    color: var(--color-secondary);
+    flex: 0 1 auto;
+    max-width: min(100%, 16rem);
+}
+
+.roadmap-lead-legend-mark {
+    font-size: 0.72rem;
+    line-height: 1;
+    color: #7c3aed;
+    opacity: 0.92;
+}
+
+.roadmap-future-loop {
+    flex: 1 1 12rem;
+    min-width: 0;
+    opacity: 0.72;
+}
+
+.roadmap-future-loop-copy {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 0.38rem;
+    max-width: none;
+    margin-left: auto;
+    text-align: right;
+}
+
+.roadmap-future-loop-label {
+    color: var(--color-primary);
+    font-size: 0.58rem;
+    font-weight: 800;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+}
+
+.roadmap-future-loop-text {
+    color: var(--color-secondary);
+    font-size: 0.63rem;
+    line-height: 1.35;
+}
+
+/* ════════════════════════════════════════════════════════════════
+   RESEARCH ATLAS — editorial journey map (serif chapters + drawn route)
+   ════════════════════════════════════════════════════════════════ */
+
+/* ── The route: a continuous line with numbered stations (the spine) ── */
+.roadmap-atlas-route {
+    position: relative;
+    margin: 0.35rem 0 1.5rem;
+    padding-top: 0.1rem;
+}
+
+.roadmap-route-line {
+    position: absolute;
+    top: 2.18rem;
+    height: 2px;
+    border-radius: 2px;
+    background: linear-gradient(90deg, #7c3aed, #0ea5e9 52%, #f59e0b);
+    transform-origin: left center;
+    z-index: 0;
+}
+
+/* Intro animations play only on first load, not on every filter click */
+.roadmap-flow.is-intro .roadmap-route-line {
+    animation: roadmap-line-draw 0.75s cubic-bezier(0.4, 0, 0.2, 1) both;
+}
+
+.roadmap-route-stations {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    position: relative;
+    z-index: 1;
+}
+
+.roadmap-route-station {
+    flex: 1 1 0;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    gap: 0.16rem;
+    padding: 0 0.3rem;
+}
+
+.roadmap-flow.is-intro .roadmap-route-station {
+    animation: roadmap-rise 0.55s ease both;
+    animation-delay: calc(0.28s + var(--i, 0) * 0.13s);
+}
+
+.roadmap-route-numeral {
+    font-family: var(--font-heading);
+    font-size: 1.3rem;
+    line-height: 1.5rem;
+    height: 1.5rem;
+    font-weight: 600;
+    color: var(--phase-color);
+    letter-spacing: 0.02em;
+}
+
+.roadmap-route-dot {
+    width: 0.85rem;
+    height: 0.85rem;
+    border-radius: 50%;
+    background: var(--color-background);
+    border: 2.5px solid var(--phase-color);
+    box-shadow: 0 0 0 4px color-mix(in srgb, var(--phase-color) 13%, transparent);
+}
+
+.roadmap-route-name {
+    font-family: var(--font-heading);
+    font-size: 0.94rem;
+    line-height: 1.22;
+    color: var(--color-primary);
+    margin-top: 0.34rem;
+}
+
+.roadmap-route-years {
+    font-size: 0.6rem;
+    letter-spacing: 0.1em;
+    color: var(--color-secondary);
+    font-variant-numeric: tabular-nums;
+    text-transform: uppercase;
+}
+
+/* ── Feedback loop: a serif aside noting the return path to the start ── */
+.roadmap-loopback {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    margin: 1.15rem 0 0.15rem;
+    padding: 0.5rem 0.9rem 0.5rem 1.05rem;
+    border-radius: 12px;
+    border: 1px dashed color-mix(in srgb, #7c3aed 32%, var(--color-border));
+    background: linear-gradient(90deg,
+        color-mix(in srgb, #f59e0b 8%, transparent),
+        color-mix(in srgb, #7c3aed 9%, transparent));
+}
+
+.roadmap-loopback-mark {
+    flex: 0 0 auto;
+    font-size: 1.15rem;
+    line-height: 1;
+    color: #7c3aed;
+}
+
+.roadmap-loopback-copy {
+    display: flex;
+    flex-direction: column;
+    gap: 0.08rem;
+    min-width: 0;
+}
+
+.roadmap-loopback-label {
+    font-family: var(--font-heading);
+    font-style: italic;
+    font-size: 0.84rem;
+    line-height: 1.1;
+    color: var(--color-primary);
+}
+
+.roadmap-loopback-text {
+    font-size: 0.66rem;
+    line-height: 1.4;
+    color: var(--color-secondary);
+}
+
+/* Touch-only hint; hidden on devices with a real hover pointer */
+.roadmap-tap-hint {
+    margin: 0;
+    font-size: 0.58rem;
+    color: var(--color-secondary);
+    opacity: 0.7;
+}
+
+@media (hover: hover) and (pointer: fine) {
+    .roadmap-tap-hint {
+        display: none;
+    }
+}
+
+@keyframes roadmap-line-draw {
+    from { transform: scaleX(0); }
+    to { transform: scaleX(1); }
+}
+
+@keyframes roadmap-rise {
+    from { opacity: 0; transform: translateY(9px); }
+    to { opacity: 1; transform: none; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .roadmap-route-line,
+    .roadmap-route-station {
+        animation: none;
+    }
+}
+
+/* Phones: route turns vertical, stations stack along a left rail */
+@media (max-width: 640px) {
+    .roadmap-route-line {
+        top: 0.5rem;
+        bottom: 0.5rem;
+        left: 0.92rem !important;
+        right: auto !important;
+        width: 2px;
+        height: auto;
+        background: linear-gradient(180deg, #7c3aed, #0ea5e9 52%, #f59e0b);
+        transform-origin: top center;
+    }
+    .roadmap-route-stations {
+        flex-direction: column;
+        gap: 0.7rem;
+    }
+    .roadmap-route-station {
+        flex-direction: row;
+        align-items: center;
+        text-align: left;
+        gap: 0.55rem;
+        padding: 0;
+    }
+    .roadmap-route-numeral {
+        order: 3;
+        margin-left: auto;
+        font-size: 1.05rem;
+    }
+    .roadmap-route-dot {
+        flex: 0 0 auto;
+    }
+    .roadmap-route-name {
+        margin-top: 0;
+    }
+}
+
+.roadmap-pyramid {
+    max-width: 560px;
+    margin: 0 auto;
+    padding: 0.18rem 0.12rem 0.02rem;
+}
+
+.roadmap-pyramid-title {
+    text-align: center;
+    font-weight: 800;
+    color: var(--color-primary);
+    margin-bottom: 0.32rem;
+    font-size: 0.82rem;
+}
+
+.roadmap-pyramid-row {
+    display: flex;
+    justify-content: center;
+    gap: 0.24rem;
+    margin-bottom: 0.22rem;
+}
+
+.roadmap-pyramid-sphere {
+    width: 108px;
+    min-height: 56px;
+    border-radius: 999px;
+    border: 2px solid color-mix(in srgb, var(--stage-color) 45%, var(--color-border));
+    background: color-mix(in srgb, var(--stage-color) 8%, var(--color-surface));
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.35), var(--shadow-sm);
+    padding: 0.34rem 0.38rem 0.34rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+}
+
+.roadmap-pyramid-sphere.row-1 {
+    width: 126px;
+    min-height: 64px;
+}
+
+.roadmap-sphere-title {
+    font-weight: 800;
+    color: var(--color-primary);
+    margin-bottom: 0.18rem;
+    font-size: 0.68rem;
+}
+
+.roadmap-sphere-dots {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 0.16rem;
+}
+
+.roadmap-paper-chip-mini {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.18rem;
+    min-width: 62px;
+    max-width: 86px;
+    border-radius: 999px;
+    border: 1.6px solid var(--paper-color);
+    background: color-mix(in srgb, var(--paper-color) 10%, var(--color-background));
+    color: var(--color-primary);
+    padding: 0.12rem 0.22rem 0.12rem 0.12rem;
+    cursor: pointer;
+    transition: var(--transition);
+    text-align: left;
+}
+
+.roadmap-paper-chip-mini:hover {
+    transform: translateY(-1px) scale(1.04);
+}
+
+.roadmap-paper-chip-mini.is-featured {
+    box-shadow: 0 0 0 4px color-mix(in srgb, var(--paper-color) 18%, transparent);
+}
+
+.roadmap-paper-chip-mini.is-preprint {
+    border-style: dashed;
+    opacity: 0.85;
+}
+
+.roadmap-paper-chip-num {
+    width: 13px;
+    height: 13px;
+    border-radius: 999px;
+    border: 1.6px solid var(--paper-color);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.48rem;
+    font-weight: 800;
+    flex: 0 0 auto;
+}
+
+.roadmap-paper-chip-copy {
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+}
+
+.roadmap-paper-chip-keyword {
+    font-size: 0.52rem;
+    font-weight: 800;
+    color: var(--color-primary);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.roadmap-paper-chip-meta {
+    font-size: 0.46rem;
+    color: var(--color-secondary);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.roadmap-sphere-empty {
+    color: var(--color-secondary);
+    font-size: 0.85rem;
+}
+
+.roadmap-hover-tooltip {
+    position: absolute;
+    z-index: 5;
+    max-width: min(320px, 92vw);
+    padding: 0.34rem 0.46rem;
+    border-radius: 12px;
+    border: 1px solid var(--color-border);
+    background: color-mix(in srgb, var(--color-background) 94%, white 6%);
+    box-shadow: var(--shadow-md);
+    pointer-events: auto;
+}
+
+.roadmap-tooltip-title {
+    color: var(--color-primary);
+    font-size: 0.76rem;
+    font-weight: 700;
+    line-height: 1.35;
+    margin-bottom: 0.26rem;
+}
+
+.roadmap-tooltip-meta {
+    color: var(--color-secondary);
+    font-size: 0.67rem;
+    line-height: 1.45;
+}
+
+.roadmap-tooltip-meta + .roadmap-tooltip-meta {
+    margin-top: 0.22rem;
+}
+
+.roadmap-tooltip-links {
+    margin-top: 0.34rem;
+    display: flex;
+    gap: 0.34rem;
+    flex-wrap: wrap;
+}
+
+.roadmap-tooltip-links a {
+    font-size: 0.67rem;
+    color: var(--color-accent);
+    text-decoration: none;
+}
+
+.roadmap-legend-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0.35rem;
+}
+
+.roadmap-legend-item {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    width: 100%;
+    border: 1px solid var(--color-border);
+    border-radius: 999px;
+    background: var(--color-background);
+    padding: 0.24rem 0.45rem 0.24rem 0.24rem;
+    cursor: pointer;
+    transition: var(--transition);
+    justify-content: flex-start;
+}
+
+.roadmap-legend-item:hover {
+    border-color: var(--paper-color);
+    background: color-mix(in srgb, var(--paper-color) 8%, var(--color-surface));
+}
+
+.roadmap-legend-num {
+    width: 18px;
+    height: 18px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 999px;
+    border: 2px solid var(--paper-color);
+    font-size: 0.62rem;
+    font-weight: 800;
+}
+
+.roadmap-legend-text {
+    font-size: 0.72rem;
+    color: var(--color-primary);
+}
+
+.roadmap-layer-band {
+    fill: color-mix(in srgb, var(--track-color) 10%, var(--color-surface));
+    stroke: color-mix(in srgb, var(--track-color) 35%, var(--color-border));
+    stroke-width: 1.2;
+    opacity: 0.95;
+}
+
+.roadmap-layer-title {
+    fill: var(--color-primary);
+    font-size: 16px;
+    font-weight: 700;
+}
+
+.roadmap-year-line {
+    stroke: color-mix(in srgb, var(--color-border) 80%, transparent);
+    stroke-width: 1;
+    stroke-dasharray: 4 4;
+}
+
+.roadmap-year-label {
+    fill: var(--color-secondary);
+    font-size: 12px;
+    text-anchor: middle;
+}
+
+.roadmap-edge {
+    fill: none;
+    stroke-width: 2.1;
+    opacity: 0.78;
+}
+
+.roadmap-edge.is-core {
+    stroke: #7c3aed;
+}
+
+.roadmap-edge.is-bridge {
+    stroke: #06b6d4;
+    stroke-dasharray: 5 4;
+}
+
+.roadmap-node {
+    cursor: pointer;
+    transition: opacity 0.2s ease;
+}
+
+.roadmap-node-circle {
+    fill: color-mix(in srgb, var(--track-color) 24%, var(--color-surface));
+    stroke: var(--track-color);
+    stroke-width: 2;
+    filter: drop-shadow(0 0 7px color-mix(in srgb, var(--track-color) 50%, transparent));
+}
+
+.roadmap-node-label {
+    fill: var(--color-primary);
+    font-size: 12.5px;
+    font-weight: 700;
+}
+
+.roadmap-node-subtitle {
+    fill: var(--color-secondary);
+    font-size: 11px;
+}
+
+.roadmap-node.is-selected .roadmap-node-circle {
+    stroke-width: 3;
+}
+
+.roadmap-paper-chip {
+    fill: color-mix(in srgb, var(--track-color) 9%, var(--color-surface));
+    stroke: color-mix(in srgb, var(--track-color) 40%, var(--color-border));
+    stroke-width: 1.2;
+}
+
+.roadmap-paper-chip.is-featured {
+    fill: color-mix(in srgb, var(--track-color) 16%, var(--color-surface));
+    stroke: var(--track-color);
+    stroke-width: 1.8;
+    filter: drop-shadow(0 0 10px color-mix(in srgb, var(--track-color) 30%, transparent));
+}
+
+.roadmap-paper-chip.is-preprint {
+    fill: color-mix(in srgb, var(--track-color) 6%, var(--color-surface));
+    stroke-dasharray: 5 4;
+    opacity: 0.88;
+}
+
+.roadmap-card {
+    fill: color-mix(in srgb, var(--track-color) 9%, var(--color-surface));
+    stroke: color-mix(in srgb, var(--track-color) 38%, var(--color-border));
+    stroke-width: 1.2;
+}
+
+.roadmap-card-title {
+    fill: var(--color-primary);
+    font-size: 15px;
+    font-weight: 700;
+}
+
+.roadmap-card-subtitle {
+    fill: var(--color-secondary);
+    font-size: 11.5px;
+}
+
+.roadmap-chip-label {
+    fill: var(--color-primary);
+    font-size: 12px;
+    font-weight: 700;
+}
+
+.roadmap-chip-subtitle {
+    fill: var(--color-secondary);
+    font-size: 10.5px;
+}
+
+.roadmap-chip-meta {
+    fill: var(--color-secondary);
+    font-size: 10px;
+    font-weight: 700;
+}
+
+.roadmap-agenda-hub {
+    fill: color-mix(in srgb, var(--color-accent) 9%, var(--color-surface));
+    stroke: color-mix(in srgb, var(--color-accent) 45%, var(--color-border));
+    stroke-width: 1.4;
+}
+
+.roadmap-hub-title {
+    fill: var(--color-primary);
+    font-size: 18px;
+    font-weight: 800;
+}
+
+.roadmap-hub-subtitle {
+    fill: var(--color-secondary);
+    font-size: 12px;
+}
+
+.roadmap-bridge-label {
+    fill: #0f766e;
+    font-size: 10.5px;
+    font-weight: 700;
+}
+
+.roadmap-node.is-dimmed,
+.roadmap-edge.is-dimmed,
+.roadmap-layer-band.is-dimmed,
+.roadmap-layer-title.is-dimmed {
+    opacity: 0.16;
+}
+
+.roadmap-detail {
+    border: 1px solid var(--color-border);
+    border-radius: 14px;
+    background: color-mix(in srgb, var(--color-background) 88%, transparent);
+    padding: 0.55rem 0.65rem;
+    min-height: 100%;
+    align-self: stretch;
+}
+
+.roadmap-detail-placeholder {
+    color: var(--color-secondary);
+    font-size: 0.92rem;
+}
+
+.roadmap-detail-track {
+    font-size: 0.76rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    color: var(--color-accent);
+    margin-bottom: 0.25rem;
+}
+
+.roadmap-detail-title {
+    font-size: 0.9rem;
+    line-height: 1.35;
+    margin-bottom: 0.45rem;
+}
+
+.roadmap-detail-meta {
+    color: var(--color-secondary);
+    font-size: 0.75rem;
+    margin-bottom: 0.35rem;
+}
+
+.roadmap-detail-tldr {
+    color: var(--color-primary);
+    font-size: 0.8rem;
+    margin-bottom: 0.45rem;
+}
+
+.roadmap-detail-links {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.45rem;
+}
+
+.roadmap-detail-link {
+    text-decoration: none;
+    border: 1px solid var(--color-border);
+    border-radius: 999px;
+    padding: 0.32rem 0.7rem;
+    color: var(--color-accent);
+    font-size: 0.83rem;
+    transition: var(--transition);
+}
+
+.roadmap-detail-link:hover {
+    border-color: var(--color-accent);
+    background: color-mix(in srgb, var(--color-accent) 10%, var(--color-surface));
+}
+
+@media (min-width: 1201px) {
+    .roadmap-phase-papers.papers-prefer-2 {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+}
+
+/* Stacked phases: more room → same auto-fit behavior (no inline 1fr blocking). */
+@media (max-width: 1200px) {
+    .roadmap-phase-grid {
+        grid-template-columns: 1fr;
+        gap: 0.6rem;
+    }
+    .roadmap-agentic-top-row {
+        grid-template-columns: repeat(auto-fit, minmax(18rem, 1fr));
+    }
+    .roadmap-phase-papers.papers-prefer-2 {
+        grid-template-columns: repeat(auto-fit, minmax(10rem, 1fr));
+    }
+    .roadmap-paper-card-title {
+        white-space: normal;
+        overflow: visible;
+        text-overflow: unset;
+        word-break: break-word;
+    }
+}
+
+@media (max-width: 960px) {
+    .roadmap-points {
+        grid-template-columns: 1fr;
+    }
+    .roadmap-flow {
+        padding: 0.75rem;
+    }
+    .roadmap-spine {
+        grid-template-columns: 1fr;
+        gap: 0.4rem;
+        margin-bottom: 0.7rem;
+    }
+    .roadmap-spine-arrow {
+        display: none;
+    }
+    .roadmap-flow-header {
+        flex-direction: column;
+        gap: 0.55rem;
+    }
+    .roadmap-toolbar-inline {
+        justify-content: flex-start;
+    }
+    .roadmap-phase-grid {
+        grid-template-columns: 1fr;
+        gap: 0.6rem;
+    }
+    .roadmap-agentic-top-row {
+        grid-template-columns: repeat(auto-fit, minmax(14rem, 1fr));
+    }
+    .roadmap-phase-papers,
+    .roadmap-phase-papers.papers-prefer-2 {
+        grid-template-columns: repeat(auto-fit, minmax(9rem, 1fr));
+    }
+    .roadmap-paper-group-grid {
+        grid-template-columns: repeat(auto-fill, minmax(7rem, 1fr));
+    }
+    .roadmap-context-cards-grid {
+        grid-template-columns: 1fr;
+    }
+    .roadmap-flow-footer {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+    .roadmap-future-loop {
+        flex: 1 1 auto;
+        width: 100%;
+    }
+    .roadmap-future-loop-copy {
+        align-items: flex-start;
+        margin-left: 0;
+        flex-direction: column;
+        text-align: left;
+    }
+    .research-roadmap-svg {
+        min-width: 620px;
+    }
+    .research-roadmap-graph {
+        min-height: 0;
+        height: auto;
+    }
+}
+
+@media (max-width: 350px) {
+    .roadmap-agentic-top-row {
+        grid-template-columns: 1fr;
+    }
+    .roadmap-phase-papers,
+    .roadmap-phase-papers.papers-prefer-2 {
+        grid-template-columns: 1fr;
+    }
+    .roadmap-paper-group-grid {
+        grid-template-columns: 1fr;
+    }
+}

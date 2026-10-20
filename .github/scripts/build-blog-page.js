@@ -1,41 +1,78 @@
 /**
  * Blog Page Generator for Config-Driven Academic Website Template
- * Generates blog.html from config.json and blog-data.js
+ * Generates blog.html from content.json + meta.json and blog-data.js
  * 
  * @author Sixun Dong (ironieser)
- * @version 1.0.0
+ * @version 2.0.0
  * @license MIT
  */
 
 const fs = require('fs');
 const path = require('path');
+const yaml = require('js-yaml');
 
 // Configuration and output files
-const CONFIG_FILE = path.join(__dirname, '../../config.json');
+const CONFIG_DIR = path.join(__dirname, '../../config');
+const CONTENT_CONFIG_FILE = path.join(CONFIG_DIR, 'content.json');
+const META_CONFIG_FILE = path.join(CONFIG_DIR, 'meta.json');
+const SITE_CONFIG_FILE = path.join(CONFIG_DIR, 'site.yaml');
 const BLOG_OUTPUT = path.join(__dirname, '../../blog.html');
 
+function expandVisitorMap(siteVisitorMap) {
+  // Self-hosted visitor analytics (Cloudflare Pages Functions + D1).
+  // Only a single on/off switch; everything else lives in the Function + widget.
+  if (!siteVisitorMap) return siteVisitorMap;
+  return { enabled: siteVisitorMap.enabled !== false };
+}
+
 function loadConfig() {
-  console.log('Loading configuration from config.json...');
-  
-  if (!fs.existsSync(CONFIG_FILE)) {
-    throw new Error('config.json file not found!');
-  }
-  
+  console.log('Loading configuration for blog page...');
+
+  const hasContent = fs.existsSync(CONTENT_CONFIG_FILE);
+  const hasMeta = fs.existsSync(META_CONFIG_FILE);
+  const hasSite = fs.existsSync(SITE_CONFIG_FILE);
+
   try {
-    const configContent = fs.readFileSync(CONFIG_FILE, 'utf-8');
-    return JSON.parse(configContent);
+    if (hasContent) {
+      const contentRaw = fs.readFileSync(CONTENT_CONFIG_FILE, 'utf-8');
+      const contentConfig = JSON.parse(contentRaw);
+
+      let metaConfig = {};
+      if (hasMeta) {
+        const metaRaw = fs.readFileSync(META_CONFIG_FILE, 'utf-8');
+        metaConfig = JSON.parse(metaRaw);
+      }
+
+      let siteConfig = {};
+      if (hasSite) {
+        const siteRaw = fs.readFileSync(SITE_CONFIG_FILE, 'utf-8');
+        siteConfig = yaml.load(siteRaw) || {};
+        if (siteConfig.visitor_map) {
+          siteConfig.visitor_map = expandVisitorMap(siteConfig.visitor_map);
+        }
+      }
+
+      const parts = ['config/content.json'];
+      if (hasMeta) parts.push('config/meta.json');
+      if (hasSite) parts.push('config/site.yaml');
+      console.log('✓ Loaded config from ' + parts.join(' + '));
+      return { ...metaConfig, ...contentConfig, ...siteConfig };
+    }
+
   } catch (error) {
-    throw new Error(`Error parsing config.json: ${error.message}`);
+    throw new Error(`Error parsing configuration files: ${error.message}`);
   }
+
+  throw new Error('Missing config/content.json. Run: npm run migrate-config');
 }
 
 function generateNavigation(personal, activePage) {
   const navLinks = {
     'Bio': 'index.html',
     'Publications': 'publications.html', 
-    'Blog': 'blog.html',
-    'CV(PDF)': personal.cv_link
+    'Blog': 'blog.html'
   };
+  if (personal.cv_link) navLinks['CV(PDF)'] = personal.cv_link;
   
   const navItems = Object.entries(navLinks).map(([name, url]) => {
     const isActive = activePage === name ? 'active' : '';
@@ -46,42 +83,60 @@ function generateNavigation(personal, activePage) {
   return navItems.join('\n                ');
 }
 
-function generateFooter(personal, templateInfo = null) {
+const BACK_TO_TOP_BUTTON = `
+    <button id="back-to-top" class="back-to-top" type="button" aria-label="Back to top">
+        <i class="fas fa-chevron-up"></i>
+    </button>`;
+
+function generateFooter(personal, templateInfo = null, visitorMap = null, copyrightStartYear = null) {
+  const startYear = copyrightStartYear != null ? Number(copyrightStartYear) : 2025;
   const currentYear = new Date().getFullYear();
+  const copyrightYears = currentYear === startYear ? `${startYear}` : `${startYear} - ${currentYear}`;
   
-  // Generate template credit if enabled
+  // Template credit: full block if enabled; otherwise single "Template by" line
+  const templateAcknowledgment = templateInfo && templateInfo.acknowledgments
+    ? `\n                <p class="template-acknowledgments">${templateInfo.acknowledgments}</p>`
+    : '';
   const templateCredit = templateInfo && templateInfo.show_template_credit ? `
             <div class="template-credit">
-                <p>Built with <a href="${templateInfo.repository}" target="_blank" rel="noopener">${templateInfo.name}</a> by <a href="${templateInfo.repository}" target="_blank" rel="noopener">${templateInfo.author}</a></p>
-                ${templateInfo.acknowledgments ? `<p class="template-acknowledgments">${templateInfo.acknowledgments}</p>` : ''}
+                <p>Built with <a href="${templateInfo.repository}" target="_blank" rel="noopener">${templateInfo.name}</a> by <a href="${templateInfo.repository}" target="_blank" rel="noopener">${templateInfo.author}</a></p>${templateAcknowledgment}
             </div>` : '';
+  const templateAttribution = templateInfo && templateInfo.author && templateInfo.repository && !templateInfo.show_template_credit
+    ? `<p class="template-attribution">Template by <a href="${templateInfo.repository}" target="_blank" rel="noopener">${templateInfo.author}</a></p>`
+    : '';
+  
+  // Generate visitor analytics section if enabled (self-hosted; lazy-loaded on footer scroll).
+  let visitorMapHtml = '';
+  if (visitorMap && visitorMap.enabled) {
+    visitorMapHtml = `
+            <!-- Visitor Analytics Section (self-hosted) -->
+            <div class="visitor-map-section">
+                <div class="visitor-map-container">
+                    <div class="visitor-widget" id="visitor-widget-mount" data-api="/api"></div>
+                    <script src="assets/js/visitor-map.js?v=14" defer></script>
+                </div>
+            </div>`;
+  }
+
+  const visitorLocationHtml = visitorMap && visitorMap.enabled ? `
+                <div class="stats-item" id="visitor-location-item" style="display:none" hidden>
+                    <i class="fas fa-map-marker-alt"></i>
+                    Visiting from: <span id="visitor-location"></span>
+                </div>` : '';
   
   return `
     <footer class="footer">
         <div class="container">
-            <!-- Visitor Map Section -->
-            <div class="visitor-map-section">
-                <div class="visitor-map-container">
-                    <!-- Visitor Map Widget -->
-                    <div class="visitor-map">
-                        <!-- ClustrMaps Widget -->
-                        <script type="text/javascript" id="clustrmaps" src="//clustrmaps.com/map_v2.js?d=r_cMMykDPAdqK2GTahWbR__mtnzcj9svUgejZ86OXnU&cl=ffffff&w=a"></script>
-                    </div>
-                </div>
-            </div>
-
-            <div class="footer-stats">
-                <div class="stats-item">
-                    <i class="fas fa-map-marker-alt"></i>
-                    Last updated from: <span id="owner-location">Loading...</span>
-                </div>
+            ${visitorMapHtml}
+            <div class="footer-stats">${visitorLocationHtml}
                 <div class="stats-item">
                     <i class="fas fa-clock"></i>
                     Content last updated: <span id="last-updated"></span>
                 </div>
             </div>
             ${templateCredit}
-            <p>&copy; ${currentYear} ${personal.name}. All rights reserved.</p>
+            ${templateAttribution}
+            <p>&copy; ${copyrightYears} ${personal.name}. All rights reserved.</p>
         </div>
     </footer>`;
 }
@@ -96,45 +151,6 @@ function generateCommonScripts() {
   
   return `
     <script>
-        // Get website owner's location during build (not visitor's location)
-        async function getOwnerLocation() {
-            try {
-                // Try primary API first
-                let response = await fetch('https://ipapi.co/json/');
-                let data = await response.json();
-                
-                if (data.city && data.country_name) {
-                    const location = \`\${data.city}, \${data.country_name}\`;
-                    document.getElementById('owner-location').textContent = location;
-                    return;
-                }
-                
-                // If primary API fails, try backup API
-                response = await fetch('https://api.ipify.org?format=json');
-                const ipData = await response.json();
-                
-                if (ipData.ip) {
-                    // Use a different geolocation service
-                    response = await fetch(\`https://ip-api.com/json/\${ipData.ip}\`);
-                    data = await response.json();
-                    
-                    if (data.city && data.country) {
-                        const location = \`\${data.city}, \${data.country}\`;
-                        document.getElementById('owner-location').textContent = location;
-                        return;
-                    }
-                }
-                
-                // If all APIs fail, show a default message
-                document.getElementById('owner-location').textContent = 'GitHub Actions';
-                
-            } catch (error) {
-                console.log('Location detection failed:', error);
-                // For GitHub Actions builds, show a more appropriate message
-                document.getElementById('owner-location').textContent = 'GitHub Actions';
-            }
-        }
-        
         // Set last updated time (when GitHub Actions built the site)
         function setLastUpdated() {
             const buildDate = '${buildTime}';
@@ -149,7 +165,6 @@ function generateCommonScripts() {
         
         // Initialize on page load
         document.addEventListener('DOMContentLoaded', function() {
-            getOwnerLocation();
             setLastUpdated();
         });
     </script>`;
@@ -158,7 +173,9 @@ function generateCommonScripts() {
 function generateBlogPage(config) {
   console.log('Generating blog.html...');
   
-  const { personal, _template_info } = config;
+  const { personal, _template_info, visitor_map } = config;
+  // Waline comment server (site.yaml: blog_comments_server). Comments stay off when unset.
+  const commentsServer = config.blog_comments_server || '';
   
   return `<!DOCTYPE html>
 <!-- 
@@ -168,6 +185,8 @@ function generateBlogPage(config) {
   License: MIT
 -->
 <html lang="en">
+<script>/* Inline theme init — prevent flash of wrong theme */
+(function(){var m=localStorage.getItem('theme-mode')||'auto';var d=m==='night'||(m==='auto'&&window.matchMedia('(prefers-color-scheme:dark)').matches);document.documentElement.setAttribute('data-theme',d?'dark':'light');})();</script>
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -179,16 +198,16 @@ function generateBlogPage(config) {
     <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
     <link rel="shortcut icon" href="favicon.ico">
     
-    <link rel="stylesheet" href="styles.css">
-    <link rel="stylesheet" href="blog.css">
-    <link rel="stylesheet" href="blog-comments.css">
+    <link rel="stylesheet" href="assets/css/styles.css">
+    <link rel="stylesheet" href="assets/css/blog.css">
+    <link rel="stylesheet" href="assets/css/blog-comments.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/jpswalsh/academicons@1/css/academicons.min.css">
     <link rel="stylesheet" href="https://unpkg.com/@waline/client@v3/dist/waline.css">
-    <script src="blog-data.js"></script>
+    <script src="assets/js/blog-data.js"></script>
 </head>
 <body>
     <!-- Navigation -->
@@ -261,7 +280,8 @@ function generateBlogPage(config) {
         </div>
     </main>
 
-    ${generateFooter(personal, _template_info)}
+    ${BACK_TO_TOP_BUTTON}
+    ${generateFooter(personal, _template_info, visitor_map, config.copyright_start_year)}
     
     <script>
         // Blog functionality
@@ -532,13 +552,15 @@ function generateBlogPage(config) {
             if (walineContainer) {
                 walineContainer.innerHTML = '';
             }
+            const commentsServer = ${JSON.stringify(commentsServer)};
+            if (!commentsServer) return;
             
             // Import and initialize Waline
             import('https://unpkg.com/@waline/client@v3/dist/waline.js')
                 .then(({ init }) => {
                     init({
                         el: '#waline',
-                        serverURL: 'https://comments.ironieser.cc',
+                        serverURL: commentsServer,
                         path: window.location.pathname + window.location.search,
                         lang: 'en-US',
                         locale: {
@@ -621,7 +643,7 @@ function generateBlogPage(config) {
                 return;
             }
             
-            // Wait for blog-data.js to load with progressive timeout
+            // Wait for assets/js/blog-data.js to load with progressive timeout
             let attempts = 0;
             const maxAttempts = 50; // 5 seconds total
             
@@ -688,4 +710,4 @@ if (require.main === module) {
   }
 }
 
-module.exports = { buildBlogPage }; 
+module.exports = { buildBlogPage };

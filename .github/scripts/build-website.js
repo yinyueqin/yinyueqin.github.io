@@ -3,33 +3,166 @@
  * Build Script for GitHub Actions
  * 
  * @author Sixun Dong (ironieser)
- * @version 1.0.0
+ * @version 2.0.0
  * @license MIT
  * @repository https://github.com/Ironieser/ironieser.github.io
- * @description Generates HTML files from config.json for academic websites
+ * @description Generates HTML files from content.json + meta.json for academic websites
  */
 
+const crypto = require('crypto');
 const fs = require('fs');
 const path = require('path');
+const yaml = require('js-yaml');
 
 // Configuration and output files
-const CONFIG_FILE = path.join(__dirname, '../../config.json');
+const CONFIG_DIR = path.join(__dirname, '../../config');
+const CONTENT_CONFIG_FILE = path.join(CONFIG_DIR, 'content.json');
+const META_CONFIG_FILE = path.join(CONFIG_DIR, 'meta.json');
+const SITE_CONFIG_FILE = path.join(CONFIG_DIR, 'site.yaml');
+const ROADMAP_CONFIG_FILE = path.join(CONFIG_DIR, 'roadmap.yaml');
 const INDEX_OUTPUT = path.join(__dirname, '../../index.html');
 const PUBLICATIONS_OUTPUT = path.join(__dirname, '../../publications.html');
+const REDIRECTS_OUTPUT = path.join(__dirname, '../../_redirects');
+const PROJECT_ROOT = path.join(__dirname, '../..');
+
+/** Append content-hash ?v= to local teaser paths (stable across CI; busts only when file bytes change). */
+function publicationImageSrc(imagePath) {
+  if (!imagePath || /^https?:\/\//i.test(imagePath) || imagePath.startsWith('//')) {
+    return imagePath;
+  }
+  const clean = imagePath.split('?')[0].trim();
+  const full = path.join(PROJECT_ROOT, clean);
+  try {
+    const buf = fs.readFileSync(full);
+    const hash = crypto.createHash('sha256').update(buf).digest('hex').slice(0, 8);
+    return `${clean}?v=${hash}`;
+  } catch (_) {
+    /* missing file */
+  }
+  return clean;
+}
+
+/**
+ * Generate Cloudflare Pages style _redirects file from config.json
+ * 
+ * In site.yaml or config.json, add for example:
+ * "redirects": [
+ *   { "alias": "mmtok", "target": "/projects/mmtok.html" },
+ *   { "alias": "timesclip", "target": "/projects/timesclip.html" }
+ * ]
+ */
+function generateRedirects(config) {
+  const redirects = Array.isArray(config.redirects) ? config.redirects : [];
+
+  if (redirects.length === 0) {
+    console.log('ℹ️ No redirects defined (redirects in site.yaml or config.json), skipping _redirects generation.');
+    return false;
+  }
+
+  console.log('🚀 Generating _redirects file...');
+
+  const lines = [
+    '# Automatic Project Redirects',
+    '# Generated during build process'
+  ];
+
+  redirects.forEach(entry => {
+    const alias = entry.alias;
+    const target = entry.target;
+
+    if (!alias || !target) {
+      return;
+    }
+
+    // /alias  → target
+    lines.push(`/${alias}  ${target}  301`);
+    // /alias/* → target (so /alias/anything also lands on the main page)
+    lines.push(`/${alias}/* ${target}  301`);
+  });
+
+  fs.writeFileSync(REDIRECTS_OUTPUT, lines.join('\n'));
+  console.log(`✅ Generated ${redirects.length} redirect rules in _redirects.`);
+  return true;
+}
+
+function expandVisitorMap(siteVisitorMap) {
+  // Self-hosted visitor analytics (Cloudflare Pages Functions + D1).
+  // Only a single on/off switch; everything else lives in the Function + widget.
+  if (!siteVisitorMap) return siteVisitorMap;
+  return { enabled: siteVisitorMap.enabled !== false };
+}
+
+function normalizeRoadmap(roadmap) {
+  if (!roadmap || typeof roadmap !== 'object') return roadmap;
+  const colors = ['#7c3aed', '#0ea5e9', '#f59e0b', '#10b981', '#ec4899'];
+  return {
+    ...roadmap,
+    phases: (roadmap.phases || []).map((phase, index) => ({
+      kicker: `Stage ${String(index + 1).padStart(2, '0')}`,
+      color: colors[index % colors.length],
+      maxItems: 4,
+      columns: 1,
+      ...phase,
+    })),
+  };
+}
 
 function loadConfig() {
-  console.log('Loading configuration from config.json...');
-  
-  if (!fs.existsSync(CONFIG_FILE)) {
-    throw new Error('config.json file not found!');
-  }
-  
+  console.log('Loading configuration...');
+
+  const hasContent = fs.existsSync(CONTENT_CONFIG_FILE);
+  const hasMeta = fs.existsSync(META_CONFIG_FILE);
+  const hasSite = fs.existsSync(SITE_CONFIG_FILE);
+
   try {
-    const configContent = fs.readFileSync(CONFIG_FILE, 'utf-8');
-    return JSON.parse(configContent);
+    if (hasContent) {
+      const contentRaw = fs.readFileSync(CONTENT_CONFIG_FILE, 'utf-8');
+      const contentConfig = JSON.parse(contentRaw);
+
+      let metaConfig = {};
+      if (hasMeta) {
+        const metaRaw = fs.readFileSync(META_CONFIG_FILE, 'utf-8');
+        metaConfig = JSON.parse(metaRaw);
+      }
+
+      let siteConfig = {};
+      if (hasSite) {
+        const siteRaw = fs.readFileSync(SITE_CONFIG_FILE, 'utf-8');
+        siteConfig = yaml.load(siteRaw) || {};
+        if (siteConfig.visitor_map) {
+          siteConfig.visitor_map = expandVisitorMap(siteConfig.visitor_map);
+        }
+      }
+
+      if (!fs.existsSync(ROADMAP_CONFIG_FILE)) {
+        throw new Error('Missing config/roadmap.yaml. Run: npm run migrate-config');
+      }
+      const roadmapConfig = yaml.load(fs.readFileSync(ROADMAP_CONFIG_FILE, 'utf-8')) || {};
+      const merged = {
+        ...metaConfig,
+        ...contentConfig,
+        ...siteConfig,
+        research_roadmap: normalizeRoadmap(roadmapConfig),
+      };
+      // "hidden": true keeps a publication in content.json (so scholar sync still matches it) without rendering it
+      if (merged.publications) {
+        for (const [year, pubs] of Object.entries(merged.publications)) {
+          if (Array.isArray(pubs)) merged.publications[year] = pubs.filter(pub => !pub.hidden);
+        }
+      }
+      const parts = ['config/content.json'];
+      if (hasMeta) parts.push('config/meta.json');
+      if (hasSite) parts.push('config/site.yaml');
+      if (fs.existsSync(ROADMAP_CONFIG_FILE)) parts.push('config/roadmap.yaml');
+      console.log('✓ Loaded config from ' + parts.join(' + '));
+      return merged;
+    }
+
   } catch (error) {
-    throw new Error(`Error parsing config.json: ${error.message}`);
+    throw new Error(`Error parsing configuration files: ${error.message}`);
   }
+
+  throw new Error('Missing config/content.json. Run: npm run migrate-config');
 }
 
 function highlightAuthorName(authors, targetName) {
@@ -41,7 +174,7 @@ function highlightAuthorName(authors, targetName) {
   }).join(', ');
 }
 
-function formatPublicationVenue(venueType, venue, isOral = false) {
+function formatPublicationVenue(venueType, venue, isOral = false, awards = []) {
   let badge;
   if (venueType === 'under-review') {
     badge = `<span class="publication-venue-under-review">${venue}</span>`;
@@ -56,14 +189,12 @@ function formatPublicationVenue(venueType, venue, isOral = false) {
   if (isOral) {
     badge += '<span class="publication-venue-oral">🏆 Oral</span>';
   }
+
+  (awards || []).forEach(award => {
+    badge += `<span class="publication-award">${award}</span>`;
+  });
   
   return badge;
-}
-
-function formatPublicationAwards(awards) {
-  if (!awards || awards.length === 0) return '';
-  const awardBadges = awards.map(a => `<span class="publication-award">${a}</span>`);
-  return awardBadges.join(' ');
 }
 
 function formatPublicationLinks(links) {
@@ -80,13 +211,143 @@ function formatPublicationLinks(links) {
   return linkItems.join(' / ');
 }
 
+function getPublicationPaperLink(pub) {
+  if (!pub || !Array.isArray(pub.links)) return null;
+  const paperLink = pub.links.find(link => (
+    link &&
+    typeof link.name === 'string' &&
+    link.name.trim().toLowerCase() === 'paper' &&
+    link.url
+  ));
+  return paperLink ? paperLink.url : null;
+}
+
+function flattenPublicationsByYear(publications) {
+  if (!publications) return [];
+  const years = Object.keys(publications).filter(year => year !== 'survey').sort().reverse();
+  const list = [];
+  for (const year of years) {
+    const yearPubs = Array.isArray(publications[year]) ? publications[year] : [];
+    yearPubs.forEach(pub => list.push({ ...pub, _year: Number(year) || year }));
+  }
+  return list;
+}
+
+function isLeadAuthor(authors, personalName) {
+  if (!Array.isArray(authors) || !authors.length || !personalName) return false;
+  const normalizedPersonal = String(personalName).replace(/[*†]/g, '').trim().toLowerCase();
+  return authors.some((author, idx) => {
+    const raw = String(author || '').trim();
+    const normalized = raw.replace(/[*†]/g, '').trim().toLowerCase();
+    if (normalized !== normalizedPersonal) return false;
+    return idx === 0 || /[*†]/.test(raw);
+  });
+}
+
+function buildResearchRoadmapModel(publications, roadmapConfig, personalName) {
+  if (!roadmapConfig || roadmapConfig.enabled === false) return null;
+
+  const allPubs = flattenPublicationsByYear(publications);
+  const pubByPaperUrl = new Map();
+  allPubs.forEach(pub => {
+    // Match roadmap nodes by any link URL (e.g. OpenReview before arXiv is out), preferring "Paper"
+    (pub.links || []).forEach(link => {
+      if (link && link.url && !pubByPaperUrl.has(link.url)) pubByPaperUrl.set(link.url, pub);
+    });
+    const paperUrl = getPublicationPaperLink(pub);
+    if (paperUrl) pubByPaperUrl.set(paperUrl, pub);
+  });
+
+  const filters = Array.isArray(roadmapConfig.filters) ? roadmapConfig.filters : [];
+  const stages = Array.isArray(roadmapConfig.stages) ? roadmapConfig.stages : [];
+  const ongoing = Array.isArray(roadmapConfig.ongoing) ? roadmapConfig.ongoing : [];
+  const visionLoop = roadmapConfig.vision_loop && typeof roadmapConfig.vision_loop === 'object'
+    ? roadmapConfig.vision_loop
+    : null;
+  const phaseList = Array.isArray(roadmapConfig.phases) ? roadmapConfig.phases : [];
+  const legacyTrackColors = {
+    foundations: '#7c3aed',
+    world_model: '#0ea5e9',
+    systems: '#f59e0b'
+  };
+  const phases = phaseList.map(phase => ({
+    ...phase,
+    color: phase.color || (phase.trackId && legacyTrackColors[phase.trackId]) || '#7c3aed'
+  }));
+
+  const rawNodes = Array.isArray(roadmapConfig.nodes) ? roadmapConfig.nodes : [];
+  const nodes = rawNodes.map(node => {
+    const pub = node.paper_url ? pubByPaperUrl.get(node.paper_url) : null;
+    const links = pub?.links || node.links || [];
+    return {
+      id: node.id,
+      card_kind: node.card_kind === 'context' ? 'context' : 'paper',
+      context: node.context && typeof node.context === 'object' ? node.context : null,
+      year: node.year || pub?._year || null,
+      title: node.title || pub?.title || 'Untitled Paper',
+      authors: Array.isArray(node.authors) ? node.authors : (pub?.authors || []),
+      short_label: node.short_label || '',
+      group: node.group || '',
+      tags: Array.isArray(node.tags) ? node.tags : [],
+      venue: node.venue || pub?.venue || '',
+      venue_type: node.venue_type || pub?.venue_type || '',
+      is_oral: node.is_oral === true || pub?.is_oral === true,
+      is_lead_author: node.is_lead_author === true || isLeadAuthor(Array.isArray(node.authors) ? node.authors : (pub?.authors || []), personalName),
+      tldr: node.tldr || pub?.tldr || '',
+      label: node.label || '',
+      subtitle: node.subtitle || '',
+      stages: Array.isArray(node.stages) ? node.stages : [],
+      importance: typeof node.importance === 'number' ? node.importance : 1,
+      size: typeof node.size === 'number' ? node.size : (parseInt(node.size, 10) || 0),
+      links,
+      paper_url: node.paper_url || getPublicationPaperLink(pub) || null
+    };
+  }).filter(node => node.id);
+
+  const nodeIds = new Set(nodes.map(node => node.id));
+  const edges = (Array.isArray(roadmapConfig.edges) ? roadmapConfig.edges : []).filter(edge => (
+    edge &&
+    nodeIds.has(edge.source) &&
+    nodeIds.has(edge.target)
+  ));
+
+  return {
+    title: roadmapConfig.title || 'Research Roadmap',
+    subtitle: roadmapConfig.subtitle || '',
+    description: roadmapConfig.description || '',
+    phases,
+    filters,
+    ongoing,
+    vision_loop: visionLoop,
+    nodes
+  };
+}
+
+function generateResearchRoadmapSection(roadmapModel) {
+  if (!roadmapModel) return '';
+
+  const roadmapDataJson = JSON.stringify(roadmapModel).replace(/</g, '\\u003c');
+  return `
+        <section class="section section-alt roadmap-section">
+            <div class="container">
+                <h2 class="section-title">${roadmapModel.title}</h2>
+                <div class="roadmap-shell reveal">
+                    <div class="roadmap-canvas-wrap">
+                        <div id="research-roadmap-graph" class="research-roadmap-graph" role="img" aria-label="Research roadmap graph"></div>
+                    </div>
+                </div>
+                <script id="research-roadmap-data" type="application/json">${roadmapDataJson}</script>
+            </div>
+        </section>`;
+}
+
 function generateNavigation(personal, activePage) {
   const navLinks = {
     'Bio': 'index.html',
     'Publications': 'publications.html', 
-    'Blog': 'blog.html',
-    'CV(PDF)': personal.cv_link
+    'Blog': 'blog.html'
   };
+  if (personal.cv_link) navLinks['CV(PDF)'] = personal.cv_link;
   
   const navItems = Object.entries(navLinks).map(([name, url]) => {
     const isActive = activePage === name ? 'active' : '';
@@ -94,8 +355,15 @@ function generateNavigation(personal, activePage) {
     return `<a href="${url}" class="nav-link ${isActive}" ${target}>${name}</a>`;
   });
   
-  return navItems.join('\n                ');
+  const themeToggle = `<button id="theme-toggle" class="theme-toggle" title="Toggle theme" aria-label="Toggle theme"><span class="theme-icon">🌓</span></button>`;
+  
+  return navItems.join('\n                ') + '\n                ' + themeToggle;
 }
+
+const BACK_TO_TOP_BUTTON = `
+    <button id="back-to-top" class="back-to-top" type="button" aria-label="Back to top">
+        <i class="fas fa-chevron-up"></i>
+    </button>`;
 
 function generateJsonLd(config) {
   const { personal, seo, publications } = config;
@@ -103,6 +371,8 @@ function generateJsonLd(config) {
   if (!seo || !seo.enable_json_ld) {
     return '';
   }
+
+  const legacyUrls = Array.isArray(seo.legacy_urls) ? seo.legacy_urls : [];
   
   // Person schema
   const personSchema = {
@@ -127,10 +397,11 @@ function generateJsonLd(config) {
     "sameAs": [
       `https://scholar.google.com/citations?user=${seo.author.google_scholar_id}`,
       `https://github.com/${seo.author.github}`,
-      `https://twitter.com/${seo.author.twitter}`,
+      seo.author.twitter ? `https://twitter.com/${seo.author.twitter}` : null,
       seo.website_url,
-      seo.github_pages_url
-    ].filter(Boolean),
+      seo.github_pages_url,
+      ...legacyUrls
+    ].filter((url, index, urls) => url && urls.indexOf(url) === index),
     "knowsAbout": seo.author.research_areas,
     "image": `${seo.website_url}/${personal.profile_image}`
   };
@@ -155,7 +426,7 @@ function generateJsonLd(config) {
   
   // Collect all publications for Article schema
   const allPublications = [];
-  Object.keys(publications).forEach(year => {
+  Object.keys(publications).sort().reverse().forEach(year => {
     if (year !== 'survey') {
       publications[year].forEach(pub => {
         if (pub.venue_type !== 'preprint' && pub.venue_type !== 'under-review') {
@@ -171,7 +442,7 @@ function generateJsonLd(config) {
               "@type": "Organization",
               "name": pub.venue
             },
-            "url": pub.links?.find(link => link.name === "Paper")?.url || null
+            "url": pub.links?.find(link => link.name === "Paper")?.url || pub.links?.find(link => link.url)?.url || null
           });
         }
       });
@@ -186,42 +457,57 @@ ${JSON.stringify(schemas, null, 2)}
 </script>`;
 }
 
-function generateFooter(personal, templateInfo = null) {
+function generateFooter(personal, templateInfo = null, visitorMap = null, copyrightStartYear = null) {
+  const startYear = copyrightStartYear != null ? Number(copyrightStartYear) : 2025;
   const currentYear = new Date().getFullYear();
+  const copyrightYears = currentYear === startYear ? `${startYear}` : `${startYear} - ${currentYear}`;
   
-  // Generate template credit if enabled
+  // Template credit: full block if enabled; otherwise a single "Template by" line (so attribution stays when others use the template)
+  const templateAcknowledgment = templateInfo && templateInfo.acknowledgments
+    ? `\n                <p class="template-acknowledgments">${templateInfo.acknowledgments}</p>`
+    : '';
   const templateCredit = templateInfo && templateInfo.show_template_credit ? `
             <div class="template-credit">
-                <p>Built with <a href="${templateInfo.repository}" target="_blank" rel="noopener">${templateInfo.name}</a> by <a href="${templateInfo.repository}" target="_blank" rel="noopener">${templateInfo.author}</a></p>
-                ${templateInfo.acknowledgments ? `<p class="template-acknowledgments">${templateInfo.acknowledgments}</p>` : ''}
+                <p>Built with <a href="${templateInfo.repository}" target="_blank" rel="noopener">${templateInfo.name}</a> by <a href="${templateInfo.repository}" target="_blank" rel="noopener">${templateInfo.author}</a></p>${templateAcknowledgment}
             </div>` : '';
+  const templateAttribution = templateInfo && templateInfo.author && templateInfo.repository && !templateInfo.show_template_credit
+    ? `<p class="template-attribution">Template by <a href="${templateInfo.repository}" target="_blank" rel="noopener">${templateInfo.author}</a></p>`
+    : '';
+  
+  // Generate visitor analytics section if enabled.
+  // Self-hosted (Cloudflare Pages Functions + D1); the widget is lazy-loaded when
+  // the footer scrolls into view so it never blocks initial page load.
+  let visitorMapHtml = '';
+  if (visitorMap && visitorMap.enabled) {
+    visitorMapHtml = `
+            <!-- Visitor Analytics Section (self-hosted) -->
+            <div class="visitor-map-section">
+                <div class="visitor-map-container">
+                    <div class="visitor-widget" id="visitor-widget-mount" data-api="/api"></div>
+                    <script src="assets/js/visitor-map.js?v=14" defer></script>
+                </div>
+            </div>`;
+  }
+
+  const visitorLocationHtml = visitorMap && visitorMap.enabled ? `
+                <div class="stats-item" id="visitor-location-item" style="display:none" hidden>
+                    <i class="fas fa-map-marker-alt"></i>
+                    Visiting from: <span id="visitor-location"></span>
+                </div>` : '';
   
   return `
     <footer class="footer">
         <div class="container">
-            <!-- Visitor Map Section -->
-            <div class="visitor-map-section">
-                <div class="visitor-map-container">
-                    <!-- Visitor Map Widget -->
-                    <div class="visitor-map">
-                        <!-- ClustrMaps Widget -->
-                        <script type="text/javascript" id="clustrmaps" src="//clustrmaps.com/map_v2.js?d=r_cMMykDPAdqK2GTahWbR__mtnzcj9svUgejZ86OXnU&cl=ffffff&w=a"></script>
-                    </div>
-                </div>
-            </div>
-
-            <div class="footer-stats">
-                <div class="stats-item">
-                    <i class="fas fa-map-marker-alt"></i>
-                    Last updated from: <span id="owner-location">Loading...</span>
-                </div>
+            ${visitorMapHtml}
+            <div class="footer-stats">${visitorLocationHtml}
                 <div class="stats-item">
                     <i class="fas fa-clock"></i>
                     Content last updated: <span id="last-updated"></span>
                 </div>
             </div>
             ${templateCredit}
-            
+            ${templateAttribution}
+            <p>&copy; ${copyrightYears} ${personal.name}. All rights reserved.</p>
         </div>
     </footer>`;
 }
@@ -236,45 +522,6 @@ function generateCommonScripts() {
   
   return `
     <script>
-        // Get website owner's location during build (not visitor's location)
-        async function getOwnerLocation() {
-            try {
-                // Try primary API first
-                let response = await fetch('https://ipapi.co/json/');
-                let data = await response.json();
-                
-                if (data.city && data.country_name) {
-                    const location = \`\${data.city}, \${data.country_name}\`;
-                    document.getElementById('owner-location').textContent = location;
-                    return;
-                }
-                
-                // If primary API fails, try backup API
-                response = await fetch('https://api.ipify.org?format=json');
-                const ipData = await response.json();
-                
-                if (ipData.ip) {
-                    // Use a different geolocation service
-                    response = await fetch(\`https://ip-api.com/json/\${ipData.ip}\`);
-                    data = await response.json();
-                    
-                    if (data.city && data.country) {
-                        const location = \`\${data.city}, \${data.country}\`
-                        document.getElementById('owner-location').textContent = location;
-                        return;
-                    }
-                }
-                
-                // If all APIs fail, show a default message
-                document.getElementById('owner-location').textContent = 'Remote Server';
-                
-            } catch (error) {
-                console.log('Location detection failed:', error);
-                // For GitHub Actions builds, show a more appropriate message
-                document.getElementById('owner-location').textContent = 'GitHub Actions';
-            }
-        }
-        
         // Set last updated time (when GitHub Actions built the site)
         function setLastUpdated() {
             const buildDate = '${buildTime}';
@@ -289,7 +536,6 @@ function generateCommonScripts() {
         
         // Initialize on page load
         document.addEventListener('DOMContentLoaded', function() {
-            getOwnerLocation();
             setLastUpdated();
         });
     </script>`;
@@ -298,7 +544,7 @@ function generateCommonScripts() {
 function generateIndexPage(config) {
   console.log('Generating index.html...');
   
-  const { personal, research, news, experience, education, service, publications, _template_info } = config;
+  const { personal, research, research_roadmap, news, experience, education, service, publications, _template_info, visitor_map } = config;
   
   // Get selected publications (featured first, then recent)
   const selectedPubs = [];
@@ -316,13 +562,9 @@ function generateIndexPage(config) {
   // First, add featured publications
   const featuredPubs = allPubs.filter(pub => pub.featured === true);
   selectedPubs.push(...featuredPubs.slice(0, maxFeatured));
-  
-  // If we need more, add recent publications (non-featured)
-  if (selectedPubs.length < maxFeatured) {
-    const recentPubs = allPubs.filter(pub => !pub.featured);
-    const needed = maxFeatured - selectedPubs.length;
-    selectedPubs.push(...recentPubs.slice(0, needed));
-  }
+
+  const roadmapModel = buildResearchRoadmapModel(publications, research_roadmap, personal.name);
+  const roadmapHtml = generateResearchRoadmapSection(roadmapModel);
   
   // Generate bio HTML
   const bioHtml = personal.bio.map(para => `<p>${para}</p>`).join('\n                            ');
@@ -333,35 +575,72 @@ function generateIndexPage(config) {
                 <i class="${link.icon}"></i> ${link.name}
             </a>`).join('');
   
-  // Generate news items
-  const newsHtml = news.map(item => `
+  // Generate news items (date + optional emoji + content)
+  // [[venue name]] → <span class="venue-highlight">venue name</span>
+  // {{link}} / {{link1}} / {{link2}} → <a href="..."><arxiv or external icon></a>
+  const expandVenueHighlight = (s) => (s || '').replace(/\[\[([^\]]+)\]\]/g, '<span class="venue-highlight">$1</span>');
+  const makeLinkHtml = (link) => {
+    if (!link) return '';
+    const isArxiv = link.indexOf('arxiv.org') !== -1;
+    const isGithub = link.indexOf('github.com') !== -1;
+    const iconClass = isArxiv ? 'ai ai-arxiv' : (isGithub ? 'fab fa-github' : 'fas fa-external-link-alt');
+    const title = isArxiv ? 'arXiv' : (isGithub ? 'Code on GitHub' : 'Link');
+    return `<a href="${link}" target="_blank" rel="noopener" class="news-paper-link" title="${title}"><i class="${iconClass}"></i></a>`;
+  };
+  const expandNewsLink = (content, item) => {
+    if (!content) return content;
+    let out = content;
+    out = out.replace(/\{\{link\}\}/g, () => makeLinkHtml(item.link) || '{{link}}');
+    out = out.replace(/\{\{link(\d+)\}\}/g, (_, n) => makeLinkHtml(item['link' + n]) || '{{link' + n + '}}');
+    return out;
+  };
+  const newsCategories = [['papers', '📄 Papers'], ['career', '💼 Career'], ['projects', '🚀 Projects']];
+  const newsFilterButtons = newsCategories
+    .filter(([category]) => news.some(item => item.category === category))
+    .map(([category, label]) => `<button class="filter-btn" data-filter="${category}">${label}</button>`)
+    .join('\n                        ');
+  const newsHtml = news.map(item => {
+    let content = expandVenueHighlight(item.content);
+    content = expandNewsLink(content, item);
+    return `
             <div class="news-item" data-category="${item.category}">
                 <span class="news-date">${item.date}</span>
-                <span class="news-content">${item.content}</span>
-            </div>`).join('');
+                <span class="news-icon">${/\.(png|svg|jpg|webp)$/.test(item.icon || '') ? `<img src="${item.icon}" alt="" style="height:1.05em;width:auto;vertical-align:-0.15em">` : (item.icon || '')}</span>
+                <span class="news-content">${content}</span>
+            </div>`;
+  }).join('');
   
   // Generate selected publications
   const targetName = personal.name.split(' ')[0]; // Use first name for highlighting
   const pubsHtml = selectedPubs.map(pub => {
-    const venueBadge = formatPublicationVenue(pub.venue_type, pub.venue, pub.is_oral);
-    const awardsBadge = formatPublicationAwards(pub.awards);
+    const venueBadge = formatPublicationVenue(pub.venue_type, pub.venue, pub.is_oral, pub.awards);
     const authorsFormatted = highlightAuthorName(pub.authors, targetName);
     const linksFormatted = formatPublicationLinks(pub.links);
+    const shortDesc = pub.short_description ? `<p class="publication-description">${pub.short_description}</p>` : '';
+    
+    const hasTldrClass = pub.tldr ? "has-tldr" : "";
+    const tldrHtml = pub.tldr ? `
+        <div class="tldr-wrapper">
+            <span class="tldr-badge">TL;DR</span>
+            <p class="tldr-text">${pub.tldr}</p>
+        </div>` : "";
     
     return `
-            <div class="publication-item">
-                <img src="${pub.image}" alt="${pub.title}" class="publication-image teaser" onerror="this.src='images/default-paper.png'">
+            <div class="publication-item reveal ${hasTldrClass}">
+                <img src="${publicationImageSrc(pub.image)}" alt="${pub.title}" class="publication-image teaser" loading="lazy" decoding="async" width="160" height="90" onerror="this.onerror=null;this.src='images/default-paper.png';">
                 <div class="publication-content">
-                    <p class="publication-title">${venueBadge} ${awardsBadge} ${pub.title}</p>
+                    <p class="publication-title">${venueBadge} ${pub.title}</p>
                     <p class="publication-authors">${authorsFormatted}</p>
+                    ${shortDesc}
                     <p class="publication-links">${linksFormatted}</p>
                 </div>
+                ${tldrHtml}
             </div>`;
   }).join('');
   
   // Generate experience items
   const expHtml = experience.map(exp => `
-            <div class="experience-item">
+            <div class="experience-item reveal">
                 <img src="${exp.logo}" alt="${exp.company}" class="experience-logo">
                 <div class="experience-content">
                     <p class="experience-position">${exp.position}</p>
@@ -375,7 +654,7 @@ function generateIndexPage(config) {
   const eduHtml = education.map(edu => {
     const details = edu.details ? `<p class="education-details">${edu.details}</p>` : '';
     return `
-            <div class="education-item">
+            <div class="education-item reveal">
                 <span class="education-period">${edu.period}</span>
                 <div class="education-content">
                     <p class="education-degree">${edu.degree}</p>
@@ -393,6 +672,8 @@ function generateIndexPage(config) {
   License: MIT
 -->
 <html lang="en">
+<script>/* Inline theme init — prevent flash of wrong theme */
+(function(){var m=localStorage.getItem('theme-mode')||'auto';var d=m==='night'||(m==='auto'&&window.matchMedia('(prefers-color-scheme:dark)').matches);document.documentElement.setAttribute('data-theme',d?'dark':'light');})();</script>
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -419,18 +700,19 @@ function generateIndexPage(config) {
     <!-- JSON-LD Structured Data -->
     ${generateJsonLd(config)}
     
-    <!-- Disable favicon explicitly -->
-    <link rel="icon" href="data:,">
-    <link rel="apple-touch-icon" href="data:,">
-    <link rel="shortcut icon" href="data:,">
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" sizes="32x32" href="favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="favicon-16x16.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
+    <link rel="shortcut icon" href="favicon.ico">
     
-    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="assets/css/styles.css?v=7">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/jpswalsh/academicons@1/css/academicons.min.css">
-    <script src="script.js" defer></script>
+    <script src="assets/js/script.js?v=9" defer></script>
 </head>
 <body>
     <!-- Navigation -->
@@ -479,9 +761,7 @@ function generateIndexPage(config) {
                 <div class="news-container">
                     <div class="news-sidebar">
                         <button class="filter-btn active" data-filter="all">All</button>
-                        <button class="filter-btn" data-filter="papers">📄 Papers</button>
-                        <button class="filter-btn" data-filter="career">💼 Career</button>
-                        <button class="filter-btn" data-filter="projects">🚀 Projects</button>
+                        ${newsFilterButtons}
                     </div>
                     
                     <div class="news-list">
@@ -490,6 +770,8 @@ function generateIndexPage(config) {
                 </div>
             </div>
         </section>
+
+        ${roadmapHtml}
 
         <!-- Selected Publications -->
         <section class="section section-alt">
@@ -501,6 +783,7 @@ function generateIndexPage(config) {
                 
                 <div class="section-footer">
                     <a href="publications.html" class="btn btn-more">View All Publications</a>
+                    ${research.projects_page ? `<a href="${research.projects_page}" class="btn btn-more" style="margin-left:12px">Projects &amp; Demos</a>` : ''}
                 </div>
             </div>
         </section>
@@ -525,9 +808,9 @@ function generateIndexPage(config) {
                         <p class="service-description">
                             <strong>Conferences:</strong> ${service.reviewer.conferences}
                         </p>
-                        <p class="service-description">
+                        ${service.reviewer.journals ? `<p class="service-description">
                             <strong>Journals:</strong> ${service.reviewer.journals}
-                        </p>
+                        </p>` : ''}
                     </div>
                 </div>
             </div>
@@ -544,7 +827,8 @@ function generateIndexPage(config) {
         </section>
     </main>
 
-    ${generateFooter(personal, _template_info)}
+    ${BACK_TO_TOP_BUTTON}
+    ${generateFooter(personal, _template_info, visitor_map, config.copyright_start_year)}
     
     <script>
         // News filter functionality
@@ -595,7 +879,7 @@ function generateIndexPage(config) {
 function generatePublicationsPage(config) {
   console.log('Generating publications.html...');
   
-  const { personal, research, publications, _template_info, _scholar_sync } = config;
+  const { personal, research, publications, _template_info, _scholar_sync, visitor_map } = config;
   const targetName = personal.name.split(' ')[0];
   
   // Separate auto-synced and manual publications
@@ -629,19 +913,26 @@ function generatePublicationsPage(config) {
   for (const year of manualYears) {
     const yearPubs = manualPubs[year];
     const pubItems = yearPubs.map(pub => {
-      const venueBadge = formatPublicationVenue(pub.venue_type, pub.venue, pub.is_oral);
-      const awardsBadge = formatPublicationAwards(pub.awards);
+      const venueBadge = formatPublicationVenue(pub.venue_type, pub.venue, pub.is_oral, pub.awards);
       const authorsFormatted = highlightAuthorName(pub.authors, targetName);
       const linksFormatted = formatPublicationLinks(pub.links);
       
+      const hasTldrClass = pub.tldr ? "has-tldr" : "";
+      const tldrHtml = pub.tldr ? `
+          <div class="tldr-wrapper">
+              <span class="tldr-badge">TL;DR</span>
+              <p class="tldr-text">${pub.tldr}</p>
+          </div>` : "";
+      
       return `
-                <div class="publication-item">
-                    <img src="${pub.image}" alt="${pub.title}" class="publication-image teaser" onerror="this.src='images/default-paper.png'">
+                <div class="publication-item reveal ${hasTldrClass}">
+                    <img src="${publicationImageSrc(pub.image)}" alt="${pub.title}" class="publication-image teaser" loading="lazy" decoding="async" width="160" height="90" onerror="this.onerror=null;this.src='images/default-paper.png';">
                     <div class="publication-content">
-                        <p class="publication-title">${venueBadge} ${awardsBadge} ${pub.title}</p>
+                        <p class="publication-title">${venueBadge} ${pub.title}</p>
                         <p class="publication-authors">${authorsFormatted}</p>
                         <p class="publication-links">${linksFormatted}</p>
                     </div>
+                    ${tldrHtml}
                 </div>`;
     }).join('');
     
@@ -654,74 +945,8 @@ function generatePublicationsPage(config) {
             </div>`);
   }
   
-  // Generate survey papers section
-  if (publications.survey) {
-    const surveyItems = publications.survey.map(pub => {
-      const venueBadge = formatPublicationVenue(pub.venue_type, pub.venue);
-      const awardsBadge = formatPublicationAwards(pub.awards);
-      const authorsFormatted = highlightAuthorName(pub.authors, targetName);
-      const linksFormatted = formatPublicationLinks(pub.links);
-      
-      return `
-                <div class="publication-item">
-                    <img src="${pub.image}" alt="${pub.title}" class="publication-image teaser" onerror="this.src='images/default-paper.png'">
-                    <div class="publication-content">
-                        <p class="publication-title">${venueBadge} ${awardsBadge} ${pub.title}</p>
-                        <p class="publication-authors">${authorsFormatted}</p>
-                        <p class="publication-links">${linksFormatted}</p>
-                    </div>
-                </div>`;
-    }).join('');
-    
-    yearSections.push(`
-            <div class="year-group">
-                <h3 class="year-title">Survey Papers</h3>
-                <div class="publications-list">
-                    ${surveyItems}
-                </div>
-            </div>`);
-  }
-  
-  // Generate auto-synced publications section
-  if (autoSyncedPubs.length > 0) {
-    const autoSyncItems = autoSyncedPubs.map(pub => {
-      const venueBadge = formatPublicationVenue(pub.venue_type, pub.venue, pub.is_oral);
-      const awardsBadge = formatPublicationAwards(pub.awards);
-      const authorsFormatted = highlightAuthorName(pub.authors, targetName);
-      const linksFormatted = formatPublicationLinks(pub.links);
-      
-      return `
-                <div class="publication-item">
-                    <img src="${pub.image}" alt="${pub.title}" class="publication-image teaser" onerror="this.src='images/default-paper.png'">
-                    <div class="publication-content">
-                        <p class="publication-title">${venueBadge} ${awardsBadge} ${pub.title}</p>
-                        <p class="publication-authors">${authorsFormatted}</p>
-                        <p class="publication-links">${linksFormatted}</p>
-                    </div>
-                </div>`;
-    }).join('');
-    
-    // Generate Scholar sync info
-    let scholarSyncInfo = '';
-    if (_scholar_sync && _scholar_sync.last_sync_date) {
-      const syncDate = new Date(_scholar_sync.last_sync_date);
-      const formattedDate = syncDate.toLocaleDateString('en-US', { 
-        year: 'numeric', 
-        month: 'short', 
-        day: 'numeric' 
-      });
-      scholarSyncInfo = ` (Last synced: ${formattedDate})`;
-    }
-    
-    yearSections.push(`
-            <div class="year-group">
-                <h3 class="year-title">Other Publications <span class="auto-sync-note">Auto-updated based on Google Scholar${scholarSyncInfo}</span></h3>
-                <div class="publications-list">
-                    ${autoSyncItems}
-                </div>
-            </div>`);
-  }
-  
+  // Survey papers are no longer listed separately; they live in their year groups by date.
+
   // Generate stats
   const statsHtml = research.stats.map(stat => `<span class="stat-item">${stat}</span>`).join(' <span class="stat-divider">•</span> ');
   
@@ -733,6 +958,8 @@ function generatePublicationsPage(config) {
   License: MIT
 -->
 <html lang="en">
+<script>/* Inline theme init — prevent flash of wrong theme */
+(function(){var m=localStorage.getItem('theme-mode')||'auto';var d=m==='night'||(m==='auto'&&window.matchMedia('(prefers-color-scheme:dark)').matches);document.documentElement.setAttribute('data-theme',d?'dark':'light');})();</script>
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -747,29 +974,31 @@ function generatePublicationsPage(config) {
     <meta property="og:title" content="Publications - ${personal.name}">
     <meta property="og:description" content="Publications by ${personal.name} - ${personal.title} at ${personal.affiliation}">
     <meta property="og:type" content="website">
-    <meta property="og:url" content="${config.seo?.website_url || 'https://cv.ironieser.cc'}/publications.html">
-    <meta property="og:image" content="${config.seo?.website_url || 'https://cv.ironieser.cc'}/${personal.profile_image}">
+    <meta property="og:url" content="${config.seo?.website_url || 'https://sixundong.com'}/publications.html">
+    <meta property="og:image" content="${config.seo?.website_url || 'https://sixundong.com'}/${personal.profile_image}">
     
     <!-- Twitter Card Meta Tags -->
     <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:title" content="Publications - ${personal.name}">
     <meta name="twitter:description" content="Publications by ${personal.name} - ${personal.title} at ${personal.affiliation}">
-    <meta name="twitter:image" content="${config.seo?.website_url || 'https://cv.ironieser.cc'}/${personal.profile_image}">
+    <meta name="twitter:image" content="${config.seo?.website_url || 'https://sixundong.com'}/${personal.profile_image}">
     
     <!-- JSON-LD Structured Data -->
     ${generateJsonLd(config)}
     
-    <!-- Disable favicon explicitly -->
-    <link rel="icon" href="data:,">
-    <link rel="apple-touch-icon" href="data:,">
-    <link rel="shortcut icon" href="data:,">
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" sizes="32x32" href="favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="favicon-16x16.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
+    <link rel="shortcut icon" href="favicon.ico">
     
-    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="assets/css/styles.css?v=7">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/jpswalsh/academicons@1/css/academicons.min.css">
+    <script src="assets/js/script.js?v=9" defer></script>
 </head>
 <body>
     <!-- Navigation -->
@@ -804,11 +1033,15 @@ function generatePublicationsPage(config) {
         <section class="section">
             <div class="container">
                 ${yearSections.join('')}
+                ${research.projects_page ? `<div class="section-footer">
+                    <a href="${research.projects_page}" class="btn btn-more">Projects &amp; Demos</a>
+                </div>` : ''}
             </div>
         </section>
     </main>
 
-    ${generateFooter(personal, _template_info)}
+    ${BACK_TO_TOP_BUTTON}
+    ${generateFooter(personal, _template_info, visitor_map, config.copyright_start_year)}
     
     ${generateCommonScripts()}
 </body>
@@ -816,7 +1049,7 @@ function generatePublicationsPage(config) {
 }
 
 function buildWebsite() {
-  console.log('🚀 Building website from config.json...');
+  console.log('🚀 Building website from content.json + meta.json...');
   
   try {
     // Load configuration
@@ -831,11 +1064,18 @@ function buildWebsite() {
     const publicationsHtml = generatePublicationsPage(config);
     fs.writeFileSync(PUBLICATIONS_OUTPUT, publicationsHtml);
     console.log('✓ publications.html generated successfully');
+
+    // Generate Cloudflare Pages _redirects file for project short links (if configured)
+    const redirectsGenerated = generateRedirects(config);
     
     console.log('\n🎉 Website generation completed!');
     console.log('\n💡 Files updated:');
     console.log('   - index.html');
     console.log('   - publications.html');
+    if (redirectsGenerated) {
+      console.log('   - _redirects');
+    }
+    console.log('   - _redirects');
     
   } catch (error) {
     console.error('❌ Error:', error.message);
@@ -844,4 +1084,4 @@ function buildWebsite() {
 }
 
 // Run the build
-buildWebsite(); 
+buildWebsite();

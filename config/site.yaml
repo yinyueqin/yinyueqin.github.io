@@ -1,0 +1,55 @@
+# ============================================================
+# One-time site setup (do not change often)
+# - SEO / meta / JSON-LD
+# - Visitor map (needs Cloudflare Pages + D1; off on GitHub Pages)
+# - Copyright (footer line: "© {start_year} - {current_year} {name}. All rights reserved.")
+# ============================================================
+
+copyright_start_year: 2025
+
+visitor_map:
+  enabled: false
+
+seo:
+  enable_json_ld: true
+  website_url: https://yinyueqin.github.io
+  github_pages_url: https://yinyueqin.github.io
+  legacy_urls: []
+  website_name: Yueqin Yin (殷月琴) - Academic Homepage
+  website_description: Yueqin Yin is a final-year Ph.D. student at UT Austin working on LLM post-training, including agentic RL, data synthesis for terminal and SWE agents, and reward design.
+  keywords:
+    - LLM post-training
+    - agentic RL
+    - data synthesis
+    - reinforcement learning
+    - LLM alignment
+    - reward modeling
+    - preference optimization
+    - Yueqin Yin
+    - 殷月琴
+  author:
+    name: Yueqin Yin
+    alternate_name: 殷月琴
+    email: yinyueqin0314@gmail.com
+    academic_email: yueqin.yin@utexas.edu
+    affiliation: The University of Texas at Austin
+    job_title: Ph.D. Candidate in Artificial Intelligence
+    research_areas:
+      - LLM post-training
+      - agentic reinforcement learning
+      - data synthesis for LLM agents
+      - reinforcement learning from feedback
+      - LLM alignment
+      - reward design
+    google_scholar_id: HhEo-1cAAAAJ
+    orcid: null
+    github: yinyueqin
+    twitter: null
+  organization:
+    name: The University of Texas at Austin
+    type: CollegeOrUniversity
+    url: https://www.utexas.edu
+    address:
+      addressCountry: USA
+      addressLocality: Austin
+      addressRegion: TX

@@ -1,0 +1,507 @@
+{
+  "personal": {
+    "name": "Yueqin Yin",
+    "aka": "殷月琴",
+    "title": "LLM Post-Training · Agentic RL · Data Synthesis · Alignment",
+    "affiliation": "The University of Texas at Austin, TX, USA",
+    "email": "yinyueqin0314@gmail.com",
+    "profile_image": "images/profile.jpg",
+    "bio": [
+      "I am a final-year Ph.D. student at the McCombs School of Business, The University of Texas at Austin, advised by <a href=\"https://scholar.google.com/citations?user=LXwCIisAAAAJ&hl=en\" class=\"link\">Prof. Mingyuan Zhou</a>, and will graduate in May 2027. My research focuses on <strong>LLM post-training</strong>, and my interests span:",
+      "(1) <strong>Agentic RL</strong>: long-horizon RL training for terminal and SWE agents (current focus)<br>(2) <strong>Data synthesis</strong>: verifiable training data for code and agents (KodCode; terminal and SWE agent datasets)<br>(3) <strong>Feedback and reward design</strong>: richer preference signals, better-targeted rewards, and grounded supervision (RPO, SAPO, Segment-PPO, MulIF, ContextCheck, SQL Autocomplete)",
+      "<span class=\"job-market-note\">📢 <strong class=\"job-market-highlight\">I am on the job market!</strong> I am looking for full-time industry <strong>research scientist</strong> positions starting in <strong>2027</strong>. Feel free to reach out!</span>"
+    ],
+    "links": [
+      {
+        "name": "Email",
+        "url": "mailto:yinyueqin0314@gmail.com",
+        "icon": "fas fa-envelope",
+        "color": "#dc3545"
+      },
+      {
+        "name": "Scholar",
+        "url": "https://scholar.google.com/citations?user=HhEo-1cAAAAJ&hl=en",
+        "icon": "fas fa-graduation-cap",
+        "color": "#4285f4"
+      },
+      {
+        "name": "GitHub",
+        "url": "https://github.com/yinyueqin",
+        "icon": "fab fa-github",
+        "color": "#333"
+      },
+      {
+        "name": "LinkedIn",
+        "url": "https://www.linkedin.com/in/yueqin-yin-64813234b/",
+        "icon": "fab fa-linkedin",
+        "color": "#1666C5"
+      }
+    ]
+  },
+  "research": {
+    "description": "I work on <strong>LLM post-training</strong>, with a focus on designing feedback a model can learn from: building more informative preference signals, directing rewards and exploration to the behaviors that still need work, and grounding feedback in execution and evidence, including in a deployed SQL autocomplete model that learns both what to suggest and when to stay silent. I am currently building training data for terminal and SWE agents and working on long-horizon RL.",
+    "stats": [
+      "11 publications",
+      "8 first / co-first author",
+      "🏆 Best Paper Award at DataWorld @ ICML 2025"
+    ],
+    "max_featured_publications": 8
+  },
+  "news": [
+    {
+      "date": "Oct 2026",
+      "icon": "🎉",
+      "link": "https://openreview.net/forum?id=xSBiWehn2W",
+      "content": "Our paper on <strong>context-grounded data curation and gate-first RL rewards for SQL autocomplete</strong> {{link}}, from my Snowflake internship, was accepted to [[NeurIPS 2026 Workshop: Transitioning from Pre-Training to Post-Training]].",
+      "category": "papers"
+    },
+    {
+      "date": "Aug 2026",
+      "icon": "🎉",
+      "link": "https://arxiv.org/abs/2608.23830",
+      "content": "<strong>MulIF</strong> {{link}} was accepted to [[EMNLP 2026 Findings]]. RL for multi-instruction following tends to over-optimize easy instructions; we correct this with behavioral bootstrapping and scarcity-aware rewards.",
+      "category": "papers"
+    },
+    {
+      "date": "Jun 2026",
+      "icon": "💼",
+      "content": "Joined <strong>Snowflake AI Research</strong> in Bellevue, WA as a research intern, working on code LLM post-training.",
+      "category": "career"
+    },
+    {
+      "date": "Apr 2026",
+      "icon": "🎉",
+      "link": "https://aclanthology.org/2026.findings-acl.658.pdf",
+      "content": "<strong>ContextCheck</strong> {{link}} was accepted to [[ACL 2026 Findings]].",
+      "category": "papers"
+    },
+    {
+      "date": "Sep 2025",
+      "icon": "🎉",
+      "link": "https://arxiv.org/abs/2501.02790",
+      "content": "<strong>Segment-PPO</strong> {{link}} was accepted to [[TMLR]].",
+      "category": "papers"
+    },
+    {
+      "date": "Jul 2025",
+      "icon": "🏆",
+      "link": "https://arxiv.org/abs/2503.02951",
+      "content": "<strong>KodCode</strong> {{link}} received the <strong>Best Paper Award</strong> at the [[DataWorld Workshop @ ICML 2025]].",
+      "category": "papers"
+    },
+    {
+      "date": "Jun 2025",
+      "icon": "💼",
+      "content": "Joined the <strong>Zoom GenAI Research Group</strong> as a research intern, working on hallucination detection and faithfulness verification.",
+      "category": "career"
+    },
+    {
+      "date": "May 2025",
+      "icon": "🎉",
+      "link": "https://arxiv.org/abs/2503.02951",
+      "content": "<strong>KodCode</strong> {{link}} was accepted to [[ACL 2025 Findings]].",
+      "category": "papers"
+    },
+    {
+      "date": "Jun 2024",
+      "icon": "💼",
+      "content": "Joined <strong>Microsoft Research</strong> as a research intern, working on RLHF reward design and verifiable code data.",
+      "category": "career"
+    },
+    {
+      "date": "Aug 2023",
+      "icon": "🎓",
+      "content": "Started my Ph.D. at <strong>The University of Texas at Austin</strong>, advised by Prof. Mingyuan Zhou.",
+      "category": "career"
+    }
+  ],
+  "publications": {
+    "2022": [
+      {
+        "title": "TransEditor: Transformer-Based Dual-Space GAN for Highly Controllable Facial Editing",
+        "authors": [
+          "Yanbo Xu*",
+          "Yueqin Yin*",
+          "Liming Jiang",
+          "Qianyi Wu",
+          "Chengyao Zheng",
+          "Chen Change Loy",
+          "Bo Dai",
+          "Wayne Wu"
+        ],
+        "venue": "CVPR'22",
+        "venue_type": "conference",
+        "image": "teaser/transeditor.jpg",
+        "featured": true,
+        "tldr": "A Transformer-based dual-space GAN that lets two latent spaces interact through a cross-space interaction mechanism, so the structure (e.g., pose) and texture (e.g., style) of a face can be edited independently. Improves controllability and identity preservation on CelebA-HQ and FFHQ.",
+        "links": [
+          {
+            "name": "Paper",
+            "url": "https://arxiv.org/abs/2203.17266",
+            "icon": "ai ai-arxiv"
+          },
+          {
+            "name": "Code",
+            "url": "https://github.com/BillyXYB/TransEditor",
+            "icon": "fab fa-github"
+          },
+          {
+            "name": "Website",
+            "url": "https://billyxyb.github.io/TransEditor/",
+            "icon": "fas fa-home"
+          }
+        ]
+      },
+      {
+        "title": "DiffGAR: Model-Agnostic Restoration from Generative Artifacts Using Image-to-Image Diffusion Models",
+        "authors": [
+          "Yueqin Yin",
+          "Lianghua Huang",
+          "Yu Liu",
+          "Kaiqi Huang"
+        ],
+        "venue": "CSAI'22",
+        "venue_type": "conference",
+        "image": "teaser/diffgar.jpg",
+        "tldr": "Introduces generative artifact restoration: removing the artifacts that GANs and diffusion models leave in their outputs. DiffGAR is a model-agnostic image-to-image diffusion framework for this task, released with two new datasets.",
+        "links": [
+          {
+            "name": "Paper",
+            "url": "https://arxiv.org/abs/2210.08573",
+            "icon": "ai ai-arxiv"
+          }
+        ]
+      }
+    ],
+    "2023": [
+      {
+        "title": "Efficient-VQGAN: Towards High-Resolution Image Generation with Efficient Vision Transformers",
+        "authors": [
+          "Shiyue Cao",
+          "Yueqin Yin",
+          "Lianghua Huang",
+          "Yu Liu",
+          "Xin Zhao",
+          "Deli Zhao",
+          "Kaiqi Huang"
+        ],
+        "venue": "ICCV'23",
+        "venue_type": "conference",
+        "image": "teaser/efficient-vqgan.jpg",
+        "tldr": "Makes two-stage VQ image generation efficient at high resolution: local-window Transformer blocks replace global attention for vector quantization, and multi-grained attention is paired with autoencoding training and autoregressive inference. Improves both fidelity and speed on FFHQ and ImageNet.",
+        "links": [
+          {
+            "name": "Paper",
+            "url": "https://openaccess.thecvf.com/content/ICCV2023/papers/Cao_Efficient-VQGAN_Towards_High-Resolution_Image_Generation_with_Efficient_Vision_Transformers_ICCV_2023_paper.pdf",
+            "icon": "fas fa-file-pdf"
+          }
+        ]
+      }
+    ],
+    "2024": [
+      {
+        "title": "Relative Preference Optimization: Enhancing LLM Alignment through Contrasting Responses across Identical and Diverse Prompts",
+        "authors": [
+          "Yueqin Yin*",
+          "Zhendong Wang*",
+          "Yi Gu",
+          "Hai Huang",
+          "Weizhu Chen",
+          "Mingyuan Zhou"
+        ],
+        "venue": "arXiv'2402",
+        "venue_type": "preprint",
+        "image": "teaser/rpo.jpg",
+        "featured": true,
+        "tldr": "DPO only compares two responses to the same prompt. RPO also contrasts responses across semantically related prompts, weighting each pair by prompt similarity, so it can learn from both paired and unpaired preference data. Outperforms DPO, IPO, and KTO on Anthropic-HH, OpenAI Summarization, and AlpacaEval 2.0.",
+        "links": [
+          {
+            "name": "Paper",
+            "url": "https://arxiv.org/abs/2402.10958",
+            "icon": "ai ai-arxiv"
+          },
+          {
+            "name": "Code",
+            "url": "https://github.com/yinyueqin/relative-preference-optimization",
+            "icon": "fab fa-github"
+          }
+        ]
+      },
+      {
+        "title": "Self-Augmented Preference Optimization: Off-Policy Paradigms for Language Model Alignment",
+        "authors": [
+          "Yueqin Yin*",
+          "Zhendong Wang*",
+          "Yujia Xie",
+          "Weizhu Chen",
+          "Mingyuan Zhou"
+        ],
+        "venue": "arXiv'2405",
+        "venue_type": "preprint",
+        "image": "teaser/sapo.jpg",
+        "featured": true,
+        "tldr": "Preference alignment without paired preference data or an external reward model. SAPO builds its own negatives by regenerating segments of chosen responses, using an EMA model and a replay buffer to keep training pairs fresh as the policy improves. Matches or exceeds DPO, ORPO, and SPIN on the Open LLM Leaderboard, IFEval, MT-Bench, and AlpacaEval 2.0.",
+        "links": [
+          {
+            "name": "Paper",
+            "url": "https://arxiv.org/pdf/2405.20830",
+            "icon": "ai ai-arxiv"
+          },
+          {
+            "name": "Code",
+            "url": "https://github.com/yinyueqin/SAPO",
+            "icon": "fab fa-github"
+          }
+        ]
+      },
+      {
+        "title": "Diffusion-RPO: Aligning Diffusion Models through Relative Preference Optimization",
+        "authors": [
+          "Yi Gu",
+          "Zhendong Wang",
+          "Yueqin Yin",
+          "Yujia Xie",
+          "Mingyuan Zhou"
+        ],
+        "venue": "arXiv'2406",
+        "venue_type": "preprint",
+        "image": "teaser/diffusionr-rpo.jpg",
+        "tldr": "Extends RPO to text-to-image diffusion models, contrasting images generated from identical and semantically related prompts with step-wise weighting. Also introduces a style-alignment evaluation task, and outperforms Diffusion-DPO and SFT on Stable Diffusion 1.5 and XL.",
+        "links": [
+          {
+            "name": "Paper",
+            "url": "https://arxiv.org/pdf/2406.06382",
+            "icon": "ai ai-arxiv"
+          }
+        ]
+      }
+    ],
+    "2025": [
+      {
+        "title": "Segmenting Text and Learning Their Rewards for Improved RLHF in Language Model",
+        "authors": [
+          "Yueqin Yin*",
+          "Shentao Yang*",
+          "Yujia Xie",
+          "Ziyi Yang",
+          "Yuting Sun",
+          "Hany Awadalla",
+          "Weizhu Chen",
+          "Mingyuan Zhou"
+        ],
+        "venue": "TMLR'25",
+        "venue_type": "journal",
+        "image": "teaser/segment-ppo.jpg",
+        "featured": true,
+        "tldr": "A single reward per response is too sparse for RLHF, and a single token is too small to carry meaning. We split responses into semantically complete segments using the SFT model's entropy, learn segment-level rewards from ordinary sequence-level preferences, and stabilize PPO with location-aware reward normalization and within-segment reward interpolation. Outperforms sequence-, sentence-, and token-level reward variants on AlpacaEval 2.0, Arena-Hard, and MT-Bench.",
+        "links": [
+          {
+            "name": "Paper",
+            "url": "https://arxiv.org/abs/2501.02790",
+            "icon": "ai ai-arxiv"
+          },
+          {
+            "name": "Code",
+            "url": "https://github.com/yinyueqin/DenseRewardRLHF-PPO",
+            "icon": "fab fa-github"
+          }
+        ]
+      },
+      {
+        "title": "KODCODE: A Diverse, Challenging, and Verifiable Synthetic Dataset for Coding",
+        "authors": [
+          "Zhangchen Xu",
+          "Yang Liu",
+          "Yueqin Yin",
+          "Mingyuan Zhou",
+          "Radha Poovendran"
+        ],
+        "venue": "ACL Findings'25",
+        "venue_type": "conference",
+        "image": "teaser/kodcode.jpg",
+        "featured": true,
+        "awards": [
+          "🏆 Best Paper Award at DataWorld @ ICML 2025"
+        ],
+        "tldr": "A synthetic coding dataset of 447K question–solution–test triplets from 12 sources. Each solution is verified by executing its unit tests, and hard problems get extra attempts so they are not filtered out. Models fine-tuned on KodCode reach state-of-the-art results on HumanEval(+), MBPP(+), BigCodeBench, and LiveCodeBench, and the data also supports RL with verifiable rewards.",
+        "links": [
+          {
+            "name": "Paper",
+            "url": "https://arxiv.org/abs/2503.02951",
+            "icon": "ai ai-arxiv"
+          },
+          {
+            "name": "Code",
+            "url": "https://github.com/KodCode-AI/kodcode",
+            "icon": "fab fa-github"
+          },
+          {
+            "name": "Website",
+            "url": "https://kodcode-ai.github.io/",
+            "icon": "fas fa-home"
+          }
+        ]
+      }
+    ],
+    "2026": [
+      {
+        "title": "Context-Grounded Data Curation and Gate-First RL Reward Design for SQL Autocomplete",
+        "authors": [
+          "Yueqin Yin*",
+          "Paul Dong*",
+          "Anni Li*",
+          "Yite Wang*",
+          "Arun Ponnusamy",
+          "Jaeseong Lee",
+          "Chiu Wah So",
+          "Mingyuan Zhou",
+          "Yuxiong He",
+          "Khalid Bijon",
+          "Zhewei Yao"
+        ],
+        "venue": "NeurIPS'26 Workshop",
+        "venue_type": "conference",
+        "image": "teaser/sql-autocomplete.png",
+        "featured": true,
+        "tldr": "Autocomplete models trained on editing logs learn to guess, because the logged completion often depends on information not yet visible at the cursor. We trim each SFT target to its longest context-inferable prefix, keep empty targets as silence labels, and in RL place deterministic abstention and grounding gates before a graded LLM-judge reward, which avoids the silence collapse of a judge-only reward. The deployed 4B dense model raised live acceptance from 17.8% to 26.35% over the previous 30B-A3B MoE while cutting median latency by 71%.",
+        "links": [
+          {
+            "name": "OpenReview",
+            "url": "https://openreview.net/forum?id=xSBiWehn2W",
+            "icon": "fas fa-file-alt"
+          },
+          {
+            "name": "Code (Coming Soon)",
+            "url": null,
+            "icon": "fab fa-github",
+            "coming_soon": true
+          }
+        ]
+      },
+      {
+        "title": "Mitigating Exploration Bias in RL for Multi-Instruction Following",
+        "authors": [
+          "Mian Zhang*",
+          "Yueqin Yin*",
+          "Kaiyu He",
+          "Peilin Wu",
+          "Xinlu Zhang",
+          "Mingyuan Zhou",
+          "Zhiyu Zoey Chen"
+        ],
+        "venue": "EMNLP Findings'26",
+        "venue_type": "conference",
+        "image": "teaser/mulif.png",
+        "featured": true,
+        "tldr": "When a prompt contains several instructions and the reward counts how many are satisfied, RL keeps improving the easy instructions while the hard ones barely move. We propose two metrics that measure this exploration bias, then reduce it in two stages: Behavioral Bootstrapping, a short rejection-sampling fine-tuning that activates hard instructions before RL, and Scarcity-Aware Rewards, which weight each instruction by how rarely it is satisfied. Beats the cumulative-reward baseline by up to 9.2 points on IFBench.",
+        "links": [
+          {
+            "name": "Paper",
+            "url": "https://arxiv.org/abs/2608.23830",
+            "icon": "ai ai-arxiv"
+          },
+          {
+            "name": "Code",
+            "url": "https://github.com/mianzhang/MulIF",
+            "icon": "fab fa-github"
+          }
+        ]
+      },
+      {
+        "title": "ContextCheck: Sentence-Level Faithfulness Verification with Context-Aware Disambiguation",
+        "authors": [
+          "Yueqin Yin",
+          "Yaxi Li",
+          "Xin Liu",
+          "Xun Wang",
+          "Kaiqiang Song",
+          "Simin Ma",
+          "Shujian Liu",
+          "Sathish Reddy Indurthi",
+          "Haoyun Deng",
+          "Pengcheng He",
+          "Mingyuan Zhou",
+          "Song Wang"
+        ],
+        "venue": "ACL Findings'26",
+        "venue_type": "conference",
+        "image": "teaser/contextcheck.png",
+        "featured": true,
+        "tldr": "Checks each generated sentence against the source document while reading the preceding sentences to resolve pronouns, references, and ellipsis, removing the separate decontextualization step of prior pipelines. Earlier context is used only to disambiguate; evidence comes only from the source. Gains 10+ Macro-F1 points on three new context-dependent benchmarks and matches or beats 8B-scale verifiers on 14 standard single-sentence datasets.",
+        "links": [
+          {
+            "name": "Paper",
+            "url": "https://aclanthology.org/2026.findings-acl.658.pdf",
+            "icon": "ai ai-arxiv"
+          },
+          {
+            "name": "Code (Coming Soon)",
+            "url": "https://github.com/yinyueqin/ContextCheck-Verifier",
+            "icon": "fab fa-github",
+            "coming_soon": true
+          }
+        ]
+      }
+    ]
+  },
+  "experience": [
+    {
+      "position": "Research Intern",
+      "company": "Snowflake AI Research",
+      "period": "Jun 2026 - Present",
+      "description": "Now building training datasets for terminal and SWE agents and working on long-horizon RL training. Earlier, worked on SQL autocomplete: post-trained a 4B dense fill-in-the-middle model that replaced a 30B-A3B MoE in production, with context-grounded SFT data and a gate-first RL reward that teaches the model when to suggest and when to stay silent (NeurIPS'26 Workshop).",
+      "logo": "images/snowflake.png"
+    },
+    {
+      "position": "Research Intern",
+      "company": "Zoom, GenAI Research Group",
+      "period": "Jun 2025 - Aug 2025",
+      "description": "Built ContextCheck, a sentence-level faithfulness verifier that reads the preceding context to resolve references while drawing evidence only from the source document (ACL Findings'26).",
+      "logo": "images/zoom.jpg"
+    },
+    {
+      "position": "Research Scientist Intern",
+      "company": "Microsoft Research (MAI Superintelligence)",
+      "period": "Jun 2024 - May 2025",
+      "description": "Developed Segment-PPO, which learns rewards for semantically complete text segments to give PPO denser feedback (TMLR'25), and contributed to KodCode, a verifiable synthetic coding dataset for SFT and RL (ACL Findings'25; Best Paper at DataWorld @ ICML'25).",
+      "logo": "images/micorsoft.png"
+    },
+    {
+      "position": "Research Intern",
+      "company": "Alibaba DAMO Academy",
+      "period": "Mar 2022 - Mar 2023",
+      "description": "Worked on continuous and discrete diffusion models: DiffGAR for restoring artifacts in generated images (CSAI'22) and Efficient-VQGAN for high-resolution image generation (ICCV'23).",
+      "logo": "images/alibaba.png"
+    },
+    {
+      "position": "Research Intern",
+      "company": "Shanghai AI Laboratory",
+      "period": "Mar 2021 - Dec 2021",
+      "description": "Developed TransEditor, a Transformer-based dual-space GAN for controllable facial editing (CVPR'22), and an audio-driven talking-face generation system.",
+      "logo": "images/shanghailab.jpg"
+    }
+  ],
+  "education": [
+    {
+      "degree": "Ph.D. in Artificial Intelligence",
+      "institution": "The University of Texas at Austin",
+      "period": "Sep 2023 - May 2027 (expected)",
+      "details": "Advisor: Prof. Mingyuan Zhou"
+    },
+    {
+      "degree": "M.S. in Computer Vision and Deep Learning",
+      "institution": "Institute of Automation, Chinese Academy of Sciences (CASIA)",
+      "period": "Sep 2020 - Jun 2023"
+    },
+    {
+      "degree": "B.S. in Software Engineering",
+      "institution": "Dalian University of Technology",
+      "period": "Sep 2016 - Jun 2020"
+    }
+  ],
+  "service": {
+    "reviewer": {
+      "conferences": "NeurIPS (2026), ICLR (2025, 2026, 2027), EMNLP (2026), CVPR (2024), ICCV (2025)"
+    }
+  }
+}
